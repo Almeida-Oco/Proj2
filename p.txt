@@ -1,0 +1,10 @@
+laranja ; 1.5
+banana ; 1.0
+peixe ; 4.5
+batatas ; 1.0
+carne ; 3.5
+cerveja ; 2.5
+ovos ; 1.75
+uvas ; 1.6
+azeitonas ; 0.99
+uvas ; 1.3
