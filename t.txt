@@ -1,6 +1,0 @@
-4 ; 2/10/20114 ; arroz, farinha, massa
-3 ; 2/10/20114 ; arroz, farinha, massa, pipocas
-2 ; 2/10/20114 ; farinha, arroz, batatas, pipocas
-1 ; 2/10/20114 ; massa, farinha, arroz, pipocas
-0 ; 2/10/20114 ; sumo, arroz, farinha, massa
-8 ; 20/12/2014 ; batatas, carne, azeitonas

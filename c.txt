@@ -1,7 +1,0 @@
-1 ; Rui Pereira ; 234.67
-2 ; Maria de Lurdes ; 123.54
-5 ; Joana Beires ; 1231
-4 ; Joao ; 1923
-6 ; Manuela Moura ; 1236.8
-8 ; Antonio ; 7.5
-9 ; Jose ; 5
