@@ -10,17 +10,19 @@
 
 using namespace std;
 
+
+//====================================================================================
+//=================================== PROTOTYPES ======================================
+//====================================================================================
 vector<string> string_split(const string &line, const string spliter);
-//similar to java string_split, given a string and a spliter, it returns the different parts of the original string in a vector
-
 string remove_middle_spaces(const string &S);
-//leaves only one middle space between the different words there might exist
-
 string trim(string &str);
-//removes all spaces at the left and at the right of the string
-
 bool testText(const string &c_name);
 
+
+//=================================================================================
+//=================================== CLASS ======================================
+//=================================================================================
 class Product {
 	static string product_file_name;
 	static map <string,double> prod_price;
