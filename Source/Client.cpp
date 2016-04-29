@@ -1,6 +1,5 @@
 #include "..\Headers\Client.h"
 
-
 string Client::client_file_name = "";
 unsigned int Client::max_client_number = 0;
 vector<Client_t> Client::info_clients;
@@ -59,6 +58,7 @@ Client::Client()
 		}
 		fin.close();
 	} while (failed); //and not the products, if it is the client file, it copies the information to a vector of Structs
+	sort(this->info_clients.begin(), this->info_clients.end());
 	this->max_client_number++;
 } 
 
