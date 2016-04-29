@@ -1,13 +1,13 @@
 #ifndef VISUALIZE_H
 #define VISUALIZE_H
 
-#include "Declarations.h"
+#include "..\Headers\Declarations.h"
 #include <iomanip>
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
-#include "Product.h"
+#include "..\Headers\Product.h"
 
 using namespace std;
 class Product;

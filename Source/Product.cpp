@@ -1,4 +1,4 @@
-#include "Product.h"
+#include "..\Headers\Product.h"
 
 string Product::product_file_name = "";
 map<string, double> Product::prod_price;
@@ -55,8 +55,8 @@ void Product::update()
 
 double Product::getPrice(const string &product)
 {
-	auto it = prod_price.find(product);
-	if (it != prod_price.end())
+	auto it = this->prod_price.find(product);
+	if (it != this->prod_price.end())
 		return it->second;
 	return -1;
 }
@@ -64,7 +64,7 @@ double Product::getPrice(const string &product)
 string Product::getProd(double price)
 {
 	const double delta = 0.001; //erro aceitavel no preco
-	for (auto P : prod_price)
+	for (auto P : this->prod_price)
 	{
 		if (P.second >= (price - delta) || P.second <= (price + delta))
 			return P.first;

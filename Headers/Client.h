@@ -1,12 +1,15 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include "Declarations.h"
-#include "Input_Asker.h"
+#include "..\Headers\Declarations.h"
+#include "..\Headers\Input_Asker.h"
+#include "..\Headers\Visualize.h"
 #include <iostream>
 #include <vector>
 #include <string>
 #include <fstream>
+
+//sadnasçnasnf
 
 using namespace std;
 

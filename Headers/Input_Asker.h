@@ -4,9 +4,9 @@
 #include <vector>
 #include <iostream>
 #include <string>
-#include "Declarations.h"
-#include "Visualize.h"
-#include "Client.h"
+#include "..\Headers\Declarations.h"
+#include "..\Headers\Visualize.h"
+#include "..\Headers\Client.h"
 
 using namespace std;
 class Product;

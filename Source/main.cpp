@@ -5,13 +5,13 @@
 using namespace std;
 
 //FUNCTIONS AND ETC
-#include "Declarations.h"
-#include "Product.h"
-#include "Visualize.h"
-#include "Client.h"
-#include "Trans.h"
-#include "Input_Asker.h"
-#include "menu.h"
+#include "..\Headers\Declarations.h"
+#include "..\Headers\Product.h"
+#include "..\Headers\Visualize.h"
+#include "..\Headers\Client.h"
+#include "..\Headers\Trans.h"
+#include "..\Headers\Input_Asker.h"
+#include "..\Headers\menu.h"
 
 bool testText(const string &c_name);
 //checks if the string contains only letters and spaces and if so return true

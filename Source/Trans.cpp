@@ -1,6 +1,7 @@
-#include "Trans.h"
-#include "Client.h"
-#include "Input_Asker.h"
+#include "..\Headers\Trans.h"
+
+#include <algorithm>	
+
 
 string Trans::trans_file_name = "";
 vector<Trans_t> Trans::info_trans;
@@ -18,13 +19,13 @@ Trans::Trans()
 	do {
 		failed = false;
 		cout << "Insert the transactions file name" << endl;
-		getline(cin, trans_file_name);
-		fin.open(trans_file_name);
+		getline(cin, this->trans_file_name);
+		fin.open(this->trans_file_name);
 		while (!fin.is_open())
 		{
 			cout << "Unknown name. Please try again" << endl;
-			getline(cin, trans_file_name);
-			fin.open(trans_file_name);
+			getline(cin, this->trans_file_name);
+			fin.open(this->trans_file_name);
 		}
 
 		while (getline(fin, line))
@@ -51,14 +52,21 @@ Trans::Trans()
 			transaction.date.month = stoi(date_tokens.at(1));
 			transaction.date.year = stoi(date_tokens.at(2));
 			transaction.number = stoi(tokens.at(0));
-			info_trans.push_back(transaction);
+			this->info_trans.push_back(transaction);
 		}
 		fin.close();
 	} while (failed); //it if is the transaction files it copies its contents to a vector of structs
+
+	sort(this->info_trans.begin(), this->info_trans.end(), 
 }
 //====================================================================================
 //=================================== MODIFIERS ======================================
 //====================================================================================
+
+bool cmpName(const Client_t &C1 , const Client_t &C2) 
+{
+	return C1.name > C2.name;
+}
 
 void Trans::addTrans(Product &P ,Client &C)//adds a new transaction to the vector of transactions
 {
@@ -70,7 +78,7 @@ void Trans::addTrans(Product &P ,Client &C)//adds a new transaction to the vecto
 	t.date = Ask.askDate(2);
 	//t.products = Ask.askProducts(P);
 	C.addMoney(t.number, (price * t.products.size()));
-	info_trans.push_back(t);
+	this->info_trans.push_back(t);
 }
 
 //====================================================================================
@@ -80,7 +88,7 @@ void Trans::visAllTrans()
 {
 	transHeader();
 	Visualize V;
-	for (Trans_t T : info_trans)
+	for (Trans_t T : this->info_trans)
 	{
 		V.visNumber(T.number); visDate(T.date); cout << V.P_comma(T.products); cout << endl;
 	}
@@ -99,7 +107,7 @@ void Trans::visClientTrans(const Client &C)
 		c_number = ask.askClientName(C.info_clients);
 		transHeader();
 		unsigned int i = 0;
-		for (Trans_t T : info_trans)
+		for (Trans_t T : this->info_trans)
 		{
 			if (T.number == c_number) {
 				V.visNumber(T.number); visDate(T.date); cout << V.P_comma(T.products) << endl;
@@ -118,7 +126,7 @@ void Trans::visDayTrans()
 	bool found = false, first = true;
 	unsigned int i = 0;
 		D = Ask.askDate(2);
-		for (Trans_t T : info_trans)
+		for (Trans_t T : this->info_trans)
 		{
 			if (T.date.day == D.day && T.date.month == D.month && T.date.year == D.year)
 			{
@@ -144,7 +152,7 @@ void Trans::visBetweenDates()
 	Date_t upper_date = Ask.askDate(1);
 
 	unsigned int i = 0;
-	for (Trans_t T : info_trans)
+	for (Trans_t T : this->info_trans)
 	{
 		if (cmpDates(T.date, lower_date) && !cmpDates(T.date, upper_date))
 		{
@@ -166,7 +174,7 @@ Matrix Trans::createMatrix()
 {//creates the matrix initialized with the true and false values, creates maps to associate position in matrix to information
 	int position_matrix = 0;
 	Matrix map_n_matrix;
-	for (Trans_t transaction_line : info_trans) //iterates through the vector
+	for (Trans_t transaction_line : this->info_trans) //iterates through the vector
 	{
 		for (string p_name : transaction_line.products) //p_name contains a product name
 		{
@@ -181,7 +189,7 @@ Matrix Trans::createMatrix()
 	vector<bool> columns(position_matrix, false); 
 	//creates column vector with size = to number of products brought by all users
 	position_matrix = 0;
-	for (Trans_t transaction_line : info_trans)
+	for (Trans_t transaction_line : this->info_trans)
 	{
 		if (!map_n_matrix.c_number_to_i.count(transaction_line.number))
 		{ //associates the client number to its position in the matrix
@@ -192,7 +200,7 @@ Matrix Trans::createMatrix()
 	map_n_matrix.prod_bought = vector< vector<bool> >(position_matrix, columns);
 	//creates the matrix which will hold the true or false values
 
-	for (Trans_t transaction_line : info_trans)
+	for (Trans_t transaction_line : this->info_trans)
 	{
 		for (string p_name : transaction_line.products) //fills the matrix with the products bought
 			map_n_matrix.prod_bought[map_n_matrix.c_number_to_i[transaction_line.number]][map_n_matrix.product_to_i[p_name]] = true;
@@ -346,6 +354,22 @@ bool Trans::cmpDates(const Date_t &d1, const Date_t &d2)
 	return false;
 }
 
+bool Trans::cmpDates(const Trans_t &T1, const Trans_t &T2)
+{
+	if (T1.date.year > T2.date.year)
+		return true;
+	else if (T1.date.year == T2.date.year)
+	{
+		if (T1.date.month >= T2.date.month)
+			return true;
+		else if (T1.date.day >= T2.date.day)
+			return true;
+		else
+			return false;
+	}
+	return false;
+}
+
 void Trans::visDate(Date_t date) {
 	cout << setw(DATE_BOX) << left << to_string(date.day) + "/" + to_string(date.month) + "/" + to_string(date.year);
 }
@@ -362,9 +386,9 @@ void Trans::update()
 	Visualize V;
 	fout.open(temp_file_name);
 	if (fout.is_open())
-		for (Trans_t i : info_trans)																									//create function to return string of products to display
+		for (Trans_t i : this->info_trans)																									//create function to return string of products to display
 			fout << i.number << " ; " << to_string(i.date.day) + "/" + to_string(i.date.month) + "/" + to_string(i.date.year) << " ; " << V.P_comma(i.products) << endl;
 	fout.close();
-	remove(trans_file_name.c_str());
-	rename(temp_file_name.c_str(), trans_file_name.c_str());
+	remove(this->trans_file_name.c_str());
+	rename(temp_file_name.c_str(), this->trans_file_name.c_str());
 }

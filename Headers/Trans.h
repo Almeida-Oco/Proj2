@@ -2,11 +2,13 @@
 #ifndef TRANS_H
 #define TRANS_H
 
-#include "Visualize.h"
+#include "..\Headers\Visualize.h"
+#include "..\Headers\Input_Asker.h"
+#include "..\Headers\Declarations.h"
+#include "..\Headers\Client.h"
+#include <algorithm>
 #include <string>
 #include <vector>
-#include "Declarations.h"
-#include "Client.h"
 
 void quicksort(vector<int> &qs); //function used to easily call qksort
 
@@ -49,6 +51,7 @@ public:
 	void update();
 private:
 	bool cmpDates(const Date_t &date1, const Date_t &d2);
+	bool cmpDates(const Trans_t &T1, const Trans_t &T2);
 	void visDate(Date_t date);
 };
 

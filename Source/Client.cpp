@@ -1,5 +1,4 @@
-#include "Client.h"
-#include "Visualize.h"
+#include "..\Headers\Client.h"
 
 
 string Client::client_file_name = "";
@@ -11,7 +10,7 @@ vector<Client_t> Client::info_clients;
 
 Client::Client()
 {
-	max_client_number = 0;
+	this->max_client_number = 0;
 	unsigned int temp;
 	vector<string> tokens;
 	bool failed = false;
@@ -22,13 +21,13 @@ Client::Client()
 		string line;
 		ifstream fin;
 		cout << "Insert the clients file name" << endl;
-		getline(cin, client_file_name);
-		fin.open(client_file_name);
+		getline(cin, this->client_file_name);
+		fin.open(this->client_file_name);
 		while (!fin.is_open())
 		{
 			cout << "Unknown name. Please try again" << endl;
-			getline(cin, client_file_name);
-			fin.open(client_file_name);
+			getline(cin, this->client_file_name);
+			fin.open(this->client_file_name);
 		}
 		while (getline(fin, line))
 		{
@@ -49,8 +48,8 @@ Client::Client()
 			client.name = trim(tokens.at(1));
 			client.number = stoi(tokens.at(0));
 			temp = client.number;
-			if (temp > max_client_number)
-				max_client_number = temp;
+			if (temp > this->max_client_number)
+				this->max_client_number = temp;
 			info_clients.push_back(client);
 		}
 		if (failed)
@@ -60,7 +59,7 @@ Client::Client()
 		}
 		fin.close();
 	} while (failed); //and not the products, if it is the client file, it copies the information to a vector of Structs
-	max_client_number++;
+	this->max_client_number++;
 } 
 
 void Client::removeClient()
@@ -95,8 +94,8 @@ void Client::addClient()//asks the client info, checks its validity and if it ch
 		cout << "Insert client name" << endl;
 		getline(cin, c_name);
 	} while (!testText(c_name));
-	new_c.number = max_client_number;
-	max_client_number++;
+	new_c.number = this->max_client_number;
+	this->max_client_number++;
 	new_c.name = c_name;
 	new_c.money = 0;
 	info_clients.push_back(new_c);
@@ -190,6 +189,6 @@ void Client::update()
 		for (Client_t i : info_clients)
 			fout << i.number << " ; " << i.name << " ; " << i.money << endl;
 	fout.close();
-	remove(client_file_name.c_str());
-	rename(temp_file_name.c_str(), client_file_name.c_str());
+	remove(this->client_file_name.c_str());
+	rename(temp_file_name.c_str(), this->client_file_name.c_str());
 }
