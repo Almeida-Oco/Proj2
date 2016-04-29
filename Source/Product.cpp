@@ -19,6 +19,7 @@ Product::Product()
 		if (!fin.is_open())
 		{
 			cout << "File not found" << endl;
+			exit(0);
 			break;
 		}
 
