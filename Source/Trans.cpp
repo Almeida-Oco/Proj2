@@ -57,16 +57,12 @@ Trans::Trans()
 		fin.close();
 	} while (failed); //it if is the transaction files it copies its contents to a vector of structs
 
-	sort(this->info_trans.begin(), this->info_trans.end(), 
+	sort(this->info_trans.begin(), this->info_trans.end());
 }
+
 //====================================================================================
 //=================================== MODIFIERS ======================================
 //====================================================================================
-
-bool cmpName(const Client_t &C1 , const Client_t &C2) 
-{
-	return C1.name > C2.name;
-}
 
 void Trans::addTrans(Product &P ,Client &C)//adds a new transaction to the vector of transactions
 {
@@ -104,7 +100,7 @@ void Trans::visClientTrans(const Client &C)
 	bool found = false;
 	do
 	{
-		c_number = ask.askClientName(C.info_clients);
+		c_number = ask.askClientName(C.getInfo());
 		transHeader();
 		unsigned int i = 0;
 		for (Trans_t T : this->info_trans)
@@ -154,7 +150,7 @@ void Trans::visBetweenDates()
 	unsigned int i = 0;
 	for (Trans_t T : this->info_trans)
 	{
-		if (cmpDates(T.date, lower_date) && !cmpDates(T.date, upper_date))
+		if (T.date > lower_date && T.date < upper_date)
 		{
 			if (first)
 				transHeader();
@@ -226,7 +222,7 @@ void Trans::selectiveAd(const Client &C)
 	vector<int> temp_vec; //will temporarily hold the different products of the current user
 
 	int
-		client_number			 = Ask.askClientName(C.info_clients), //client ID
+		client_number			 = Ask.askClientName(C.getInfo()), //client ID
 		client_number_pos		 = product_list.c_number_to_i[client_number], //target client position in matrix
 		n_columns				 = product_list.prod_bought[client_number_pos].size(),
 		n_rows					 = product_list.prod_bought.size(), 
@@ -337,38 +333,6 @@ void Trans::mergeVectors(vector<int> &v1, vector<int> &v2)
  //====================================================================================
  //================================= MISCELLANEOUS ====================================
  //====================================================================================
-
-bool Trans::cmpDates(const Date_t &d1, const Date_t &d2)
-{//returns true if d1 is later or equal than d2
-	if (d1.year > d2.year)
-		return true;
-	else if (d1.year == d2.year)
-	{
-		if (d1.month >= d2.month)
-			return true;
-		else if (d1.day >= d2.day)
-			return true;
-		else
-			return false;
-	}
-	return false;
-}
-
-bool Trans::cmpDates(const Trans_t &T1, const Trans_t &T2)
-{
-	if (T1.date.year > T2.date.year)
-		return true;
-	else if (T1.date.year == T2.date.year)
-	{
-		if (T1.date.month >= T2.date.month)
-			return true;
-		else if (T1.date.day >= T2.date.day)
-			return true;
-		else
-			return false;
-	}
-	return false;
-}
 
 void Trans::visDate(Date_t date) {
 	cout << setw(DATE_BOX) << left << to_string(date.day) + "/" + to_string(date.month) + "/" + to_string(date.year);
