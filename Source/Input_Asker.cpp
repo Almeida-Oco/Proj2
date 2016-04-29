@@ -51,7 +51,7 @@ int Input_Asker::askClientName(const vector<Client_t> &info_c)
 
 bool Input_Asker::testNum(unsigned int num, const Client &C)
 {
-	for (Client_t i : C.info_clients)
+	for (Client_t i : C.getInfo())
 	{
 		if (i.number == num)
 			return true;
