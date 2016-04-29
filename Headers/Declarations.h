@@ -42,12 +42,17 @@ struct Client_t {
 	unsigned int number;
 	string name;
 	double money;
+
+	bool operator< (const Client_t &C1);
 };
 
 struct Date_t {
 	unsigned int day;
 	unsigned int month;
 	unsigned int year;
+
+	bool operator> (const Date_t &D1);
+	bool operator< (const Date_t &D1);
 };
 
 struct Trans_t
@@ -55,6 +60,8 @@ struct Trans_t
 	unsigned int number;
 	Date_t date;
 	vector<string> products;
+
+	bool operator< (const Trans_t &T1);
 };
 
 #endif // !DECLARATIONS_H
