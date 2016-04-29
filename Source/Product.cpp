@@ -43,11 +43,9 @@ void Product::update()
 	ofstream fout;
 
 	fout.open(temp_file_name);
-	/*
 	if (fout.is_open())
-		for (string i : info_products)
-			fout << i << endl;
-			*/
+		for (const std::pair<string, double> i : prod_price)
+			fout << i.first << " ; " << i.second << endl;
 	fout.close();
 	remove(this->product_file_name.c_str());
 	rename(temp_file_name.c_str(), this->product_file_name.c_str());
