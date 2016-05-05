@@ -21,21 +21,16 @@ public:
 	//input a date using different cout (depending on int question),
 	//validates the date and returns the Date struct
 
-	//vector<string> askProducts(Product &P);
-	//keeps asking user for products (only existing ones in the Product.txt), until it enters CTRL+Z
-
 	int askClientName(const vector<Client_t> &info_c);
 	//keeps asking client name until an existing one is entered
 
-	string askProduct(Product &P);
-	//aks user product name to be removed from the product list
 private:
 	bool testNum(unsigned int num, const Client &C);
 	//checks if ID number exists in the file
-	bool testText(const string &c_name);
-	//checks if the string only contains letters and spaces (used for product input)
-	bool testDate(const string &date);
+	bool testDate(const Date_t &D) const;
 	//checks if string contains only numbers and if it is null
+	unsigned int n_days(const unsigned int M, const unsigned int Y) const;
+	bool leapYear(const unsigned int Y) const;
 };
 
 #endif // !INPUT_ASKER_H

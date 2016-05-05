@@ -66,6 +66,7 @@ bool Input_Asker::testNum(unsigned int num, const Client &C)
 Date_t Input_Asker::askDate(int question)
 {
 	int cont = 0, date_placeholder = 0;
+	bool done = false;
 	vector<string> date_numbers;
 	Date_t input_date;
 	string line;
@@ -82,29 +83,44 @@ Date_t Input_Asker::askDate(int question)
 		date_numbers = string_split(line, "/");
 		for (unsigned int i = 0; i < date_numbers.size(); i++)
 			date_numbers.at(i) = trim(date_numbers.at(i));
-		if (date_numbers.size() == 3 && testDate(date_numbers.at(0)) && testDate(date_numbers.at(1)) && testDate(date_numbers.at(2)))
+		if (date_numbers.size() == 3)
 		{
 			input_date.day = stoi(date_numbers.at(0));
 			input_date.month = stoi(date_numbers.at(1));
 			input_date.year = stoi(date_numbers.at(2));
-			break;
 		}
-	} while (true);
+	} while (!testDate(input_date));
 
 	return input_date;
 }
 
-bool Input_Asker::testDate(const string &date) //tests if the string contains only number, bars '/'  and spaces
+bool Input_Asker::testDate(const Date_t &D) const //tests if the string contains only number, bars '/'  and spaces
 {
-	bool found = false; //only here to check if the string given is not null
-	for (char i:date)
-	{
-		if (!(i >= ZERO && i <= NINE))
-			return false;
-		found = true;
-	}
-	if (!found)
-		return false;
+	if (D.year >= 1)
+		if (D.month >= 1 && D.month <= 12)
+			if (D.day >= 1 && D.day <= n_days(D.month, D.year))
+				return true;
+	return false;
+}
+
+unsigned int Input_Asker::n_days(const unsigned int M, const unsigned int Y) const 
+{
+	if (M == JAN || M == MAR || M == MAY || M == JUL || M == AUG || M == OCT || M == DEC)
+		return 31;
+	else if (M == APR || M == JUN || M == SEP || M == NOV)
+		return 30;
+	else if (leapYear(Y))
+		return 29;
 	else
-	return true;
+		return 28;
+}
+
+bool Input_Asker::leapYear(const unsigned int Y) const
+{
+	if (remainder(Y, 4) == 0 && remainder(Y, 100) != 0)
+		return true;
+	else if (remainder(Y, 400) == 0)
+		return true;
+	else
+		return false;
 }
