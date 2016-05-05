@@ -60,13 +60,19 @@ double Product::getPrice(const string &product)
 	return -1;
 }
 
-string Product::getProd(double price)
+string Product::getProd(unsigned int position)
 {
-	const double delta = 0.001; //erro aceitavel no preco
-	for (auto P : this->prod_price)
+	unsigned int cont = 0;
+	for (pair<string, double> it : prod_price)
 	{
-		if (P.second >= (price - delta) || P.second <= (price + delta))
-			return P.first;
+		if (cont == position)
+			return it.first;
+		cont++;
 	}
 	return "";
+}
+
+unsigned int Product::getSize()
+{
+	return prod_price.size();
 }

@@ -43,6 +43,7 @@ public:
 
 	void update();
 private:
+	string askProduct(Product &P);
 	void visDate(Date_t date);
 };
 

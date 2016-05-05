@@ -27,7 +27,7 @@ public:
 	int askClientName(const vector<Client_t> &info_c);
 	//keeps asking client name until an existing one is entered
 
-	string askProduct();
+	string askProduct(Product &P);
 	//aks user product name to be removed from the product list
 private:
 	bool testNum(unsigned int num, const Client &C);

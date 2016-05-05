@@ -22,3 +22,16 @@ void Visualize::visName(string &name) {
 void Visualize::visProd(string &prod) {
 	cout << setw(PROD_BOX) << left << prod;
 }
+//====================================================================================
+map<int, string> Visualize::visAllProd(Product &P)
+{
+	unsigned int i = 0, sz = P.getSize();
+	map<int, string> n_prod;
+	for (i; i < sz; i++)
+	{
+		cout << i+1 << " -> " << P.getProd(i) << endl;
+		n_prod[i+1] = P.getProd(i);
+	}
+	cout << "---> ";
+	return n_prod;
+}

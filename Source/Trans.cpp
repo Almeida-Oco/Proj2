@@ -66,15 +66,20 @@ Trans::Trans()
 
 void Trans::addTrans(Product &P ,Client &C)//adds a new transaction to the vector of transactions
 {
-	double price = 2.5;
-	Trans_t t;
+	Trans_t T;
 	Input_Asker Ask;
-	string date, products;
-	t.number = Ask.ask_c_number(C);
-	t.date = Ask.askDate(2);
-	//t.products = Ask.askProducts(P);
-	C.addMoney(t.number, (price * t.products.size()));
-	this->info_trans.push_back(t);
+	T.number = Ask.ask_c_number(C);
+	T.date = Ask.askDate(2);
+	vector <string> prod_bought;
+	string prod;
+	do
+	{
+		prod = askProduct(P);
+		prod_bought.push_back(prod);
+		C.addMoney(T.number, P.getPrice(prod));
+	} while (prod != "");
+	T.products = prod_bought;
+	this->info_trans.push_back(T);
 }
 
 //====================================================================================
@@ -160,6 +165,16 @@ void Trans::visBetweenDates()
 		i++;
 	}
 	cout << endl << "========================================================" << endl;
+}
+
+void Trans::visDate(Date_t date) {
+	cout << setw(DATE_BOX) << left << to_string(date.day) + "/" + to_string(date.month) + "/" + to_string(date.year);
+}
+
+void Trans::transHeader()
+{
+	cout << endl << "========================================================" << endl;
+	cout << setw(NUM_BOX) << left << "Num :" << setw(DATE_BOX) << "Date :" << setw(PROD_BOX) << "Products :" << endl << endl;
 }
 
 //====================================================================================
@@ -334,15 +349,9 @@ void Trans::mergeVectors(vector<int> &v1, vector<int> &v2)
  //================================= MISCELLANEOUS ====================================
  //====================================================================================
 
-void Trans::visDate(Date_t date) {
-	cout << setw(DATE_BOX) << left << to_string(date.day) + "/" + to_string(date.month) + "/" + to_string(date.year);
-}
-
-void Trans::transHeader()
-{
-	cout << endl << "========================================================" << endl;
-	cout << setw(NUM_BOX) << left << "Num :" << setw(DATE_BOX) << "Date :" << setw(PROD_BOX) << "Products :" << endl << endl;
-}
+//======================================================================================
+//================================== MISCELLANEOUS =====================================
+//======================================================================================
 
 void Trans::update()
 {
@@ -355,4 +364,25 @@ void Trans::update()
 	fout.close();
 	remove(this->trans_file_name.c_str());
 	rename(temp_file_name.c_str(), this->trans_file_name.c_str());
+}
+
+string Trans::askProduct(Product &P)
+{
+	Visualize V;
+	string p_name;
+	int n_prod;
+	map<int,string> num_prod = V.visAllProd(P);
+	do {
+		cin >> n_prod;
+		cin.ignore(9999, '\n');
+		if (cin.fail() && !cin.eof())
+		{
+			cin.clear();
+			cin.ignore(9999, '\n');
+			cout << "Invalid input, try again" << endl;
+			cout << "---> ";
+			continue;
+		}
+		return (!cin.eof()) ? num_prod.at(n_prod) : "";
+	} while (true);
 }

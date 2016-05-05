@@ -30,8 +30,10 @@ public:
 
 	//initializes products vector
 	Product();
+
+	unsigned int getSize();
 	double getPrice(const string &product);
-	string getProd(double price);
+	string getProd(unsigned int position);
 	void update();
 };
 

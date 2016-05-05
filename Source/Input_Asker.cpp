@@ -60,56 +60,6 @@ bool Input_Asker::testNum(unsigned int num, const Client &C)
 }
 
 //====================================================================================
-//==================================== PRODUCTS ======================================
-//====================================================================================
-/*
-vector<string> Input_Asker::askProducts(Product &P) //keeps asking user names of products, until CTRL+Z is entered
-{
-	Visualize V;
-	string p_name;
-	int n_prod;
-	vector<string> temp;
-	map<int, string > num_prod = V.visAllProd(P);
-	do {
-		cin >> n_prod;
-		cin.ignore(9999, '\n');
-		if (cin.fail() && !cin.eof())
-		{
-			cin.clear();
-			cin.ignore(9999, '\n');
-			continue;
-		}
-
-		if (!cin.eof())
-		{
-			temp.push_back(num_prod[n_prod]);
-			cout << "-----> ";
-		}
-	} while (!cin.eof());
-	return temp;
-}
-*/
-string Input_Asker::askProduct()
-{
-	string p_name;
-	do {
-		cout << "Insert product name" << endl;
-		getline(cin, p_name);
-	} while (!testText(p_name));
-	return p_name;
-}
-
-bool Input_Asker::testText(const string &c_name) //checks if the string contains only letters and spaces and if so return true
-{
-	for (char i : c_name)
-	{
-		if (!((i >= A && i <= Z) || (i >= a && i <= z) || i == SPACE))
-			return false;
-	}
-	return true;
-}
-
-//====================================================================================
 //==================================== DATE =========================================
 //====================================================================================
 
