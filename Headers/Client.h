@@ -25,7 +25,6 @@ class Client
 	static string client_file_name;
 	static unsigned int max_client_number;
 	static vector<Client_t> info_clients;
-	//used to avoid number repetitions
 public:
 	
 	Client();
@@ -46,6 +45,8 @@ public:
 
 	void update();
 private:
+	vector<Client_t>::iterator findInsertPos(const Client_t &C) const;
+	unsigned int findPos(const Client_t &C, unsigned int start, unsigned int end) const;
 	void visMoney(double money);
 };
 

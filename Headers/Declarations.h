@@ -8,8 +8,6 @@
 
 using namespace std;
 
-//EXperimentar github
-
 //CONSTANTS
 const string temp_file_name = "lqpebcsgs285nmgs99n2exzgguwcajf.txt";
 
@@ -52,7 +50,8 @@ struct Client_t {
 	string name;
 	double money;
 
-	bool operator< (const Client_t &C1);
+	bool operator< (const Client_t &C1) const;
+	bool operator> (const Client_t &C1) const;
 };
 
 struct Date_t {
@@ -60,8 +59,8 @@ struct Date_t {
 	unsigned int month;
 	unsigned int year;
 
-	bool operator> (const Date_t &D1);
-	bool operator< (const Date_t &D1);
+	bool operator> (const Date_t &D1) const;
+	bool operator< (const Date_t &D1) const;
 };
 
 struct Trans_t
@@ -70,7 +69,7 @@ struct Trans_t
 	Date_t date;
 	vector<string> products;
 
-	bool operator< (const Trans_t &T1);
+	bool operator< (const Trans_t &T1) const;
 };
 
 #endif // !DECLARATIONS_H

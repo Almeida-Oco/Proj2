@@ -28,6 +28,7 @@ Client::Client()
 			getline(cin, this->client_file_name);
 			fin.open(this->client_file_name);
 		}
+
 		while (getline(fin, line))
 		{
 			tokens = string_split(line, " ; ");
@@ -46,18 +47,19 @@ Client::Client()
 
 			client.name = trim(tokens.at(1));
 			client.number = stoi(tokens.at(0));
+
 			temp = client.number;
 			if (temp > this->max_client_number)
 				this->max_client_number = temp;
 			info_clients.push_back(client);
 		}
+
 		if (failed)
-		{
 			info_clients.clear();
-			continue;
-		}
+
 		fin.close();
-	} while (failed); //and not the products, if it is the client file, it copies the information to a vector of Structs
+	} while (failed); 
+
 	sort(this->info_clients.begin(), this->info_clients.end());
 	this->max_client_number++;
 } 
@@ -98,7 +100,7 @@ void Client::addClient()//asks the client info, checks its validity and if it ch
 	this->max_client_number++;
 	new_c.name = c_name;
 	new_c.money = 0;
-	info_clients.push_back(new_c);
+	info_clients.insert(findInsertPos(new_c), new_c);
 }
 
 void Client::addMoney(const unsigned int c_num, const double amount)
@@ -164,6 +166,32 @@ void Client::clientHeader()
 //====================================================================================
 //================================= MISCELLANEOUS ====================================
 //====================================================================================
+
+vector<Client_t>::iterator Client::findInsertPos(const Client_t &C) const
+{
+	return info_clients.begin() + findPos(C, 0, info_clients.size() - 1) + 1;
+}
+
+unsigned int Client::findPos(const Client_t &C, unsigned int start, unsigned int end) const
+{
+	if (start != end)
+	{
+		if (C < info_clients.at((start + end) / 2))
+			return findPos(C, start, ((start + end) / 2) - 1);
+		else if (C > info_clients.at((start + end) / 2))
+			return findPos(C, ((start + end) / 2) + 1, end);
+		else
+			return (start + end) / 2;
+	}
+
+	if (start == end && C > info_clients.at(start))
+		return start + 1;
+	if (start == end && C < info_clients.at(start) && start != 0)
+		return start - 1;
+	else
+		return start; //only happens when the element should be inserted in the first position
+
+}
 
 int Client::findName(const string &c_name) //searches the client vector for a given name, and returns its position on the vector
 {//if the name exists, if not then return -1

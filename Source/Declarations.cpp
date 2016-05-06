@@ -1,6 +1,6 @@
 #include "..\Headers\Declarations.h"
 
-bool Date_t::operator> (const Date_t &D1)
+bool Date_t::operator> (const Date_t &D1) const
 {
 	if (this->year > D1.year)
 		return true;
@@ -15,12 +15,10 @@ bool Date_t::operator> (const Date_t &D1)
 	}
 	return false;
 }
-bool Date_t::operator< (const Date_t &D1) 
+bool Date_t::operator< (const Date_t &D1) const
 { return !(*this > D1); }
 
-
-
-bool Trans_t::operator< (const Trans_t &T1)
+bool Trans_t::operator< (const Trans_t &T1) const
 {
 	if (this->date.year > T1.date.year)
 		return false;
@@ -36,8 +34,11 @@ bool Trans_t::operator< (const Trans_t &T1)
 	return true;
 }
 
-
-bool Client_t::operator< (const Client_t &C1)
+bool Client_t::operator< (const Client_t &C1) const
 {
 	return this->name < C1.name;
+}
+bool Client_t::operator> (const Client_t &C1) const
+{
+	return this->name > C1.name;
 }
