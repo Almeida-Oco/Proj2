@@ -16,6 +16,9 @@ class Input_Asker {
 	static Input_Asker *IA_pt;
 
 public:
+	Input_Asker() {};
+	Input_Asker(const Input_Asker &IA) {};
+
 	int ask_c_number()  const;
 	//asks for a client number until an existing one is entered
 

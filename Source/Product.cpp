@@ -3,7 +3,7 @@
 string Product::product_file_name = "";
 map<string, double> Product::prod_price;
 
-Product::Product()
+void Product::startUp()
 {
 	bool failed = false;
 	string line;

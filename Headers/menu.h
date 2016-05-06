@@ -5,9 +5,9 @@
 #include "..\Headers\Trans.h"
 #include "..\Headers\Product.h"
 //Pretty straightforward functions
-void ClientMenu(Client &C);
-void TransMenu(Trans &T, Client &C, Product &P);
-void MainMenu(Client &Cl, Product &P, Trans &T);
+void ClientMenu();
+void TransMenu();
+void MainMenu();
 
 //alteracao
 

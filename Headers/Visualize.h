@@ -18,6 +18,9 @@ class Visualize
 	static Visualize *V_pt;
 
 public:
+	Visualize() {};
+	Visualize(const Visualize &V) {};
+
 	void visProd(const string &prod) const;
 	void visNumber(unsigned int number) const; //WORKING
 	void visName(const string &name) const; //WORKING

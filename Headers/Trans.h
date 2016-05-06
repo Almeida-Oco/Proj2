@@ -20,9 +20,11 @@ class Trans {
 
 	static Trans *T_pt;
 public:
-	Trans();
+	Trans() {};
+	Trans(const Trans &T) {};
 
 	//MODIFIERS
+	void startUp();
 	void addTrans();
 	void update();
 

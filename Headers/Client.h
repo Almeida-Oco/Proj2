@@ -24,10 +24,12 @@ class Client
 
 public:
 	
-	Client();
+	Client() {};
+	Client(const Client &C) {};
 	//void calcClientMoney(Trans &T);
 
 	vector <Client_t> getInfo() const { return info_clients; }
+	void startUp();
 
 	//manipulates vector/info of clients
 	void removeClient();

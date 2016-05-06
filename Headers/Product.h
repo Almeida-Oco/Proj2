@@ -19,7 +19,10 @@ class Product {
 public:
 
 	//initializes products vector
-	Product();
+	Product() {};
+	Product(const Product &P) {};
+
+	void startUp();
 
 	unsigned int getSize();
 	double getPrice(const string &product);

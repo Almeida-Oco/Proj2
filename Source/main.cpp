@@ -13,28 +13,33 @@ using namespace std;
 #include "..\Headers\Input_Asker.h"
 #include "..\Headers\menu.h"
 
-bool testText(const string &c_name);
-//checks if the string contains only letters and spaces and if so return true
+Client *Client::C_pt;
+Product *Product::P_pt;
+Trans *Trans::T_pt;
+Input_Asker *Input_Asker::IA_pt;
+Visualize *Visualize::V_pt;
 
-void update_n_exit(Client &info_clients, Product &info_prod, Trans &info_trans);
+
+bool testText(const string &c_name);
+void update_n_exit();
 //last function to be called, updates the files, according to the current information on the info_(vectors)
 
 
 
 int main()
 {
-	Client C;
-	Product P;
-	Trans T;
-	MainMenu(C, P, T);
-	update_n_exit(C, P, T);
+	Client::instance()->startUp();
+	Product::instance()->startUp();
+	Trans::instance()->startUp();
+	MainMenu();
+	update_n_exit();
 }
 
-void update_n_exit(Client &C, Product &P, Trans &T)
+void update_n_exit()
 {
-	C.update();
-	P.update();
-	T.update();
+	Client::instance()->update();
+	Product::instance()->update();
+	Trans::instance()->update();
 	cout << "GOODBYE" << endl;
 	exit(0);
 }

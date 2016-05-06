@@ -7,7 +7,7 @@ vector<Client_t> Client::info_clients;
 //=================================== MODIFIERS ======================================
 //====================================================================================
 
-Client::Client()
+void Client::startUp()
 {
 	this->max_client_number = 0;
 	unsigned int temp;

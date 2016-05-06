@@ -6,7 +6,7 @@
 string Trans::trans_file_name = "";
 vector<Trans_t> Trans::info_trans;
 
-Trans::Trans()
+void Trans::startUp()
 {
 	bool failed = false;
 	vector<string> tokens;
@@ -223,13 +223,12 @@ void Trans::printRecommended(const vector<string> &P)
 void Trans::selectiveAd()
 {
 	cout << endl << "========================================================" << endl;
-	Input_Asker Ask;
 	Matrix product_list = createMatrix(); //holds matrix with true and false values already initialized
 	vector<int> different_products; //vector which will hold the products the target client did not bought
 	vector<int> temp_vec; //will temporarily hold the different products of the current user
 
 	int
-		client_number			 = Ask.askClientName(Client::instance()->getInfo()), //client ID
+		client_number			 = Input_Asker::instance()->askClientName(), //client ID
 		client_number_pos		 = product_list.c_number_to_i[client_number], //target client position in matrix
 		n_columns				 = product_list.prod_bought[client_number_pos].size(),
 		n_rows					 = product_list.prod_bought.size(), 
