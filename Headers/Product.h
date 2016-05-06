@@ -1,6 +1,7 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
-#include "..\Headers\Input_Asker.h"
+#include "Input_Asker.h"
+#include "Declarations.h"
 #include <iomanip>
 #include <map>
 #include <string>
@@ -10,22 +11,11 @@
 
 using namespace std;
 
-
-//====================================================================================
-//=================================== PROTOTYPES ======================================
-//====================================================================================
-vector<string> string_split(const string &line, const string spliter);
-string remove_middle_spaces(const string &S);
-string trim(string &str);
-bool testText(const string &c_name);
-
-
-//=================================================================================
-//=================================== CLASS ======================================
-//=================================================================================
 class Product {
 	static string product_file_name;
 	static map <string,double> prod_price;
+	
+	static Product *P_pt;
 public:
 
 	//initializes products vector
@@ -35,6 +25,13 @@ public:
 	double getPrice(const string &product);
 	string getProd(unsigned int position);
 	void update();
+
+	static Product *instance()
+	{
+		if (!P_pt)
+			P_pt = new Product;
+		return P_pt;
+	}
 };
 
 #endif // !PRODUCT_H

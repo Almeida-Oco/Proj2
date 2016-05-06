@@ -72,4 +72,10 @@ struct Trans_t
 	bool operator< (const Trans_t &T1) const;
 };
 
+vector<string> string_split(const string &line, const string spliter);
+string remove_middle_spaces(const string &S);
+string trim(string &str);
+bool testText(const string &c_name);
+void quicksort(vector<int> &qs);
+
 #endif // !DECLARATIONS_H

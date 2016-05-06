@@ -1,13 +1,10 @@
 #include "..\Headers\Input_Asker.h"
 
-string trim(string &str);
-vector<string> string_split(const string &line, const string spliter);
-
 //====================================================================================
 //==================================== CLIENTS =======================================
 //====================================================================================
 
-int Input_Asker::ask_c_number(const Client &C)
+int Input_Asker::ask_c_number() const
 {
 	int c_number;
 	do
@@ -22,12 +19,12 @@ int Input_Asker::ask_c_number(const Client &C)
 			cout << "Insert client number" << endl;
 			cin >> c_number;
 		}
-	} while (!testNum(c_number , C));
+	} while (!testNum(c_number));
 
 		return c_number;
 }
 
-int Input_Asker::askClientName(const vector<Client_t> &info_c)
+int Input_Asker::askClientName() const
 {
 	bool found = false;
 	string client_name;
@@ -35,7 +32,7 @@ int Input_Asker::askClientName(const vector<Client_t> &info_c)
 	{
 		cout << "Insert client name : " << endl;
 		getline(cin, client_name);
-		for (Client_t client_line : info_c)
+		for (Client_t client_line : Client::instance()->getInfo())
 		{
 			if (client_line.name == client_name)
 			{
@@ -49,9 +46,9 @@ int Input_Asker::askClientName(const vector<Client_t> &info_c)
 	return -1;
 }
 
-bool Input_Asker::testNum(unsigned int num, const Client &C)
+bool Input_Asker::testNum(unsigned int num) const
 {
-	for (Client_t i : C.getInfo())
+	for (Client_t i : Client::instance()->getInfo())
 	{
 		if (i.number == num)
 			return true;
@@ -63,7 +60,7 @@ bool Input_Asker::testNum(unsigned int num, const Client &C)
 //==================================== DATE =========================================
 //====================================================================================
 
-Date_t Input_Asker::askDate(int question)
+Date_t Input_Asker::askDate(int question) const
 {
 	int cont = 0, date_placeholder = 0;
 	bool done = false;

@@ -1,4 +1,3 @@
-
 #ifndef TRANS_H
 #define TRANS_H
 
@@ -10,41 +9,49 @@
 #include <string>
 #include <vector>
 
-void quicksort(vector<int> &qs);
-vector<string> string_split(const string &line, const string spliter);
-string remove_middle_spaces(const string &S);
-string trim(string &str);
-
+class Client;
+class Product;
 using namespace std;
+
+
 class Trans {
 	static string trans_file_name;
 	static vector<Trans_t> info_trans;
-	static vector<Client_t> info_clients;
+
+	static Trans *T_pt;
 public:
 	Trans();
 
 	//MODIFIERS
-	void addTrans(Product &P, Client &C);
+	void addTrans();
+	void update();
 
 	//VISUALIZERS
-	void transHeader();
-	void visClientTrans(const Client &C);
-	void visAllTrans();
-	void visDayTrans();
-	void visBetweenDates();
+	void transHeader() const;
+	void visClientTrans() const;
+	void visAllTrans() const;
+	void visDayTrans() const;
+	void visBetweenDates() const;
 
-	//ADS
+	//ADVERTISEMENT
 	Matrix createMatrix();
 	void printRecommended(const vector<string> &P);
-	void selectiveAd(const Client &C); 
+	void selectiveAd(); 
 	void mergeVectors(vector<int> &v1, vector<int> &v2);
 	vector<int> mostBought(vector<int> &p_bought);
-	//receives vector, sorts it with quicksort and then returns vector which hold which number(s) had more repetitions
-
-	void update();
+	
+	//MISC
+	vector<Trans_t> getInfo() const;
+	static Trans *instance()
+	{
+		if (!T_pt)
+			T_pt = new Trans;
+		return T_pt;
+	}
 private:
-	string askProduct(Product &P);
-	void visDate(Date_t date);
+	string askProduct() const;
+	void visTrans(const Trans_t &T_t) const;
+	void visDate(Date_t date) const;
 };
 
 #endif // !TRANS_H

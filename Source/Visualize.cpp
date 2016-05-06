@@ -9,28 +9,28 @@ string Visualize::P_comma(const vector<string> &prods)
 }
 
 //====================================================================================
-void Visualize::visNumber(unsigned int number) {
+void Visualize::visNumber(unsigned int number) const {
 	cout << setw(NUM_BOX) << left << number;
 }
 
 //====================================================================================
-void Visualize::visName(string &name) {
+void Visualize::visName(const string &name) const {
 	cout << setw(NAME_BOX) << left << name;
 }
 
 //====================================================================================
-void Visualize::visProd(string &prod) {
+void Visualize::visProd(const string &prod) const {
 	cout << setw(PROD_BOX) << left << prod;
 }
 //====================================================================================
-map<int, string> Visualize::visAllProd(Product &P)
+map<int, string> Visualize::visAllProd() const
 {
-	unsigned int i = 0, sz = P.getSize();
+	unsigned int i = 0, sz = Product::instance()->getSize();
 	map<int, string> n_prod;
 	for (i; i < sz; i++)
 	{
-		cout << i+1 << " -> " << P.getProd(i) << endl;
-		n_prod[i+1] = P.getProd(i);
+		cout << i + 1 << " -> " << Product::instance()->getProd(i) << endl;
+		n_prod[i+1] = Product::instance()->getProd(i);
 	}
 	cout << "---> ";
 	return n_prod;

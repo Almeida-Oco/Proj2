@@ -64,15 +64,24 @@ Client::Client()
 	this->max_client_number++;
 } 
 
+/*
+void Client::calcClientMoney(Trans &T)
+{
+	for (vector<Trans_t>::iterator it = T.getInfo().begin ; it != T.getInfo().end() ; it++)
+	{
+		
+	}
+}
+*/
+
 void Client::removeClient()
 {//removes a certain client by removing it from the vector of clients
 
 	bool removed = false;
 	unsigned int c_number, sz = info_clients.size(), i = 0;
-	Input_Asker Ask;
 	do
 	{
-		c_number = Ask.askClientName(info_clients);
+		c_number = Input_Asker::instance()->askClientName();
 		for (i=0 ; i<sz ; i++)
 		{
 			if (c_number == info_clients.at(i).number)
@@ -120,7 +129,6 @@ void Client::addMoney(const unsigned int c_num, const double amount)
 void Client::visClient()
 {
 	bool found = false;
-	Visualize V;
 	string client_name;
 	do
 	{
@@ -134,7 +142,7 @@ void Client::visClient()
 			{
 				found = true;
 				clientHeader();
-				V.visNumber(i.number); V.visName(i.name); visMoney(i.money);
+				Visualize::instance()->visNumber(i.number); Visualize::instance()->visName(i.name); visMoney(i.money);
 				cout << endl;
 				break;
 			}
@@ -147,11 +155,10 @@ void Client::visClient()
 
 void Client::visAllClients()
 {
-	Visualize V;
 	clientHeader();
 	for (Client_t i : info_clients)
 	{
-		V.visNumber(i.number); V.visName(i.name); visMoney(i.money);
+		Visualize::instance()->visNumber(i.number); Visualize::instance()->visName(i.name); visMoney(i.money);
 		cout << endl;
 	}
 	cout << endl << "========================================================" << endl;
@@ -220,3 +227,4 @@ void Client::update()
 	remove(this->client_file_name.c_str());
 	rename(temp_file_name.c_str(), this->client_file_name.c_str());
 }
+

@@ -5,15 +5,12 @@
 
 string Trans::trans_file_name = "";
 vector<Trans_t> Trans::info_trans;
-vector<Client_t> Trans::info_clients;
 
 Trans::Trans()
 {
 	bool failed = false;
 	vector<string> tokens;
 	Trans_t transaction;
-	//int test1;
-	//char test2;
 	string line;
 	ifstream fin;
 	do {
@@ -64,19 +61,18 @@ Trans::Trans()
 //=================================== MODIFIERS ======================================
 //====================================================================================
 
-void Trans::addTrans(Product &P ,Client &C)//adds a new transaction to the vector of transactions
+void Trans::addTrans()//adds a new transaction to the vector of transactions
 {
 	Trans_t T;
-	Input_Asker Ask;
-	T.number = Ask.ask_c_number(C);
-	T.date = Ask.askDate(2);
+	T.number = Input_Asker::instance()->ask_c_number();
+	T.date = Input_Asker::instance()->askDate(2);
 	vector <string> prod_bought;
 	string prod;
 	do
 	{
-		prod = askProduct(P);
+		prod = askProduct();
 		prod_bought.push_back(prod);
-		C.addMoney(T.number, P.getPrice(prod));
+		Client::instance()->addMoney(T.number, Product::instance()->getPrice(prod));
 	} while (prod != "");
 	T.products = prod_bought;
 	this->info_trans.push_back(T);
@@ -85,74 +81,66 @@ void Trans::addTrans(Product &P ,Client &C)//adds a new transaction to the vecto
 //====================================================================================
 //================================== VISUALIZERS =====================================
 //====================================================================================
-void Trans::visAllTrans()
+void Trans::visAllTrans() const
 {
 	transHeader();
-	Visualize V;
 	for (Trans_t T : this->info_trans)
-	{
-		V.visNumber(T.number); visDate(T.date); cout << V.P_comma(T.products); cout << endl;
-	}
+		visTrans(T);
+
 	cout << endl << "========================================================" << endl;
 }
 
-void Trans::visClientTrans(const Client &C)
+void Trans::visClientTrans() const
 {
-	string client_name;
-	Input_Asker ask;
-	Visualize V;
 	unsigned int c_number;
-	bool found = false;
+	bool first = true;
 	do
 	{
-		c_number = ask.askClientName(C.getInfo());
-		transHeader();
-		unsigned int i = 0;
+		c_number = Input_Asker::instance()->askClientName();
 		for (Trans_t T : this->info_trans)
 		{
-			if (T.number == c_number) {
-				V.visNumber(T.number); visDate(T.date); cout << V.P_comma(T.products) << endl;
+			if (T.number == c_number)
+			{
+				if (first) 
+					transHeader();
+				first = false;
+				visTrans(T);
 			}
-			i++;
 		}
 		cout << endl << "========================================================" << endl;
 	} while (c_number == -1);
 }
 
-void Trans::visDayTrans()
+void Trans::visDayTrans() const
 {
-	Input_Asker Ask;
-	Visualize V;
 	Date_t D;
 	bool found = false, first = true;
 	unsigned int i = 0;
-		D = Ask.askDate(2);
-		for (Trans_t T : this->info_trans)
+	D = Input_Asker::instance()->askDate(2);
+
+	for (Trans_t T : this->info_trans)
+	{
+		if (T.date.day == D.day && T.date.month == D.month && T.date.year == D.year)
 		{
-			if (T.date.day == D.day && T.date.month == D.month && T.date.year == D.year)
-			{
-				if (first)
-					transHeader();
-				first = false;
-				V.visNumber(T.number); visDate(T.date); cout << V.P_comma(T.products); cout << endl;
-				found = true;
-			}
-			i++;
+			if (first)
+				transHeader();
+			first = false;
+			Visualize::instance()->visNumber(T.number); visDate(T.date); cout << Visualize::instance()->P_comma(T.products); cout << endl;
+			found = true;
 		}
-		if (!found)
-			cout << "The date is not on records, please try again " << endl;
-		cout << endl << "========================================================" << endl;
+		i++;
+	}
+	if (!found)
+		cout << "The date is not on records" << endl;
+	cout << endl << "========================================================" << endl;
 }
 
-void Trans::visBetweenDates()
+void Trans::visBetweenDates() const
 {
 	bool first = true;
-	Input_Asker Ask;
-	Visualize V;
-	Date_t lower_date = Ask.askDate(0);
-	Date_t upper_date = Ask.askDate(1);
+	Date_t lower_date = Input_Asker::instance()->askDate(0);
+	Date_t upper_date = Input_Asker::instance()->askDate(1);
 
-	unsigned int i = 0;
 	for (Trans_t T : this->info_trans)
 	{
 		if (T.date > lower_date && T.date < upper_date)
@@ -160,21 +148,25 @@ void Trans::visBetweenDates()
 			if (first)
 				transHeader();
 			first = false;
-			V.visNumber(T.number); visDate(T.date); V.visProd(T.products.at(i)); cout << endl;
+			visTrans(T);
 		}
-		i++;
 	}
 	cout << endl << "========================================================" << endl;
 }
 
-void Trans::visDate(Date_t date) {
-	cout << setw(DATE_BOX) << left << to_string(date.day) + "/" + to_string(date.month) + "/" + to_string(date.year);
-}
-
-void Trans::transHeader()
+void Trans::transHeader() const
 {
 	cout << endl << "========================================================" << endl;
 	cout << setw(NUM_BOX) << left << "Num :" << setw(DATE_BOX) << "Date :" << setw(PROD_BOX) << "Products :" << endl << endl;
+}
+
+void Trans::visDate(Date_t date) const {
+	cout << setw(DATE_BOX) << left << to_string(date.day) + "/" + to_string(date.month) + "/" + to_string(date.year);
+}
+
+void Trans::visTrans(const Trans_t &T_t) const
+{
+	Visualize::instance()->visNumber(T_t.number); visDate(T_t.date); cout << Visualize::instance()->P_comma(T_t.products); cout << endl;
 }
 
 //====================================================================================
@@ -228,7 +220,7 @@ void Trans::printRecommended(const vector<string> &P)
 	cout << "<--";
 }
 
-void Trans::selectiveAd(const Client &C)
+void Trans::selectiveAd()
 {
 	cout << endl << "========================================================" << endl;
 	Input_Asker Ask;
@@ -237,7 +229,7 @@ void Trans::selectiveAd(const Client &C)
 	vector<int> temp_vec; //will temporarily hold the different products of the current user
 
 	int
-		client_number			 = Ask.askClientName(C.getInfo()), //client ID
+		client_number			 = Ask.askClientName(Client::instance()->getInfo()), //client ID
 		client_number_pos		 = product_list.c_number_to_i[client_number], //target client position in matrix
 		n_columns				 = product_list.prod_bought[client_number_pos].size(),
 		n_rows					 = product_list.prod_bought.size(), 
@@ -349,29 +341,22 @@ void Trans::mergeVectors(vector<int> &v1, vector<int> &v2)
  //================================= MISCELLANEOUS ====================================
  //====================================================================================
 
-//======================================================================================
-//================================== MISCELLANEOUS =====================================
-//======================================================================================
-
 void Trans::update()
 {
 	ofstream fout;
-	Visualize V;
 	fout.open(temp_file_name);
 	if (fout.is_open())
 		for (Trans_t i : this->info_trans)																									//create function to return string of products to display
-			fout << i.number << " ; " << to_string(i.date.day) + "/" + to_string(i.date.month) + "/" + to_string(i.date.year) << " ; " << V.P_comma(i.products) << endl;
+			fout << i.number << " ; " << to_string(i.date.day) + "/" + to_string(i.date.month) + "/" + to_string(i.date.year) << " ; " << Visualize::instance()->P_comma(i.products) << endl;
 	fout.close();
 	remove(this->trans_file_name.c_str());
 	rename(temp_file_name.c_str(), this->trans_file_name.c_str());
 }
 
-string Trans::askProduct(Product &P)
+string Trans::askProduct() const
 {
-	Visualize V;
-	string p_name;
 	int n_prod;
-	map<int,string> num_prod = V.visAllProd(P);
+	map<int,string> num_prod = Visualize::instance()->visAllProd();
 	do {
 		cin >> n_prod;
 		cin.ignore(9999, '\n');
@@ -385,4 +370,9 @@ string Trans::askProduct(Product &P)
 		}
 		return (!cin.eof()) ? num_prod.at(n_prod) : "";
 	} while (true);
+}
+
+vector<Trans_t> Trans::getInfo() const
+{
+	return info_trans;
 }

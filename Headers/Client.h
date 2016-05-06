@@ -1,33 +1,31 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include "..\Headers\Declarations.h"
-#include "..\Headers\Input_Asker.h"
-#include "..\Headers\Visualize.h"
+#include "Declarations.h"
+#include "Input_Asker.h"
+#include "Visualize.h"
+#include "Trans.h"
 #include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <fstream>
 
-//sadnasçnasnf
+class Trans;
 
 using namespace std;
-
-vector<string> string_split(const string &line, const string spliter);
-string remove_middle_spaces(const string &S);
-string trim(string &str);
-bool testText(const string &c_name);
-
 
 class Client
 {
 	static string client_file_name;
 	static unsigned int max_client_number;
 	static vector<Client_t> info_clients;
+	static Client *C_pt;
+
 public:
 	
 	Client();
+	//void calcClientMoney(Trans &T);
 
 	vector <Client_t> getInfo() const { return info_clients; }
 
@@ -36,7 +34,6 @@ public:
 	void addClient();
 	void addMoney(const unsigned int c_num, const double amount);
 	int findName(const string &c_name);
-	//returns position in info_clients of given name, or returns -1 if not found
 
 	//visualize client information
 	void visClient();
@@ -44,6 +41,14 @@ public:
 	void clientHeader();
 
 	void update();
+
+
+	static Client *instance()
+	{
+		if (!C_pt)
+			C_pt = new Client;
+		return C_pt;
+	}
 private:
 	vector<Client_t>::iterator findInsertPos(const Client_t &C) const;
 	unsigned int findPos(const Client_t &C, unsigned int start, unsigned int end) const;
