@@ -1,19 +1,17 @@
 #ifndef INPUT_ASKER_H
 #define INPUT_ASKER_H
 
+#include "Declarations.h"
+#include "Supermarket.h"
 #include <vector>
 #include <iostream>
 #include <string>
-#include "..\Headers\Declarations.h"
-#include "..\Headers\Visualize.h"
-#include "..\Headers\Client.h"
 
 using namespace std;
-class Product;
-class Client;
 
-class Input_Asker {
-	static Input_Asker *IA_pt;
+class Supermarket::Input_Asker
+{
+	static Input_Asker *IA_ptr;
 
 public:
 	Input_Asker() {};
@@ -31,9 +29,9 @@ public:
 
 	static Input_Asker *instance()
 	{
-		if (!IA_pt)
-			IA_pt = new Input_Asker;
-		return IA_pt;
+		if (!IA_ptr)
+			IA_ptr = new Input_Asker;
+		return IA_ptr;
 	}
 
 private:

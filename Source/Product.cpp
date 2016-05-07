@@ -1,9 +1,10 @@
 #include "..\Headers\Product.h"
+#include "..\Headers\Supermarket.h"
 
-string Product::product_file_name = "";
-map<string, double> Product::prod_price;
+string Supermarket::Product::product_file_name = "";
+map<string, double> Supermarket::Product::prod_price;
 
-void Product::startUp()
+void Supermarket::Product::startUp()
 {
 	bool failed = false;
 	string line;
@@ -39,7 +40,7 @@ void Product::startUp()
 	} while (failed); //if it is the products file, it copies the information to a vector of strings
 }
 
-void Product::update()
+void Supermarket::Product::update()
 {
 	ofstream fout;
 
@@ -52,7 +53,7 @@ void Product::update()
 	rename(temp_file_name.c_str(), this->product_file_name.c_str());
 }
 
-double Product::getPrice(const string &product)
+double Supermarket::Product::getPrice(const string &product)
 {
 	auto it = this->prod_price.find(product);
 	if (it != this->prod_price.end())
@@ -60,7 +61,7 @@ double Product::getPrice(const string &product)
 	return -1;
 }
 
-string Product::getProd(unsigned int position)
+string Supermarket::Product::getProd(unsigned int position)
 {
 	unsigned int cont = 0;
 	for (pair<string, double> it : prod_price)
@@ -72,7 +73,7 @@ string Product::getProd(unsigned int position)
 	return "";
 }
 
-unsigned int Product::getSize()
+unsigned int Supermarket::Product::getSize()
 {
 	return prod_price.size();
 }

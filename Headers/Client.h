@@ -2,25 +2,25 @@
 #define CLIENT_H
 
 #include "Declarations.h"
-#include "Input_Asker.h"
-#include "Visualize.h"
-#include "Trans.h"
+#include "Supermarket.h"
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <fstream>
 
 class Trans;
+class Supermarket;
 
 using namespace std;
 
-class Client
+class Supermarket::Client
 {
 	static string client_file_name;
 	static unsigned int max_client_number;
 	static vector<Client_t> info_clients;
-	static Client *C_pt;
+	static Client *C_ptr;
 
 public:
 	
@@ -47,9 +47,9 @@ public:
 
 	static Client *instance()
 	{
-		if (!C_pt)
-			C_pt = new Client;
-		return C_pt;
+		if (!C_ptr)
+			C_ptr = new Client;
+		return C_ptr;
 	}
 private:
 	vector<Client_t>::iterator findInsertPos(const Client_t &C) const;

@@ -5,7 +5,9 @@
 using namespace std;
 
 //FUNCTIONS AND ETC
+#include "..\Headers\Supermarket.h"
 #include "..\Headers\Declarations.h"
+#include "..\Headers\Bottom_10.h"
 #include "..\Headers\Product.h"
 #include "..\Headers\Visualize.h"
 #include "..\Headers\Client.h"
@@ -13,11 +15,14 @@ using namespace std;
 #include "..\Headers\Input_Asker.h"
 #include "..\Headers\menu.h"
 
-Client *Client::C_pt;
-Product *Product::P_pt;
-Trans *Trans::T_pt;
-Input_Asker *Input_Asker::IA_pt;
-Visualize *Visualize::V_pt;
+Supermarket *Supermarket::S_pt;
+Supermarket::Client *Supermarket::Client::C_ptr;
+Supermarket::Product *Supermarket::Product::P_ptr;
+Supermarket::Trans *Supermarket::Trans::T_ptr;
+Supermarket::Input_Asker *Supermarket::Input_Asker::IA_ptr;
+Supermarket::Visualize *Supermarket::Visualize::V_ptr;
+Supermarket::Bottom_10 *Supermarket::Bottom_10::B10_ptr;
+
 
 
 bool testText(const string &c_name);
@@ -28,18 +33,18 @@ void update_n_exit();
 
 int main()
 {
-	Client::instance()->startUp();
-	Product::instance()->startUp();
-	Trans::instance()->startUp();
-	MainMenu();
-	update_n_exit();
+	cout << "FUCKING FINALLY" << endl << "GO TO SLEEP" << endl;
+	Supermarket();
+	//MainMenu();
+	//update_n_exit();
 }
 
 void update_n_exit()
 {
-	Client::instance()->update();
-	Product::instance()->update();
-	Trans::instance()->update();
+
+	//Client::instance()->update();
+	//Product::instance()->update();
+	//Trans::instance()->update();
 	cout << "GOODBYE" << endl;
 	exit(0);
 }

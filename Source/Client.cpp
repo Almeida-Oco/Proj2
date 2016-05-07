@@ -1,13 +1,18 @@
 #include "..\Headers\Client.h"
+#include "..\Headers\Visualize.h"
+#include "..\Headers\Input_Asker.h"
+#include "..\Headers\Supermarket.h"
 
-string Client::client_file_name = "";
-unsigned int Client::max_client_number = 0;
-vector<Client_t> Client::info_clients;
+class Supermarket;
+
+string Supermarket::Client::client_file_name = "";
+unsigned int Supermarket::Client::max_client_number = 0;
+vector<Client_t> Supermarket::Client::info_clients;
 //====================================================================================
 //=================================== MODIFIERS ======================================
 //====================================================================================
 
-void Client::startUp()
+void Supermarket::Client::startUp()
 {
 	this->max_client_number = 0;
 	unsigned int temp;
@@ -74,7 +79,7 @@ void Client::calcClientMoney(Trans &T)
 }
 */
 
-void Client::removeClient()
+void Supermarket::Client::removeClient()
 {//removes a certain client by removing it from the vector of clients
 
 	bool removed = false;
@@ -96,7 +101,7 @@ void Client::removeClient()
 	info_clients.erase(info_clients.begin() + i);
 } 
 
-void Client::addClient()//asks the client info, checks its validity and if it checks pushes back to the client vector
+void Supermarket::Client::addClient()//asks the client info, checks its validity and if it checks pushes back to the client vector
 {
 	Client_t new_c;
 	string info, c_name;
@@ -112,7 +117,7 @@ void Client::addClient()//asks the client info, checks its validity and if it ch
 	info_clients.insert(findInsertPos(new_c), new_c);
 }
 
-void Client::addMoney(const unsigned int c_num, const double amount)
+void Supermarket::Client::addMoney(const unsigned int c_num, const double amount)
 {
 	unsigned int sz = info_clients.size();
 	for (unsigned int i = 0; i < sz; i++)
@@ -126,7 +131,7 @@ void Client::addMoney(const unsigned int c_num, const double amount)
 //================================== VISUALIZERS =====================================
 //====================================================================================
 
-void Client::visClient()
+void Supermarket::Client::visClient()
 {
 	bool found = false;
 	string client_name;
@@ -153,7 +158,7 @@ void Client::visClient()
 	} while (!found);
 }
 
-void Client::visAllClients()
+void Supermarket::Client::visAllClients()
 {
 	clientHeader();
 	for (Client_t i : info_clients)
@@ -164,7 +169,7 @@ void Client::visAllClients()
 	cout << endl << "========================================================" << endl;
 }
 
-void Client::clientHeader()
+void Supermarket::Client::clientHeader()
 {
 	cout << endl << "========================================================" << endl;
 	cout << setw(NUM_BOX) << left << "Num :" << setw(NAME_BOX) << "Name :" << setw(MONEY_BOX) << "Money :" << endl << endl;
@@ -174,12 +179,12 @@ void Client::clientHeader()
 //================================= MISCELLANEOUS ====================================
 //====================================================================================
 
-vector<Client_t>::iterator Client::findInsertPos(const Client_t &C) const
+vector<Client_t>::iterator Supermarket::Client::findInsertPos(const Client_t &C) const
 {
 	return info_clients.begin() + findPos(C, 0, info_clients.size() - 1) + 1;
 }
 
-unsigned int Client::findPos(const Client_t &C, unsigned int start, unsigned int end) const
+unsigned int Supermarket::Client::findPos(const Client_t &C, unsigned int start, unsigned int end) const
 {
 	if (start != end)
 	{
@@ -200,7 +205,7 @@ unsigned int Client::findPos(const Client_t &C, unsigned int start, unsigned int
 
 }
 
-int Client::findName(const string &c_name) //searches the client vector for a given name, and returns its position on the vector
+int Supermarket::Client::findName(const string &c_name) //searches the client vector for a given name, and returns its position on the vector
 {//if the name exists, if not then return -1
 	int sz = info_clients.size();
 	for (int i = 0; i<sz; i++)
@@ -211,11 +216,11 @@ int Client::findName(const string &c_name) //searches the client vector for a gi
 	return -1;
 }
 
-void Client::visMoney(double money) {
+void Supermarket::Client::visMoney(double money) {
 	cout << setw(MONEY_BOX) << fixed << setprecision(2) << left << money;
 }
 
-void Client::update()
+void Supermarket::Client::update()
 {
 	ofstream fout;
 

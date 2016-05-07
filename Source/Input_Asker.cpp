@@ -1,10 +1,11 @@
 #include "..\Headers\Input_Asker.h"
-
+#include "..\Headers\Supermarket.h"
+#include "..\Headers\Client.h"
 //====================================================================================
 //==================================== CLIENTS =======================================
 //====================================================================================
 
-int Input_Asker::ask_c_number() const
+int Supermarket::Input_Asker::ask_c_number() const
 {
 	int c_number;
 	do
@@ -24,7 +25,7 @@ int Input_Asker::ask_c_number() const
 		return c_number;
 }
 
-int Input_Asker::askClientName() const
+int Supermarket::Input_Asker::askClientName() const
 {
 	bool found = false;
 	string client_name;
@@ -46,7 +47,7 @@ int Input_Asker::askClientName() const
 	return -1;
 }
 
-bool Input_Asker::testNum(unsigned int num) const
+bool Supermarket::Input_Asker::testNum(unsigned int num) const
 {
 	for (Client_t i : Client::instance()->getInfo())
 	{
@@ -60,7 +61,7 @@ bool Input_Asker::testNum(unsigned int num) const
 //==================================== DATE =========================================
 //====================================================================================
 
-Date_t Input_Asker::askDate(int question) const
+Date_t Supermarket::Input_Asker::askDate(int question) const
 {
 	int cont = 0, date_placeholder = 0;
 	bool done = false;
@@ -91,7 +92,7 @@ Date_t Input_Asker::askDate(int question) const
 	return input_date;
 }
 
-bool Input_Asker::testDate(const Date_t &D) const //tests if the string contains only number, bars '/'  and spaces
+bool Supermarket::Input_Asker::testDate(const Date_t &D) const //tests if the string contains only number, bars '/'  and spaces
 {
 	if (D.year >= 1)
 		if (D.month >= 1 && D.month <= 12)
@@ -100,7 +101,7 @@ bool Input_Asker::testDate(const Date_t &D) const //tests if the string contains
 	return false;
 }
 
-unsigned int Input_Asker::n_days(const unsigned int M, const unsigned int Y) const 
+unsigned int Supermarket::Input_Asker::n_days(const unsigned int M, const unsigned int Y) const
 {
 	if (M == JAN || M == MAR || M == MAY || M == JUL || M == AUG || M == OCT || M == DEC)
 		return 31;
@@ -112,7 +113,7 @@ unsigned int Input_Asker::n_days(const unsigned int M, const unsigned int Y) con
 		return 28;
 }
 
-bool Input_Asker::leapYear(const unsigned int Y) const
+bool Supermarket::Input_Asker::leapYear(const unsigned int Y) const
 {
 	if (remainder(Y, 4) == 0 && remainder(Y, 100) != 0)
 		return true;

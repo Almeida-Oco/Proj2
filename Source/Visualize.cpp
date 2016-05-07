@@ -1,6 +1,11 @@
 #include "..\Headers\Visualize.h"
+#include "..\Headers\Declarations.h"
+#include "..\Headers\Product.h"
+#include "..\Headers\Supermarket.h"
 
-string Visualize::P_comma(const vector<string> &prods)
+class Supermarket;
+
+string Supermarket::Visualize::P_comma(const vector<string> &prods)
 {
 	string final;
 	for (string S : prods)
@@ -9,23 +14,23 @@ string Visualize::P_comma(const vector<string> &prods)
 }
 
 //====================================================================================
-void Visualize::visNumber(unsigned int number) const {
+void Supermarket::Visualize::visNumber(unsigned int number) const {
 	cout << setw(NUM_BOX) << left << number;
 }
 
 //====================================================================================
-void Visualize::visName(const string &name) const {
+void Supermarket::Visualize::visName(const string &name) const {
 	cout << setw(NAME_BOX) << left << name;
 }
 
 //====================================================================================
-void Visualize::visProd(const string &prod) const {
+void Supermarket::Visualize::visProd(const string &prod) const {
 	cout << setw(PROD_BOX) << left << prod;
 }
 //====================================================================================
-map<int, string> Visualize::visAllProd() const
+map<int, string> Supermarket::Visualize::visAllProd() const
 {
-	unsigned int i = 0, sz = Product::instance()->getSize();
+	unsigned int i = 0, sz = Product::instance()->getSize(); //Product::instance()->getSize();
 	map<int, string> n_prod;
 	for (i; i < sz; i++)
 	{

@@ -1,6 +1,6 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
-#include "Input_Asker.h"
+#include "Supermarket.h"
 #include "Declarations.h"
 #include <iomanip>
 #include <map>
@@ -11,11 +11,12 @@
 
 using namespace std;
 
-class Product {
+class Supermarket::Product
+{
 	static string product_file_name;
 	static map <string,double> prod_price;
 	
-	static Product *P_pt;
+	static Product *P_ptr;
 public:
 
 	//initializes products vector
@@ -31,9 +32,9 @@ public:
 
 	static Product *instance()
 	{
-		if (!P_pt)
-			P_pt = new Product;
-		return P_pt;
+		if (!P_ptr)
+			P_ptr = new Product;
+		return P_ptr;
 	}
 };
 

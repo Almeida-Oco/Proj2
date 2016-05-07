@@ -1,12 +1,14 @@
 #include "..\Headers\Trans.h"
+#include "..\Headers\Supermarket.h"
+#include "..\Headers\Product.h"
+#include "..\Headers\Visualize.h"
+#include "..\Headers\Input_Asker.h"
+#include "..\Headers\Client.h"
 
-#include <algorithm>	
+string Supermarket::Trans::trans_file_name = "";
+vector<Trans_t> Supermarket::Trans::info_trans;
 
-
-string Trans::trans_file_name = "";
-vector<Trans_t> Trans::info_trans;
-
-void Trans::startUp()
+void Supermarket::Trans::startUp()
 {
 	bool failed = false;
 	vector<string> tokens;
@@ -61,7 +63,7 @@ void Trans::startUp()
 //=================================== MODIFIERS ======================================
 //====================================================================================
 
-void Trans::addTrans()//adds a new transaction to the vector of transactions
+void Supermarket::Trans::addTrans()//adds a new transaction to the vector of transactions
 {
 	Trans_t T;
 	T.number = Input_Asker::instance()->ask_c_number();
@@ -81,7 +83,7 @@ void Trans::addTrans()//adds a new transaction to the vector of transactions
 //====================================================================================
 //================================== VISUALIZERS =====================================
 //====================================================================================
-void Trans::visAllTrans() const
+void Supermarket::Trans::visAllTrans() const
 {
 	transHeader();
 	for (Trans_t T : this->info_trans)
@@ -90,7 +92,7 @@ void Trans::visAllTrans() const
 	cout << endl << "========================================================" << endl;
 }
 
-void Trans::visClientTrans() const
+void Supermarket::Trans::visClientTrans() const
 {
 	unsigned int c_number;
 	bool first = true;
@@ -111,7 +113,7 @@ void Trans::visClientTrans() const
 	} while (c_number == -1);
 }
 
-void Trans::visDayTrans() const
+void Supermarket::Trans::visDayTrans() const
 {
 	Date_t D;
 	bool found = false, first = true;
@@ -135,7 +137,7 @@ void Trans::visDayTrans() const
 	cout << endl << "========================================================" << endl;
 }
 
-void Trans::visBetweenDates() const
+void Supermarket::Trans::visBetweenDates() const
 {
 	bool first = true;
 	Date_t lower_date = Input_Asker::instance()->askDate(0);
@@ -154,17 +156,17 @@ void Trans::visBetweenDates() const
 	cout << endl << "========================================================" << endl;
 }
 
-void Trans::transHeader() const
+void Supermarket::Trans::transHeader() const
 {
 	cout << endl << "========================================================" << endl;
 	cout << setw(NUM_BOX) << left << "Num :" << setw(DATE_BOX) << "Date :" << setw(PROD_BOX) << "Products :" << endl << endl;
 }
 
-void Trans::visDate(Date_t date) const {
+void Supermarket::Trans::visDate(Date_t date) const {
 	cout << setw(DATE_BOX) << left << to_string(date.day) + "/" + to_string(date.month) + "/" + to_string(date.year);
 }
 
-void Trans::visTrans(const Trans_t &T_t) const
+void Supermarket::Trans::visTrans(const Trans_t &T_t) const
 {
 	Visualize::instance()->visNumber(T_t.number); visDate(T_t.date); cout << Visualize::instance()->P_comma(T_t.products); cout << endl;
 }
@@ -173,7 +175,7 @@ void Trans::visTrans(const Trans_t &T_t) const
 //================================== ADVERTISERS =====================================
 //====================================================================================
 
-Matrix Trans::createMatrix()
+Matrix Supermarket::Trans::createMatrix()
 {//creates the matrix initialized with the true and false values, creates maps to associate position in matrix to information
 	int position_matrix = 0;
 	Matrix map_n_matrix;
@@ -212,7 +214,7 @@ Matrix Trans::createMatrix()
 	return map_n_matrix; //matrix that already contains true and false values
 }
 
-void Trans::printRecommended(const vector<string> &P)
+void Supermarket::Trans::printRecommended(const vector<string> &P)
 {//receives vector of string and prints it out
 	cout << "The recommended products are : " << endl << "-->  ";
 	for (string i : P)
@@ -220,7 +222,7 @@ void Trans::printRecommended(const vector<string> &P)
 	cout << "<--";
 }
 
-void Trans::selectiveAd()
+void Supermarket::Trans::selectiveAd()
 {
 	cout << endl << "========================================================" << endl;
 	Matrix product_list = createMatrix(); //holds matrix with true and false values already initialized
@@ -279,7 +281,7 @@ void Trans::selectiveAd()
 	printRecommended(recommended_product);
 }
 
-vector<int> Trans::mostBought(vector<int> &p_bought)
+vector<int> Supermarket::Trans::mostBought(vector<int> &p_bought)
 //receives unsorted repetitions of different products and returns vector with products with more repetitions
 {
 	quicksort(p_bought);//orders the products
@@ -330,7 +332,7 @@ vector<int> Trans::mostBought(vector<int> &p_bought)
 	return amount;
 }//return vector with the most bought products by the most similar clients
 
-void Trans::mergeVectors(vector<int> &v1, vector<int> &v2)
+void Supermarket::Trans::mergeVectors(vector<int> &v1, vector<int> &v2)
 {
 	for (int i : v2)
 		v1.push_back(i);
@@ -340,7 +342,7 @@ void Trans::mergeVectors(vector<int> &v1, vector<int> &v2)
  //================================= MISCELLANEOUS ====================================
  //====================================================================================
 
-void Trans::update()
+void Supermarket::Trans::update()
 {
 	ofstream fout;
 	fout.open(temp_file_name);
@@ -352,7 +354,7 @@ void Trans::update()
 	rename(temp_file_name.c_str(), this->trans_file_name.c_str());
 }
 
-string Trans::askProduct() const
+string Supermarket::Trans::askProduct() const
 {
 	int n_prod;
 	map<int,string> num_prod = Visualize::instance()->visAllProd();
@@ -371,7 +373,7 @@ string Trans::askProduct() const
 	} while (true);
 }
 
-vector<Trans_t> Trans::getInfo() const
+vector<Trans_t> Supermarket::Trans::getInfo() const
 {
 	return info_trans;
 }

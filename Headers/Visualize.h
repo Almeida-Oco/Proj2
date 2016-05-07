@@ -1,21 +1,19 @@
 #ifndef VISUALIZE_H
 #define VISUALIZE_H
 
-#include "..\Headers\Declarations.h"
+#include "Supermarket.h"
 #include <iomanip>
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
-#include "..\Headers\Product.h"
 
 using namespace std;
 class Product;
 
-
-class Visualize
+class Supermarket::Visualize
 {
-	static Visualize *V_pt;
+	static Visualize *V_ptr;
 
 public:
 	Visualize() {};
@@ -32,9 +30,9 @@ public:
 
 	static Visualize *instance()
 	{
-		if (!V_pt)
-			V_pt = new Visualize;
-		return V_pt;
+		if (!V_ptr)
+			V_ptr = new Visualize;
+		return V_ptr;
 	}
 };
 

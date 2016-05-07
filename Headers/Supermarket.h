@@ -1,27 +1,32 @@
 #ifndef SUPERMARKET_H
 #define SUPERMARKET_H
 
-#include "Declarations.h"
-#include "Client.h"
-#include "menu.h"
-#include "Trans.h"
-#include "Product.h"
-#include "Visualize.h"
-
-
+#include <iostream>
 
 class Supermarket {
 private:
-	std::multimap<Client_t, Trans_t > CtoT;
-	Client C;
-	Trans T;
-	Product P;
-
+	static Supermarket *S_pt;
 public:
+
+	class Visualize;
+	class Input_Asker;
+	class Bottom_10;
+	class Client;
+	class Trans;
+	class Product;
+
 	Supermarket();
+	void MainMenu();
 
-
-
+	static Supermarket *S_instance()
+	{
+		if (!S_pt)
+			S_pt = new Supermarket;
+		return S_pt;
+	}
+private:
+	void ClientMenu();
+	void TransMenu();
 };
 
 

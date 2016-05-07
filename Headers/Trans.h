@@ -1,25 +1,26 @@
 #ifndef TRANS_H
 #define TRANS_H
-
-#include "..\Headers\Visualize.h"
-#include "..\Headers\Input_Asker.h"
-#include "..\Headers\Declarations.h"
-#include "..\Headers\Client.h"
+#include "Supermarket.h"
+#include "Declarations.h"
+#include <algorithm>	
+#include <fstream>
+#include <iomanip>
 #include <algorithm>
 #include <string>
 #include <vector>
 
-class Client;
-class Product;
 using namespace std;
 
 
-class Trans {
+class Supermarket::Trans
+{
+private:
 	static string trans_file_name;
 	static vector<Trans_t> info_trans;
 
-	static Trans *T_pt;
 public:
+	static Trans *T_ptr;
+
 	Trans() {};
 	Trans(const Trans &T) {};
 
@@ -46,14 +47,15 @@ public:
 	vector<Trans_t> getInfo() const;
 	static Trans *instance()
 	{
-		if (!T_pt)
-			T_pt = new Trans;
-		return T_pt;
+		if (!T_ptr)
+			T_ptr = new Trans;
+		return T_ptr;
 	}
 private:
 	string askProduct() const;
 	void visTrans(const Trans_t &T_t) const;
 	void visDate(Date_t date) const;
+
 };
 
-#endif // !TRANS_H
+#endif //!TRANS_H
