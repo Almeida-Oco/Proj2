@@ -13,12 +13,13 @@ private:
 	static std::map<unsigned int, std::vector< std::string> > CtoP;
 	static std::map<unsigned int, double > CtoM;
 	static std::vector<unsigned int> B_10;
+	static std::vector<std::string> B10_common;
 
 	bool search_map(unsigned int K) const;
 	double calcMoney(const std::vector<std::string> &prods) const;
-	double getPrice(const std::string &P) const;
-public:
+public: 
 	static Bottom_10 *B10_ptr;
+	bool cmpPair(std::pair< unsigned int, std::vector<std::string> > P1, std::pair< unsigned int, vector<std::string> > P2);
 	void startUp();
 
 
