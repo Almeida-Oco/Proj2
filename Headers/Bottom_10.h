@@ -2,29 +2,43 @@
 #define BOTTOM_10_H
 
 #include "Supermarket.h"
-#include <map>
+#include <set>
 #include <vector>
 #include <string>
+
+struct cmpProdPrice
+{
+	bool operator() (const std::pair < unsigned int, std::vector < std::string > >  &P1, const std::pair < unsigned int, std::vector < std::string > > &P2) const;
+};
+
+struct cmpProdAmount
+{
+	bool operator() (const std::pair<std::string, unsigned int> &P1, const std::pair<std::string, unsigned int> &P2) const;
+};
 
 class Supermarket::Bottom_10
 {
 private:
-	static std::map<unsigned int, std::vector< std::string> > CtoP;
+	static std::set< std::pair < unsigned int, std::vector< std::string> > , cmpProdPrice >CtoT;
 	static std::vector<std::string> B10_common;
-	static std::map < std::string, unsigned int > histogram;
+	static std::set < std::pair < std::string , unsigned int> , cmpProdAmount> histogram;
+	static std::vector<int> P_amount;
 	
-	bool search_map(unsigned int K) const;
 	static Bottom_10 *B10_ptr;
-	double calcMoney(const std::vector<std::string> &prods) const;
-	bool cmpPairTrans(const std::pair< unsigned int, std::vector<std::string> > &T1,const std::pair< unsigned int, std::vector<std::string> > &T2) const;
+
+	
 	void startUp();
 	void initHistogram();
+	std::vector< std::string> bestProd();
+	std::set < std::pair < unsigned int, std::vector <std::string> > >::iterator searchSet(unsigned int N);
+	std::set < std::pair < std::string, unsigned int > >::iterator searchHistogram(const std::string &S);
 	bool isSimilar(const std::vector<std::string> &candidate_P) const;
-	bool cmpPairProds(const std::pair<std::string, unsigned int> &P1,const std::pair<std::string, unsigned int> &P2);
+	unsigned int howManyBought(const std::string &S) const;
+	void mergeVec(std::vector<std::string> &V1, const std::vector<std::string> &V2);
 
 public: 
 
-
+	double calcMoney(const std::vector<std::string> &prods) const;
 	static Bottom_10 *instance()
 	{
 		if (!B10_ptr)

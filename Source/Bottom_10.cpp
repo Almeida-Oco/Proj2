@@ -3,53 +3,153 @@
 #include "..\Headers\Trans.h"
 #include "..\Headers\Product.h"
 #include "..\Headers\Supermarket.h"
+
 class Supermarket;
 class Trans;
-std::map<unsigned int, std::vector< std::string> > Supermarket::Bottom_10::CtoP;
-std::vector<std::string> Supermarket::Bottom_10::B10_common;
-std::map < std::string, unsigned int > Supermarket::Bottom_10::histogram;
 
+std::set< std::pair < unsigned int, std::vector< std::string> >, cmpProdPrice > Supermarket::Bottom_10::CtoT;
+std::vector<std::string> Supermarket::Bottom_10::B10_common;
+std::vector<int> Supermarket::Bottom_10::P_amount;
+std::set < std::pair < std::string, unsigned int>, cmpProdAmount> Supermarket::Bottom_10::histogram;
+
+//======================================================================================================================================================
+//============================================================ COMPARE FUNCTIONS =======================================================================
+//======================================================================================================================================================
+bool cmpProdPrice::operator() (const std::pair < unsigned int, std::vector < std::string > >  &P1, const std::pair < unsigned int, std::vector < std::string > > &P2) const
+{
+	return (Supermarket::Bottom_10::instance()->calcMoney(P1.second) < Supermarket::Bottom_10::instance()->calcMoney(P2.second)) || P1.first == P2.first;
+}
+
+bool cmpProdAmount::operator() (const std::pair<std::string, unsigned int> &P1, const std::pair<std::string, unsigned int> &P2) const
+{
+	return P2.second < P1.second;
+}
+
+//======================================================================================================================================================
+//================================================== BOTTOM_10 CLASS METHODS ===========================================================================
+//======================================================================================================================================================
 
 void Supermarket::Bottom_10::startUp()
 {
-	//creates CtoP, key is the Client number, value is a vector of the products the client bought
+	pair<unsigned int, vector<string> > temp_pair;
+	vector<string> temp_string;
+
 	for (auto it = Trans::instance()->getInfo().begin(); it != Trans::instance()->getInfo().end(); it++)
 	{
-		if (!search_map(it->number))
-			CtoP[it->number] = it->products;
+		auto set_it = searchSet(it->number);
+		if (set_it ==  CtoT.end())
+			CtoT.insert(make_pair(it->number, it->products));
 		else
-			CtoP[it->number].insert(  CtoP[it->number].end(), it->products.begin(), it->products.end() );
-	}
-	sort(CtoP.begin(), CtoP.end(), [&](const std::pair< unsigned int, std::vector<std::string> > &T1, const std::pair< unsigned int, vector<std::string> > &T2) -> bool {return (calcMoney(T1.second) < calcMoney(T2.second)); }); //falta testar, mas em principio deve dar
-	//se der entao o primeiro elemento do map deve ser o que fez menos compras, pelo que os bottom 10 sao os 10 primeiros elementos
+		{
+			temp_string = it->products;
+			mergeVec(temp_string, set_it->second);
+			temp_pair = make_pair(set_it->first, temp_string);
+			CtoT.erase(set_it);
+			set_it++;
+			CtoT.insert(set_it, temp_pair);
+		}
+	}//when it reaches here the set contains a pair of the client number and the products bought,
+	//ordered by the amount of money the client spent at the store
 
-	auto it = CtoP.begin();
+	auto it = CtoT.begin();
 	B10_common = it->second;
 	advance(it, 1);
-	for (it; it != CtoP.end(); it++)
-	{
-		for (string S : B10_common)
-		{//searches for B10_common products in the vector of products, and if they are not found, meaning it is not a common product
-			//between the Bottom 10, it erases that product from B10_common
-			if (find(it->second.begin(), it->second.end(), S) == it->second.end())
-				B10_common.erase(find(B10_common.begin(), B10_common.end(), S));
+	for (it; it != CtoT.end(); it++)
+	{ // ---------------------------------------------------------------------------------------------------------------> Verificar se depois de se apagar o elemento se o apontador atualiza ou é preciso subtrair 1
+		for (auto vec_it = B10_common.begin(); vec_it != B10_common.end(); vec_it++)
+		{
+			if (find(it->second.begin(), it->second.end(), *vec_it) == it->second.end())
+				B10_common.erase(vec_it);
 		}
 	}
-
-}//once this method ends, CtoP relates the client to the products it bought and it is sorted, meaning the first 10 clients are the Bottom 10
-//B10_common will hold the common products between the Bottom 10
-
-bool Supermarket::Bottom_10::search_map(unsigned int K) const
-{
-	for (auto it = CtoP.begin(); it != CtoP.end(); it++)
-	{
-		if (it->first == K)
-			return true;
-	}
-	return false;
+	//now B10_common contains the common products between the Bottom 10
 }
 
-double Supermarket::Bottom_10::calcMoney(const std::vector<string> &prods) const
+void Supermarket::Bottom_10::initHistogram()
+{
+	unsigned int amount = 0;
+
+	auto it = CtoT.begin();  //remember this set is sorted, so the Bottom 10 are the first 10 clients
+	advance(it, 10);		// since they dont matter here, we simply ignore them
+	for (it; it != CtoT.end(); it++)
+	{
+		if (isSimilar(it->second))
+		{
+			for (auto IT = it->second.begin(); IT != it->second.end(); IT++)
+			{
+				if (find(B10_common.begin(), B10_common.end(), *IT) == B10_common.end()) //meaning it was not bought by all the Bottom 10
+				{
+					auto hist_it = searchHistogram(*IT);
+					if (hist_it == histogram.end())
+						histogram.insert(make_pair(*IT, 1));
+					else
+					{
+						amount = hist_it->second;
+						amount++;
+						histogram.erase(hist_it);
+						hist_it++;
+						histogram.insert(make_pair(*IT, amount));
+					}
+				}
+			}
+		}
+
+	}
+}//when it reaches here, the histogram has been created and sorted by descending order
+
+vector<string> Supermarket::Bottom_10::bestProd()
+{
+	vector<string> bestProds;
+	const unsigned int NONE = 0;
+	unsigned int bought = 0;
+
+	for (auto it = histogram.begin(); it != histogram.end(); it++)
+	{
+		bought = howManyBought(it->first);
+		if (bought == NONE)
+		{
+			bestProds.push_back(it->first);
+			return bestProds;
+		}
+		else
+			P_amount.push_back(it->second - bought);
+	}
+	//if the program gets through this for loop it means that there was no product in the histogram
+	//that was not bought by the Bottom 10
+
+	auto max_it = max_element(P_amount.begin(), P_amount.end());
+	auto bP_it = histogram.begin();
+	for (unsigned int i = 0; i < P_amount.size(); i++)
+	{
+		if (P_amount.at(i) == *max_it)
+		{
+			bP_it = histogram.begin();
+			advance(bP_it, i);
+			bestProds.push_back(bP_it->first);
+		}
+	}
+	//once it gets here bestProds holds the products to be returned
+	return bestProds;
+}
+
+unsigned int Supermarket::Bottom_10::howManyBought(const string &S) const
+{
+	unsigned int cont = 0;
+	auto B10_it = CtoT.begin();
+	advance(B10_it, 10);
+
+	for (auto it = CtoT.begin(); it != B10_it; it++)
+	{
+		for (string str : it->second)
+		{
+			if (str == S)
+				cont++;
+		}
+	}
+	return cont;
+}
+
+double Supermarket::Bottom_10::calcMoney(const std::vector<std::string> &prods) const
 {
 	double total = 0;
 	for (auto it = prods.begin(); it < prods.end(); it++)
@@ -58,35 +158,34 @@ double Supermarket::Bottom_10::calcMoney(const std::vector<string> &prods) const
 	return total;
 }
 
-bool Supermarket::Bottom_10::cmpPairTrans(const std::pair< unsigned int, std::vector<std::string> > &T1, const std::pair< unsigned int, vector<std::string> > &T2) const
-{
-	return ( calcMoney(T1.second) < calcMoney(T2.second) );
-}
-
-void Supermarket::Bottom_10::initHistogram()
-{
-	auto it = CtoP.begin();  //remember this map is sorted, so the Bottom 10 are the first 10 clients
-	advance(it, 10);		// since they dont matter here, we simply ignore them
-	for (it; it != CtoP.end(); it++)
-	{
-		if (isSimilar(it->second))
-		{
-			for (auto IT = it->second.begin(); IT != it->second.end(); IT++)
-			{
-
-				if (find(B10_common.begin(), B10_common.end(), *IT) == B10_common.end()) //meaning it was not bought by all the Bottom 10
-					histogram[*IT]++;
-			}
-		}
-
-	}
-	sort(histogram.begin(), histogram.end(), [&](const pair< string, unsigned int> &P1, const pair<string, unsigned int> &P2) -> bool {return P1.second > P2.second;} );
-}//when it reaches here, the histogram has been created and sorted by descending order
-
 bool Supermarket::Bottom_10::isSimilar(const std::vector<std::string> &candidate_P) const
 {
 	for (auto it = B10_common.begin(); it != B10_common.end(); it++)
 		if (find(candidate_P.begin(), candidate_P.end(), *it) == candidate_P.end())
 			return false;
 	return true;
+}
+
+void Supermarket::Bottom_10::mergeVec(vector<string> &V1, const vector<string> &V2)
+{
+	for (string S : V2)
+		V1.push_back(S);
+}
+
+std::set < std::pair < unsigned int, std::vector <std::string> > >::iterator Supermarket::Bottom_10::searchSet(unsigned int N)
+{
+	auto it = CtoT.begin();
+	for (it; it != CtoT.end(); it++)
+		if (it->first == N)
+			return it;
+	return CtoT.end();
+}
+
+std::set < std::pair < string, unsigned int > >::iterator Supermarket::Bottom_10::searchHistogram(const string &S)
+{
+	auto it = histogram.begin();
+	for (it; it != histogram.end(); it++)
+		if (it->first == S)
+			return it;
+	return histogram.end();
 }
