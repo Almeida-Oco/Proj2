@@ -10,6 +10,7 @@ vector<Trans_t> Supermarket::Trans::info_trans;
 
 void Supermarket::Trans::startUp()
 {
+	unsigned int vector_size = 0;
 	bool failed = false;
 	vector<string> tokens;
 	Trans_t transaction;
@@ -26,6 +27,11 @@ void Supermarket::Trans::startUp()
 			getline(cin, this->trans_file_name);
 			fin.open(this->trans_file_name);
 		}
+
+		if (cin >> vector_size)
+			info_trans.reserve(vector_size);
+		else
+			continue;
 
 		while (getline(fin, line))
 		{//fazer um get do numero , data e produtos;
@@ -83,6 +89,7 @@ void Supermarket::Trans::addTrans()//adds a new transaction to the vector of tra
 //====================================================================================
 //================================== VISUALIZERS =====================================
 //====================================================================================
+
 void Supermarket::Trans::visAllTrans() const
 {
 	transHeader();
@@ -347,6 +354,7 @@ void Supermarket::Trans::update()
 	ofstream fout;
 	fout.open(temp_file_name);
 	if (fout.is_open())
+		fout << info_trans.size();
 		for (Trans_t i : this->info_trans)																									//create function to return string of products to display
 			fout << i.number << " ; " << to_string(i.date.day) + "/" + to_string(i.date.month) + "/" + to_string(i.date.year) << " ; " << Visualize::instance()->P_comma(i.products) << endl;
 	fout.close();
