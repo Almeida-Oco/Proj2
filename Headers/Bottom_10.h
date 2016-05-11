@@ -19,7 +19,7 @@ struct cmpProdAmount
 class Supermarket::Bottom_10
 {
 private:
-	static std::set< std::pair < unsigned int, std::vector< std::string> > , cmpProdPrice >CtoT;
+	static std::vector< std::pair < unsigned int, std::vector< std::string> > > CtoT;
 	static std::vector<std::string> B10_common;
 	static std::vector < std::pair < std::string , unsigned int> > histogram;
 	static std::vector<int> P_amount;
@@ -30,7 +30,7 @@ private:
 	void startUp();
 	void initHistogram();
 	std::vector< std::string> bestProd();
-	std::set < std::pair < unsigned int, std::vector <std::string> > >::iterator searchSet(unsigned int N);
+	std::vector < std::pair < unsigned int, std::vector <std::string> > >::iterator searchSet(unsigned int N);
 	std::vector < std::pair < std::string, unsigned int > >::iterator searchHistogram(const std::string &S);
 	bool isSimilar(const std::vector<std::string> &candidate_P) const;
 	unsigned int howManyBought(const std::string &S) const;

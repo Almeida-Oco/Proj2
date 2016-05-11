@@ -7,7 +7,7 @@
 class Supermarket;
 class Trans;
 
-std::set< std::pair < unsigned int, std::vector< std::string> >, cmpProdPrice > Supermarket::Bottom_10::CtoT;
+std::vector< std::pair < unsigned int, std::vector< std::string> > > Supermarket::Bottom_10::CtoT;
 std::vector<std::string> Supermarket::Bottom_10::B10_common;
 std::vector<int> Supermarket::Bottom_10::P_amount;
 std::vector < std::pair < std::string, unsigned int> > Supermarket::Bottom_10::histogram;
@@ -48,32 +48,28 @@ void Supermarket::Bottom_10::startUp()
 	pair<unsigned int, vector<string> > temp_pair;
 	vector<string> temp_string;
 
+	//the maximum size of the CtoT vector will be the amount of transactions the info_trans vector contains
+	CtoT.reserve(Trans::instance()->getInfo().size());
+
 	for (vector<Trans_t>::iterator it = Trans::instance()->getInfo().begin(); it != Trans::instance()->getInfo().end(); it++)
 	{
 		auto set_it = searchSet(it->number);
-		if (set_it ==  CtoT.end())
-			CtoT.insert(make_pair(it->number, it->products));
+		if (set_it == CtoT.end())
+			CtoT.push_back(make_pair(it->number, it->products));
 		else
-		{
-			temp_string = it->products;
-			mergeVec(temp_string, set_it->second);
-			temp_pair = make_pair(set_it->first, temp_string);
-			CtoT.erase(set_it);
-			if (CtoT.size() == 0)
-				CtoT.insert(temp_pair);
-			else
-				CtoT.insert(set_it, temp_pair);
-		}
-	}//when it reaches here the set contains a pair of the client number and the products bought,
+			mergeVec(set_it->second, it->products);
+	}
+	sort(CtoT.begin(), CtoT.end(), cmpProdPrice());
+	//when it reaches here the set contains a pair of the client number and the products bought,
 	//ordered by the amount of money the client spent at the store
 
+	//the maximum number of common products will be the number of products the Bottom 1 client bought
+	B10_common.reserve(CtoT.at(0).second.size());
 	auto it = CtoT.begin();
-	auto it_end = CtoT.begin();
-	advance(it_end, 3);
 	B10_common = it->second;
-	advance(it, 1);
-	for (it; it != it_end; it++)
-	{ // ---------------------------------------------------------------------------------------------------------------> Verificar se depois de se apagar o elemento se o apontador atualiza ou é preciso subtrair 1
+	it++;
+	for (it; it != CtoT.begin() + 3; it++)
+	{
 		for (auto vec_it = B10_common.begin(); vec_it != B10_common.end(); vec_it++)
 		{
 			if (find(it->second.begin(), it->second.end(), *vec_it) == it->second.end())
@@ -184,7 +180,7 @@ void Supermarket::Bottom_10::mergeVec(vector<string> &V1, const vector<string> &
 		V1.push_back(S);
 }
 
-std::set < std::pair < unsigned int, std::vector <std::string> > >::iterator Supermarket::Bottom_10::searchSet(unsigned int N)
+std::vector < std::pair < unsigned int, std::vector <std::string> > >::iterator Supermarket::Bottom_10::searchSet(unsigned int N)
 {
 	auto it = CtoT.begin();
 	for (it; it != CtoT.end(); it++)
