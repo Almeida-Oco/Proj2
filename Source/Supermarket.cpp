@@ -1,12 +1,15 @@
 #include "..\Headers\Supermarket.h"
 #include "..\Headers\Client.h"
+#include "..\Headers\Product.h"
 #include "..\Headers\Visualize.h"
 #include "..\Headers\Input_Asker.h"
 #include "..\Headers\Trans.h"
 
 Supermarket::Supermarket()
 {
-	
+	Client::instance()->startUp();
+	Trans::instance()->startUp();
+	Product::instance()->startUp();
 }
 
 

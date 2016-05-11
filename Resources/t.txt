@@ -4,3 +4,6 @@
 1 ; 2/10/20114 ; massa, farinha, arroz, pipocas
 0 ; 2/10/20114 ; sumo, arroz, farinha, massa
 8 ; 20/12/2014 ; batatas, carne, azeitonas
+9 ; 2/10/2013 ; laranja, banana, uvas
+9 ; 3/10/2013 ; carne, peixe, batatas
+10 ; 10/10/2014 ; farinha, massa

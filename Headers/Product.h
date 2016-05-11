@@ -18,8 +18,6 @@ class Supermarket::Product
 	
 	static Product *P_ptr;
 public:
-
-	//initializes products vector
 	Product() {};
 	Product(const Product &P) {};
 

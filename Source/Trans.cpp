@@ -373,7 +373,7 @@ string Supermarket::Trans::askProduct() const
 	} while (true);
 }
 
-vector<Trans_t> Supermarket::Trans::getInfo() const
+vector<Trans_t> &Supermarket::Trans::getInfo() const
 {
 	return info_trans;
 }

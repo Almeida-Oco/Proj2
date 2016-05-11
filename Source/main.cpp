@@ -33,8 +33,8 @@ void update_n_exit();
 
 int main()
 {
-	cout << "FUCKING FINALLY" << endl << "GO TO SLEEP" << endl;
 	Supermarket();
+	Supermarket::Bottom_10::instance()->Source();
 	//MainMenu();
 	//update_n_exit();
 }
