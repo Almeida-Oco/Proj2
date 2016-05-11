@@ -21,7 +21,7 @@ class Supermarket::Bottom_10
 private:
 	static std::set< std::pair < unsigned int, std::vector< std::string> > , cmpProdPrice >CtoT;
 	static std::vector<std::string> B10_common;
-	static std::set < std::pair < std::string , unsigned int> , cmpProdAmount> histogram;
+	static std::vector < std::pair < std::string , unsigned int> > histogram;
 	static std::vector<int> P_amount;
 	
 	static Bottom_10 *B10_ptr;
@@ -31,13 +31,13 @@ private:
 	void initHistogram();
 	std::vector< std::string> bestProd();
 	std::set < std::pair < unsigned int, std::vector <std::string> > >::iterator searchSet(unsigned int N);
-	std::set < std::pair < std::string, unsigned int > >::iterator searchHistogram(const std::string &S);
+	std::vector < std::pair < std::string, unsigned int > >::iterator searchHistogram(const std::string &S);
 	bool isSimilar(const std::vector<std::string> &candidate_P) const;
 	unsigned int howManyBought(const std::string &S) const;
 	void mergeVec(std::vector<std::string> &V1, const std::vector<std::string> &V2);
 
 public: 
-
+	void Source();
 	double calcMoney(const std::vector<std::string> &prods) const;
 	static Bottom_10 *instance()
 	{

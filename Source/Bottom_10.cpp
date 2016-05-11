@@ -10,7 +10,7 @@ class Trans;
 std::set< std::pair < unsigned int, std::vector< std::string> >, cmpProdPrice > Supermarket::Bottom_10::CtoT;
 std::vector<std::string> Supermarket::Bottom_10::B10_common;
 std::vector<int> Supermarket::Bottom_10::P_amount;
-std::set < std::pair < std::string, unsigned int>, cmpProdAmount> Supermarket::Bottom_10::histogram;
+std::vector < std::pair < std::string, unsigned int> > Supermarket::Bottom_10::histogram;
 
 //======================================================================================================================================================
 //============================================================ COMPARE FUNCTIONS =======================================================================
@@ -29,12 +29,26 @@ bool cmpProdAmount::operator() (const std::pair<std::string, unsigned int> &P1, 
 //================================================== BOTTOM_10 CLASS METHODS ===========================================================================
 //======================================================================================================================================================
 
+void Supermarket::Bottom_10::Source()
+{
+	string final;
+	Bottom_10::instance()->startUp();
+	Bottom_10::instance()->initHistogram();
+
+	final = final + "----> ";
+	for (string S : Bottom_10::instance()->bestProd())
+		final = final + S + " , ";
+	final = final.substr(0, final.length() - 3);
+	final = final + " <----";
+	cout << final << endl;
+}
+
 void Supermarket::Bottom_10::startUp()
 {
 	pair<unsigned int, vector<string> > temp_pair;
 	vector<string> temp_string;
 
-	for (auto it = Trans::instance()->getInfo().begin(); it != Trans::instance()->getInfo().end(); it++)
+	for (vector<Trans_t>::iterator it = Trans::instance()->getInfo().begin(); it != Trans::instance()->getInfo().end(); it++)
 	{
 		auto set_it = searchSet(it->number);
 		if (set_it ==  CtoT.end())
@@ -45,16 +59,20 @@ void Supermarket::Bottom_10::startUp()
 			mergeVec(temp_string, set_it->second);
 			temp_pair = make_pair(set_it->first, temp_string);
 			CtoT.erase(set_it);
-			set_it++;
-			CtoT.insert(set_it, temp_pair);
+			if (CtoT.size() == 0)
+				CtoT.insert(temp_pair);
+			else
+				CtoT.insert(set_it, temp_pair);
 		}
 	}//when it reaches here the set contains a pair of the client number and the products bought,
 	//ordered by the amount of money the client spent at the store
 
 	auto it = CtoT.begin();
+	auto it_end = CtoT.begin();
+	advance(it_end, 3);
 	B10_common = it->second;
 	advance(it, 1);
-	for (it; it != CtoT.end(); it++)
+	for (it; it != it_end; it++)
 	{ // ---------------------------------------------------------------------------------------------------------------> Verificar se depois de se apagar o elemento se o apontador atualiza ou é preciso subtrair 1
 		for (auto vec_it = B10_common.begin(); vec_it != B10_common.end(); vec_it++)
 		{
@@ -67,10 +85,8 @@ void Supermarket::Bottom_10::startUp()
 
 void Supermarket::Bottom_10::initHistogram()
 {
-	unsigned int amount = 0;
-
 	auto it = CtoT.begin();  //remember this set is sorted, so the Bottom 10 are the first 10 clients
-	advance(it, 10);		// since they dont matter here, we simply ignore them
+	advance(it, 3);		// since they dont matter here, we simply ignore them
 	for (it; it != CtoT.end(); it++)
 	{
 		if (isSimilar(it->second))
@@ -81,20 +97,15 @@ void Supermarket::Bottom_10::initHistogram()
 				{
 					auto hist_it = searchHistogram(*IT);
 					if (hist_it == histogram.end())
-						histogram.insert(make_pair(*IT, 1));
+						histogram.push_back(make_pair(*IT,1));
 					else
-					{
-						amount = hist_it->second;
-						amount++;
-						histogram.erase(hist_it);
-						hist_it++;
-						histogram.insert(make_pair(*IT, amount));
-					}
+						hist_it->second++;
 				}
 			}
 		}
 
 	}
+	sort(histogram.begin(), histogram.end(), cmpProdAmount());
 }//when it reaches here, the histogram has been created and sorted by descending order
 
 vector<string> Supermarket::Bottom_10::bestProd()
@@ -132,11 +143,12 @@ vector<string> Supermarket::Bottom_10::bestProd()
 	return bestProds;
 }
 
+
 unsigned int Supermarket::Bottom_10::howManyBought(const string &S) const
 {
 	unsigned int cont = 0;
 	auto B10_it = CtoT.begin();
-	advance(B10_it, 10);
+	advance(B10_it, 3);
 
 	for (auto it = CtoT.begin(); it != B10_it; it++)
 	{
@@ -181,7 +193,7 @@ std::set < std::pair < unsigned int, std::vector <std::string> > >::iterator Sup
 	return CtoT.end();
 }
 
-std::set < std::pair < string, unsigned int > >::iterator Supermarket::Bottom_10::searchHistogram(const string &S)
+std::vector < std::pair < string, unsigned int > >::iterator Supermarket::Bottom_10::searchHistogram(const string &S)
 {
 	auto it = histogram.begin();
 	for (it; it != histogram.end(); it++)
