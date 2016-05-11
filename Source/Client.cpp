@@ -14,8 +14,8 @@ vector<Client_t> Supermarket::Client::info_clients;
 
 void Supermarket::Client::startUp()
 {
+	unsigned int vector_size = 0, temp = 0;
 	this->max_client_number = 0;
-	unsigned int temp;
 	vector<string> tokens;
 	bool failed = false;
 	do
@@ -33,6 +33,11 @@ void Supermarket::Client::startUp()
 			getline(cin, this->client_file_name);
 			fin.open(this->client_file_name);
 		}
+
+		if (cin >> vector_size)
+			info_clients.reserve(vector_size);
+		else
+			continue;
 
 		while (getline(fin, line))
 		{
@@ -68,16 +73,6 @@ void Supermarket::Client::startUp()
 	sort(this->info_clients.begin(), this->info_clients.end());
 	this->max_client_number++;
 } 
-
-/*
-void Client::calcClientMoney(Trans &T)
-{
-	for (vector<Trans_t>::iterator it = T.getInfo().begin ; it != T.getInfo().end() ; it++)
-	{
-		
-	}
-}
-*/
 
 void Supermarket::Client::removeClient()
 {//removes a certain client by removing it from the vector of clients
@@ -226,6 +221,7 @@ void Supermarket::Client::update()
 
 	fout.open(temp_file_name);
 	if (fout.is_open())
+		fout << info_clients.size() << endl;
 		for (Client_t i : info_clients)
 			fout << i.number << " ; " << i.name << " ; " << i.money << endl;
 	fout.close();

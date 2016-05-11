@@ -44,7 +44,7 @@ public:
 	vector<int> mostBought(vector<int> &p_bought);
 	
 	//MISC
-	vector<Trans_t> getInfo() const;
+	vector<Trans_t> &getInfo() const;
 	static Trans *instance()
 	{
 		if (!T_ptr)
