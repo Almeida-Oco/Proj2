@@ -2,8 +2,7 @@
 #include "..\Headers\Declarations.h"
 #include "..\Headers\Product.h"
 #include "..\Headers\Supermarket.h"
-
-class Supermarket;
+using namespace std;
 
 string Supermarket::Visualize::P_comma(const vector<string> &prods)
 {

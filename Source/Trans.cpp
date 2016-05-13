@@ -6,6 +6,8 @@
 #include "..\Headers\Client.h"
 #include "..\Headers\Bottom_10.h"
 
+using namespace std;
+
 string Supermarket::Trans::trans_file_name = "";
 vector<Trans_t> Supermarket::Trans::info_trans;
 

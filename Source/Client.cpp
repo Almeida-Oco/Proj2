@@ -4,7 +4,7 @@
 #include "..\Headers\Input_Asker.h"
 #include "..\Headers\Supermarket.h"
 
-class Supermarket;
+using namespace std;
 
 string Supermarket::Client::client_file_name = "";
 unsigned int Supermarket::Client::max_client_number = 0;

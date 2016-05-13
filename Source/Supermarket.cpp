@@ -5,6 +5,8 @@
 #include "..\Headers\Input_Asker.h"
 #include "..\Headers\Trans.h"
 
+using namespace std;
+
 Supermarket::Supermarket()
 {
 	Trans::instance()->startUp();

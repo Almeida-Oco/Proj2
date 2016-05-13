@@ -4,6 +4,8 @@
 #include "..\Headers\Product.h"
 #include "..\Headers\Supermarket.h"
 
+using namespace std;
+
 class Supermarket;
 class Trans;
 

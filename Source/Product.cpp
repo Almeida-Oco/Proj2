@@ -1,6 +1,8 @@
 #include "..\Headers\Product.h"
 #include "..\Headers\Supermarket.h"
 
+using namespace std;
+
 string Supermarket::Product::product_file_name = "";
 map<string, double> Supermarket::Product::prod_price;
 
