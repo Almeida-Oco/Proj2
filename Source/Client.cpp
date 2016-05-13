@@ -1,4 +1,5 @@
 #include "..\Headers\Client.h"
+#include "..\Headers\Trans.h"
 #include "..\Headers\Visualize.h"
 #include "..\Headers\Input_Asker.h"
 #include "..\Headers\Supermarket.h"
@@ -71,7 +72,9 @@ void Supermarket::Client::startUp()
 	} while (failed); 
 
 	sort(this->info_clients.begin(), this->info_clients.end());
-	this->max_client_number++;
+	
+	unsigned int max_trans_number = Trans::instance()->getBiggestID();
+	max_client_number = (max_trans_number > max_client_number) ? max_trans_number : max_client_number;
 } 
 
 void Supermarket::Client::removeClient()
