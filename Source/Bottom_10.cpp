@@ -203,7 +203,7 @@ std::vector < std::pair < string, unsigned int > >::iterator Supermarket::Bottom
 	return histogram.end();
 }
 
-inline std::vector< std::pair < unsigned int, std::vector< std::string> > > Supermarket::Bottom_10::getCtoT() const
+std::vector< std::pair < unsigned int, std::vector< std::string> > > &Supermarket::Bottom_10::getCtoT() const
 {
 	return CtoT;
 }

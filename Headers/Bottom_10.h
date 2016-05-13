@@ -38,7 +38,7 @@ public:
 	void CtoT_init();
 	void Source();
 	double calcMoney(const std::vector<std::string> &prods) const;
-	std::vector< std::pair < unsigned int, std::vector< std::string> > > getCtoT() const;
+	std::vector< std::pair < unsigned int, std::vector< std::string> > > &getCtoT() const;
 	void B10_c_init();
 
 	static Bottom_10 *instance()
