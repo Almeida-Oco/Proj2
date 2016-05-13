@@ -31,10 +31,10 @@ void Supermarket::Trans::startUp()
 			fin.open(this->trans_file_name);
 		}
 
-		if (cin >> vector_size)
+		if (fin >> vector_size)
 			info_trans.reserve(vector_size);
-		else
-			continue;
+		fin.ignore(999, '\n');
+		fin.clear();
 
 		while (getline(fin, line))
 		{//fazer um get do numero , data e produtos;
@@ -255,8 +255,6 @@ int Supermarket::Trans::searchID_transactions(unsigned int p)
 void Supermarket::Trans::selectiveAd() 
 {
 	unsigned int target_position = searchID_transactions(Input_Asker::instance()->ask_c_number());
-
-	Bottom_10::instance()->CtoT_init();
 	
 	bool verifi = false;
 	vector< vector<bool> > publi(Bottom_10::instance()->getCtoT().size(), vector<bool>(Product::instance()->getSize()));

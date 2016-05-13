@@ -25,7 +25,7 @@ void Supermarket::Product::startUp()
 			exit(0);
 			break;
 		}
-
+		fin.ignore(999, '\n');
 		while (getline(fin, line))
 		{
 			tokens = string_split(line, ";");

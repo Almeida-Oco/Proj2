@@ -2,6 +2,7 @@
 #include "..\Headers\Trans.h"
 #include "..\Headers\Visualize.h"
 #include "..\Headers\Input_Asker.h"
+#include "..\Headers\Bottom_10.h"
 #include "..\Headers\Supermarket.h"
 
 using namespace std;
@@ -15,6 +16,7 @@ vector<Client_t> Supermarket::Client::info_clients;
 
 void Supermarket::Client::startUp()
 {
+	Bottom_10::instance()->CtoT_init();
 	unsigned int vector_size = 0, temp = 0;
 	this->max_client_number = 0;
 	vector<string> tokens;
@@ -35,10 +37,10 @@ void Supermarket::Client::startUp()
 			fin.open(this->client_file_name);
 		}
 
-		if (cin >> vector_size)
+		if (fin >> vector_size)
 			info_clients.reserve(vector_size);
-		else
-			continue;
+		fin.ignore(999, '\n');
+		fin.clear();
 
 		while (getline(fin, line))
 		{
@@ -48,9 +50,7 @@ void Supermarket::Client::startUp()
 				failed = true;
 				break;
 			}
-			if (isdigit(tokens.at(2).at(0)))
-				client.money = stod(tokens.at(2));
-			else
+			if (!isdigit(tokens.at(2).at(0)))
 			{
 				failed = true;
 				break;
@@ -58,6 +58,7 @@ void Supermarket::Client::startUp()
 
 			client.name = trim(tokens.at(1));
 			client.number = stoi(tokens.at(0));
+			client.money = (Bottom_10::instance()->searchSet(client.number) == Bottom_10::instance()->getCtoT().end() ) ? 0.0 : Bottom_10::instance()->calcMoney(Bottom_10::instance()->searchSet(client.number)->second);
 
 			temp = client.number;
 			if (temp > this->max_client_number)
