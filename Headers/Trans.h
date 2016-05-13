@@ -9,14 +9,11 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
-
 class Supermarket::Trans
 {
 private:
 	static string trans_file_name;
-	static vector<Trans_t> info_trans;
+	static std::vector<Trans_t> info_trans;
 
 public:
 	static Trans *T_ptr;
@@ -30,19 +27,17 @@ public:
 	void update();
 
 	//VISUALIZERS
-	void transHeader() const;
 	void visClientTrans() const;
 	void visAllTrans() const;
 	void visDayTrans() const;
 	void visBetweenDates() const;
 
 	//ADVERTISEMENT
-	string maximu(vector<string>v);
-	int	searchID_transactions (unsigned int p);
-	void Func11();
-	
+	void selectiveAd();
+
 	//MISC
-	vector<Trans_t> &getInfo() const;
+	std::vector<Trans_t> &getInfo() const;
+	unsigned int getBiggestID() const;
 	static Trans *instance()
 	{
 		if (!T_ptr)
@@ -50,7 +45,10 @@ public:
 		return T_ptr;
 	}
 private:
-	string askProduct() const;
+	void transHeader() const;
+	std::vector<std::string> mostBought(std::vector<std::string> &p_bought);
+	int	searchID_transactions(unsigned int p);
+	std::string askProduct() const;
 	void visTrans(const Trans_t &T_t) const;
 	void visDate(Date_t date) const;
 

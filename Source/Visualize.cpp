@@ -40,3 +40,11 @@ map<int, string> Supermarket::Visualize::visAllProd() const
 	cout << "---> ";
 	return n_prod;
 }
+//====================================================================================
+void Supermarket::Visualize::printRecommended(const vector<string> &P) const
+{//receives vector of string and prints it out
+	cout << "The recommended products are : " << endl << "-->  ";
+	for (string i : P)
+		cout << i << "  ";
+	cout << "<--";
+}

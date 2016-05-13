@@ -13,13 +13,11 @@
 class Trans;
 class Supermarket;
 
-using namespace std;
-
 class Supermarket::Client
 {
-	static string client_file_name;
+	static std::string client_file_name;
 	static unsigned int max_client_number;
-	static vector<Client_t> info_clients;
+	static std::vector<Client_t> info_clients;
 	static Client *C_ptr;
 
 public:
@@ -28,14 +26,14 @@ public:
 	Client(const Client &C) {};
 	//void calcClientMoney(Trans &T);
 
-	vector <Client_t> getInfo() const { return info_clients; }
+	std::vector <Client_t> getInfo() const { return info_clients; }
 	void startUp();
 
 	//manipulates vector/info of clients
 	void removeClient();
 	void addClient();
 	void addMoney(const unsigned int c_num, const double amount);
-	int findName(const string &c_name);
+	int findName(const std::string &c_name);
 
 	//visualize client information
 	void visClient();
@@ -52,7 +50,7 @@ public:
 		return C_ptr;
 	}
 private:
-	vector<Client_t>::iterator findInsertPos(const Client_t &C) const;
+	std::vector<Client_t>::iterator findInsertPos(const Client_t &C) const;
 	unsigned int findPos(const Client_t &C, unsigned int start, unsigned int end) const;
 	void visMoney(double money);
 };

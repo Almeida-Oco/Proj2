@@ -7,8 +7,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class Supermarket::Input_Asker
 {
 	static Input_Asker *IA_ptr;

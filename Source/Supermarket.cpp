@@ -7,8 +7,8 @@
 
 Supermarket::Supermarket()
 {
-	Client::instance()->startUp();
 	Trans::instance()->startUp();
+	Client::instance()->startUp();
 	Product::instance()->startUp();
 }
 
@@ -39,7 +39,7 @@ void Supermarket::MainMenu()
 		else if (action == Tr)
 			TransMenu();
 		else if (action == A)
-			Trans::instance()->selectiveAd();
+			Supermarket::Trans::instance()->selectiveAd();
 		else if (action == E)
 			break;
 		else

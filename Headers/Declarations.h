@@ -6,8 +6,6 @@
 #include <string>
 #include <map>
 
-using namespace std;
-
 //CONSTANTS
 const string temp_file_name = "lqpebcsgs285nmgs99n2exzgguwcajf.txt";
 
@@ -47,7 +45,7 @@ struct Matrix {
 
 struct Client_t {
 	unsigned int number;
-	string name;
+	std::string name;
 	double money;
 
 	bool operator< (const Client_t &C1) const;
@@ -67,15 +65,14 @@ struct Trans_t
 {
 	unsigned int number;
 	Date_t date;
-	vector<string> products;
+	std::vector<std::string> products;
 
 	bool operator< (const Trans_t &T1) const;
 };
 
-vector<string> string_split(const string &line, const string spliter);
-string remove_middle_spaces(const string &S);
-string trim(string &str);
-bool testText(const string &c_name);
-void quicksort(vector<int> &qs);
+std::vector<std::string> string_split(const std::string &line, const std::string spliter);
+std::string remove_middle_spaces(const std::string &S);
+std::string trim(std::string &str);
+bool testText(const std::string &c_name);
 
 #endif // !DECLARATIONS_H

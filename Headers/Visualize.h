@@ -8,7 +8,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
 class Product;
 
 class Supermarket::Visualize
@@ -19,12 +18,13 @@ public:
 	Visualize() {};
 	Visualize(const Visualize &V) {};
 
-	void visProd(const string &prod) const;
+	void visProd(const std::string &prod) const;
+	void printRecommended(const std::vector<std::string> &P) const;
 	void visNumber(unsigned int number) const; //WORKING
-	void visName(const string &name) const; //WORKING
-	map<int, string> visAllProd() const;
+	void visName(const std::string &name) const; //WORKING
+	std::map<int, std::string> visAllProd() const;
 	//creates a map that associates a number to the product name (used for new transactions)
-	string P_comma(const vector<string> &prods);
+	string P_comma(const std::vector<std::string> &prods);
 	//given a vector of strings(products) it returns it with commas
 	// { "pao" , "arroz" } --> "pao, arroz"
 

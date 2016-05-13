@@ -9,12 +9,10 @@
 #include <fstream>
 #include <iostream>
 
-using namespace std;
-
 class Supermarket::Product
 {
-	static string product_file_name;
-	static map <string,double> prod_price;
+	static std::string product_file_name;
+	static std::map <std::string,double> prod_price;
 	
 	static Product *P_ptr;
 public:
@@ -24,8 +22,8 @@ public:
 	void startUp();
 
 	unsigned int getSize();
-	double getPrice(const string &product);
-	string getProd(unsigned int position);
+	double getPrice(const std::string &product);
+	std::string getProd(unsigned int position);
 	void update();
 
 	static Product *instance()
