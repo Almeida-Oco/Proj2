@@ -3,6 +3,7 @@
 #include "Supermarket.h"
 #include "Declarations.h"
 #include <algorithm>	
+#include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <algorithm>
@@ -12,7 +13,7 @@
 class Supermarket::Trans
 {
 private:
-	static string trans_file_name;
+	static std::string trans_file_name;
 	static std::vector<Trans_t> info_trans;
 
 public:

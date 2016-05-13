@@ -15,7 +15,6 @@ public:
 	class Trans;
 	class Product;
 
-	Supermarket();
 	void MainMenu();
 
 	static Supermarket *S_instance()
@@ -27,6 +26,7 @@ public:
 private:
 	void ClientMenu();
 	void TransMenu();
+	void AdMenu();
 };
 
 

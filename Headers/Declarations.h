@@ -7,7 +7,7 @@
 #include <map>
 
 //CONSTANTS
-const string temp_file_name = "lqpebcsgs285nmgs99n2exzgguwcajf.txt";
+const std::string temp_file_name = "lqpebcsgs285nmgs99n2exzgguwcajf.txt";
 
 const unsigned int SPACE = 32;
 const unsigned int ZERO = 48;
@@ -36,13 +36,6 @@ const unsigned int DEC = 12;
 
 
 //STRUCTS
-struct Matrix {
-	vector < vector <bool> > prod_bought; //matrix
-	map<string, int> product_to_i; //map that relates the poduct name to its position in the matrix
-	map<int, int> c_number_to_i; //returns the position of the client in the matrix
-	map<int, string> i_to_product; //map that given a position in the matrix returns the corresponding product
-};
-
 struct Client_t {
 	unsigned int number;
 	std::string name;

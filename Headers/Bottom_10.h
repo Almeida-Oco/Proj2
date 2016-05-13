@@ -28,7 +28,6 @@ private:
 
 	void initHistogram();
 	std::vector< std::string> bestProd();
-	std::vector < std::pair < unsigned int, std::vector <std::string> > >::iterator searchSet(unsigned int N);
 	std::vector < std::pair < std::string, unsigned int > >::iterator searchHistogram(const std::string &S);
 	bool isSimilar(const std::vector<std::string> &candidate_P) const;
 	unsigned int howManyBought(const std::string &S) const;
@@ -39,6 +38,7 @@ public:
 	void Source();
 	double calcMoney(const std::vector<std::string> &prods) const;
 	std::vector< std::pair < unsigned int, std::vector< std::string> > > &getCtoT() const;
+	std::vector < std::pair < unsigned int, std::vector <std::string> > >::iterator searchSet(unsigned int N);
 	void B10_c_init();
 
 	static Bottom_10 *instance()
