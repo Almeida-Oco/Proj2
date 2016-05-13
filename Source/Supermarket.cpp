@@ -2,18 +2,11 @@
 #include "..\Headers\Client.h"
 #include "..\Headers\Product.h"
 #include "..\Headers\Visualize.h"
+#include "..\Headers\Bottom_10.h"
 #include "..\Headers\Input_Asker.h"
 #include "..\Headers\Trans.h"
 
 using namespace std;
-
-Supermarket::Supermarket()
-{
-	Trans::instance()->startUp();
-	Client::instance()->startUp();
-	Product::instance()->startUp();
-}
-
 
 void Supermarket::MainMenu()
 {
@@ -123,4 +116,35 @@ void Supermarket::TransMenu()
 		else
 			std::cout << "Invalid input, please try again" << std::endl << std::endl;
 	} while (action != go_back);
+}
+
+void Supermarket::AdMenu()
+{
+	const int E = 0, C_a = 1, B_a = 2;
+	int action;
+	do
+	{
+		std::cout << std::endl << "========================================================" << std::endl;
+		std::cout << "Where do you want to go? " << std::endl;
+		std::cout << std::endl;
+		std::cout << "0 -> Go Back" << std::endl;
+		std::cout << "1 -> Client Advertisement" << std::endl;
+		std::cout << "2 -> Bottom 10 Advertisement" << std::endl;
+		std::cout << "---> ";
+		std::cin >> action;
+		std::cin.ignore(999, '\n');
+		if (std::cin.fail())
+		{
+			std::cin.clear();
+			std::cin.ignore(9999, '\n');
+		}
+		if (action == C_a)
+			Supermarket::Trans::instance()->selectiveAd();
+		else if (action == B_a)
+			Supermarket::Bottom_10::instance()->Source();
+		else if (action == E)
+			break;
+		else
+			std::cout << "Invalid input, please try again";
+	} while (action != E);
 }

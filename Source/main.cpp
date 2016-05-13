@@ -33,10 +33,11 @@ void update_n_exit();
 
 int main()
 {
-	Supermarket();
-	Supermarket::Bottom_10::instance()->Source();
-	//MainMenu();
-	//update_n_exit();
+	Supermarket::Trans::instance()->startUp();
+	Supermarket::Product::instance()->startUp();
+	Supermarket::Client::instance()->startUp();
+	Supermarket::S_instance()->MainMenu();
+	update_n_exit();
 }
 
 
@@ -45,9 +46,9 @@ int main()
 void update_n_exit()
 {
 
-	//Client::instance()->update();
-	//Product::instance()->update();
-	//Trans::instance()->update();
+	Supermarket::Client::instance()->update();
+	Supermarket::Product::instance()->update();
+	Supermarket::Trans::instance()->update();
 	cout << "GOODBYE" << endl;
 	exit(0);
 }
