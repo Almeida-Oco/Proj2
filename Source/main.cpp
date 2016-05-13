@@ -13,7 +13,6 @@ using namespace std;
 #include "..\Headers\Client.h"
 #include "..\Headers\Trans.h"
 #include "..\Headers\Input_Asker.h"
-#include "..\Headers\menu.h"
 
 Supermarket *Supermarket::S_pt;
 Supermarket::Client *Supermarket::Client::C_ptr;
@@ -39,6 +38,9 @@ int main()
 	//update_n_exit();
 }
 
+
+
+
 void update_n_exit()
 {
 
@@ -48,6 +50,14 @@ void update_n_exit()
 	cout << "GOODBYE" << endl;
 	exit(0);
 }
+
+
+
+
+
+
+
+
 
 
 //====================================================================================
@@ -131,45 +141,4 @@ bool testText(const string &c_name)
 			return false;
 	}
 	return true;
-}
-
-void qksort(vector<int> &qsort_vetor, int esquerda, int direita) {
-	int pos_pivot = (direita - esquerda) / 2 + esquerda, i;
-	int fim = direita, inicio = esquerda;
-
-	for (i = esquerda; i <= fim; i++)
-	{
-		if (qsort_vetor[i] > qsort_vetor[pos_pivot])
-		{
-			if (fim == pos_pivot)
-				pos_pivot = i;
-			swap(qsort_vetor[i], qsort_vetor[fim]);
-			i--;
-			fim--;
-			continue;
-		}
-		if (qsort_vetor[i] < qsort_vetor[pos_pivot] && i>pos_pivot)
-		{
-			if (inicio == pos_pivot)
-				pos_pivot = i;
-			swap(qsort_vetor[i], qsort_vetor[inicio]);
-			i--;
-			inicio++;
-		}
-		/*
-		if (i > pos_pivot) {
-		swap(qsort_vetor[i], qsort_vetor[pos_pivot]);
-		pos_pivot = i;
-		}
-		*/
-	}
-	if (direita > pos_pivot + 1)
-		qksort(qsort_vetor, (pos_pivot + 1), direita);
-
-	if (esquerda < pos_pivot - 1 && pos_pivot != 0)
-		qksort(qsort_vetor, esquerda, (pos_pivot - 1));
-}
-
-void quicksort(vector<int> &qs) {
-	qksort(qs, 0, qs.size() - 1); //my implementation of quicksort
 }
