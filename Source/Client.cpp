@@ -180,7 +180,7 @@ void Supermarket::Client::clientHeader()
 
 vector<Client_t>::iterator Supermarket::Client::findInsertPos(const Client_t &C) const
 {
-	return info_clients.begin() + findPos(C, 0, info_clients.size() - 1) + 1;
+	return info_clients.begin() + findPos(C, 0, info_clients.size()-1);
 }
 
 unsigned int Supermarket::Client::findPos(const Client_t &C, unsigned int start, unsigned int end) const
@@ -188,20 +188,17 @@ unsigned int Supermarket::Client::findPos(const Client_t &C, unsigned int start,
 	if (start != end)
 	{
 		if (C < info_clients.at((start + end) / 2))
-			return findPos(C, start, ((start + end) / 2) - 1);
+			return findPos(C, start,  (((start + end) / 2) > 0) ? ((start+end)/2)-1 : 0  );
 		else if (C > info_clients.at((start + end) / 2))
 			return findPos(C, ((start + end) / 2) + 1, end);
 		else
 			return (start + end) / 2;
 	}
 
-	if (start == end && C > info_clients.at(start))
+	if (start == end && C.name > info_clients.at(start).name)
 		return start + 1;
-	if (start == end && C < info_clients.at(start) && start != 0)
-		return start - 1;
-	else
-		return start; //only happens when the element should be inserted in the first position
-
+	if (start == end && C < info_clients.at(start))
+		return start;
 }
 
 int Supermarket::Client::findName(const string &c_name) //searches the client vector for a given name, and returns its position on the vector

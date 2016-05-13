@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+const unsigned int N_COMMON = 3;
+
 struct cmpProdPrice
 {
 	bool operator() (const std::pair < unsigned int, std::vector < std::string > >  &P1, const std::pair < unsigned int, std::vector < std::string > > &P2) const;

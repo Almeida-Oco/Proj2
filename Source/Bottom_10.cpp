@@ -39,11 +39,11 @@ void Supermarket::Bottom_10::Source()
 	Bottom_10::B10_c_init();
 	Bottom_10::instance()->initHistogram();
 
-	final = final + "----> ";
+	final = final + "---> ";
 	for (string S : Bottom_10::instance()->bestProd())
 		final = final + S + " , ";
 	final = final.substr(0, final.length() - 3);
-	final = final + " <----";
+	final = final + " <---";
 	cout << final << endl;
 }
 
@@ -75,7 +75,7 @@ void Supermarket::Bottom_10::B10_c_init()
 	auto it = CtoT.begin();
 	B10_common = it->second;
 	it++;
-	for (it; it != CtoT.begin() + 3; it++)
+	for (it; it != CtoT.begin() + N_COMMON; it++)
 	{
 		for (auto vec_it = B10_common.begin(); vec_it != B10_common.end(); vec_it++)
 		{
@@ -89,7 +89,7 @@ void Supermarket::Bottom_10::B10_c_init()
 void Supermarket::Bottom_10::initHistogram()
 {
 	auto it = CtoT.begin();  //remember this set is sorted, so the Bottom 10 are the first 10 clients
-	advance(it, 3);		// since they dont matter here, we simply ignore them
+	advance(it, N_COMMON);		// since they dont matter here, we simply ignore them
 	for (it; it != CtoT.end(); it++)
 	{
 		if (isSimilar(it->second))

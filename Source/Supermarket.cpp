@@ -34,7 +34,7 @@ void Supermarket::MainMenu()
 		else if (action == Tr)
 			TransMenu();
 		else if (action == A)
-			Supermarket::Trans::instance()->selectiveAd();
+			AdMenu();
 		else if (action == E)
 			break;
 		else
