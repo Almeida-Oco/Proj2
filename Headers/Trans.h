@@ -37,11 +37,9 @@ public:
 	void visBetweenDates() const;
 
 	//ADVERTISEMENT
-	Matrix createMatrix();
-	void printRecommended(const vector<string> &P);
-	void selectiveAd(); 
-	void mergeVectors(vector<int> &v1, vector<int> &v2);
-	vector<int> mostBought(vector<int> &p_bought);
+	string maximu(vector<string>v);
+	int	searchID_transactions (unsigned int p);
+	void Func11();
 	
 	//MISC
 	vector<Trans_t> &getInfo() const;
