@@ -3,11 +3,6 @@ Vende ++
 
 O QUE FALTA FAZER:
 
-Meter a cena da publicidade direito.
+Meter os Menus direitos (os menus tao na classe Supermarket);
 
-Ir buscar o maior numero de cliente entre o ficheiro de clientes e transacoes, para ser o que se da a um novo cliente quando for criado.
-
-Criar destrutores
-
-?? Fazer codigo para gestao de stock de produtos ?? 
-  (ter ao lado do preço a quantidade e etc. )
+Mudar para quando insere nomes de ficheiros errados o programa fechar, usar "assert"
