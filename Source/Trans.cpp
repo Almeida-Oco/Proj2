@@ -4,6 +4,7 @@
 #include "..\Headers\Visualize.h"
 #include "..\Headers\Input_Asker.h"
 #include "..\Headers\Client.h"
+#include "..\Headers\Bottom_10.h"
 
 string Supermarket::Trans::trans_file_name = "";
 vector<Trans_t> Supermarket::Trans::info_trans;
@@ -182,170 +183,190 @@ void Supermarket::Trans::visTrans(const Trans_t &T_t) const
 //================================== ADVERTISERS =====================================
 //====================================================================================
 
-Matrix Supermarket::Trans::createMatrix()
-{//creates the matrix initialized with the true and false values, creates maps to associate position in matrix to information
-	int position_matrix = 0;
-	Matrix map_n_matrix;
-	for (Trans_t transaction_line : this->info_trans) //iterates through the vector
-	{
-		for (string p_name : transaction_line.products) //p_name contains a product name
-		{
-			if (!map_n_matrix.product_to_i.count(p_name)) //meaning the product does not have an associated key
-			{
-				map_n_matrix.product_to_i[p_name] = position_matrix; //name to position
-				map_n_matrix.i_to_product[position_matrix] = p_name; //position to name
-				position_matrix++;
-			}//if the product already existed it is ignored
-		}
-	}
-	vector<bool> columns(position_matrix, false); 
-	//creates column vector with size = to number of products brought by all users
-	position_matrix = 0;
-	for (Trans_t transaction_line : this->info_trans)
-	{
-		if (!map_n_matrix.c_number_to_i.count(transaction_line.number))
-		{ //associates the client number to its position in the matrix
-			map_n_matrix.c_number_to_i[transaction_line.number] = position_matrix;
-			position_matrix++;
-		}
-	}
-	map_n_matrix.prod_bought = vector< vector<bool> >(position_matrix, columns);
-	//creates the matrix which will hold the true or false values
 
-	for (Trans_t transaction_line : this->info_trans)
-	{
-		for (string p_name : transaction_line.products) //fills the matrix with the products bought
-			map_n_matrix.prod_bought[map_n_matrix.c_number_to_i[transaction_line.number]][map_n_matrix.product_to_i[p_name]] = true;
-	}
-
-	return map_n_matrix; //matrix that already contains true and false values
-}
-
-void Supermarket::Trans::printRecommended(const vector<string> &P)
-{//receives vector of string and prints it out
-	cout << "The recommended products are : " << endl << "-->  ";
-	for (string i : P)
-		cout << i << "  ";
-	cout << "<--";
-}
-
-void Supermarket::Trans::selectiveAd()
+//FUNCAO QUE DA O ELEMENTO QUE APARECE MAIS VEZES NOS CLIENTES PARECIDOS COM O CLIENTE ALVO E O CLIENTE ALVO AINDA NAO TEM //
+string Supermarket::Trans::maximu(vector<string>v)
 {
-	cout << endl << "========================================================" << endl;
-	Matrix product_list = createMatrix(); //holds matrix with true and false values already initialized
-	vector<int> different_products; //vector which will hold the products the target client did not bought
-	vector<int> temp_vec; //will temporarily hold the different products of the current user
+	unsigned int u = 0, i = 0, max = 0, counter = 0, max_pos = 0;
+	string product_wanted;
 
-	int
-		client_number			 = Input_Asker::instance()->askClientName(), //client ID
-		client_number_pos		 = product_list.c_number_to_i[client_number], //target client position in matrix
-		n_columns				 = product_list.prod_bought[client_number_pos].size(),
-		n_rows					 = product_list.prod_bought.size(), 
-		cont                     = 0,
-		max_number_of_equal_prod = 0;
-
-	for (int client = 0; client < n_rows; client++)
+	while (u < Product::instance()->getSize())
 	{
-		if (client == client_number_pos)
-			continue;
-		for (int product = 0; product < n_columns; product++)
+
+		while (i < v.size())            //this function gives me the name of the product that appears most times in a vector
 		{
-			if (product_list.prod_bought[client_number_pos][product] && product_list.prod_bought[client][product])
-				//if the inserted client bought the current product
-				cont++;
-			else if (product_list.prod_bought[client][product]) //if the current user bought the current product, but the target user didnt
-				temp_vec.push_back(product);
+			if (Product::instance()->getProd(u) == v[i])
+				counter++;
+			i++;
 		}
-		// cont holds the amount of equal products the current user bought in relation to the target user
-		if (cont < max_number_of_equal_prod)
-		{ //clears the different product collected from current user
-			temp_vec.clear();
-			cont = 0;
+		if (counter > max)
+		{
+			max_pos = u;
+			max = counter;
 		}
-		else if (cont == max_number_of_equal_prod)
-		{//merges the different products and the current vector which holds the different products
-			mergeVectors(different_products, temp_vec);
-			temp_vec.clear();
-			cont = 0;
+
+		i = 0;
+		counter = 0;
+		u++;
+	}
+
+
+	return Product::instance()->getProd(max_pos);
+}
+
+
+int Supermarket::Trans::searchID_transactions(unsigned int p)
+{
+	int i = 0;
+
+	while (i<Bottom_10::instance()->getCtoT().size())
+	{
+		if (Bottom_10::instance()->getCtoT()[i].first == p)         //with this function, I can know the line I should access in the bidimensional vector that I create in Func11.
+		{
+			return i;
 		}
 		else
-		{//replaces the old vector and clears the temp_vec
-			max_number_of_equal_prod = cont;
-			different_products = temp_vec;
-			temp_vec.clear();
-			cont = 0;
-		}
-	}//different_products holds repetitions of products bought which are different from the inputed user
-	 //these repetitions are unsorted and the products are represented by its position in the matrix
+			i++;
+	}
 
-	different_products = mostBought(different_products);
-	//vector containing recommended products (represented by their position in the matrix)
-
-	vector<string> recommended_product;
-	for (int i : different_products)
-		recommended_product.push_back(product_list.i_to_product[i]);
-	//converts the product from its position in the matrix to its name(string) and then prints them out
-	printRecommended(recommended_product);
+	return -1;
 }
 
-vector<int> Supermarket::Trans::mostBought(vector<int> &p_bought)
-//receives unsorted repetitions of different products and returns vector with products with more repetitions
+
+// usar para vetor so com id e produtos     Bottom_10::instance()->getCtoT();
+
+
+//FUNC11 É AQUELA QUE FAZ A PUBLICIDADE EM SI,É ELA QUE CONSTROI A MATRIZ E QUE VERIFICA QUAIS OS CLIENTES PARECIDOS COM O CLIENTE ALVO
+//E QUAL OS PRODUTOS DESTES QUE O ALVO AINDA NAO TEM ///
+
+void Supermarket::Trans::Func11()
 {
-	quicksort(p_bought);//orders the products
-	int rep = 1, max_number = 0, vec_size = p_bought.size();
-	vector<int> amount;
-	for (int i = 0; i<vec_size; i++)
+	Bottom_10::instance()->CtoT_init();
+	vector< vector<bool> > publi(Bottom_10::instance()->getCtoT().size(), vector<bool>(Product::instance()->getSize()));
+
+	vector<bool> vec_bool;
+
+
+	int i = 0, p = 0, u = 0;
+	
+
+	bool verifi = false; //its a verifier that proves if the product in the list of products was bought by the client or not
+
+
+	while (p < Bottom_10::instance()->getCtoT().size())
 	{
-		if (i == p_bought.size() - 2)
+
+
+		while (u<Product::instance()->getSize())
 		{
-			if (p_bought.at(i) == p_bought.at(i + 1))
-				rep++;
-			else
+
+			while (i < Bottom_10::instance()->getCtoT()[p].second.size())
 			{
-				if (rep > max_number)
+				if (Product::instance()->getProd(u) == Bottom_10::instance()->getCtoT()[p].second[i])
 				{
-					max_number = rep;
-					amount.clear();
-					amount.push_back(p_bought.at(i));
-					rep = 1;
+					vec_bool.push_back(true);
+					verifi = true;
+					break;
 				}
-				if (rep == max_number)
-				{
-					amount.push_back(p_bought.at(i));
-					rep = 1;
-				}
+
 				i++;
 			}
+
+			if (verifi == false)
+			{
+				vec_bool.push_back(false);
+			}
+			verifi = false;
+			u++;
+			i = 0;
+
+
 		}
 
-		if (rep > max_number)
-		{
-			max_number = rep;
-			amount.clear();
-			amount.push_back(p_bought.at(i));
-		}
-		else if (rep == max_number)
-		{
-			amount.push_back(p_bought.at(i));
-		}
-		if (i == vec_size - 1)
-			break;
-		else if (p_bought.at(i) != p_bought.at(i + 1))
-			rep = 1;
-		else
-			rep++;
+		u = 0;
+		publi[p] = vec_bool;
+		vec_bool.clear();
+		p++;
 
 	}
-	return amount;
-}//return vector with the most bought products by the most similar clients
 
-void Supermarket::Trans::mergeVectors(vector<int> &v1, vector<int> &v2)
-{
-	for (int i : v2)
-		v1.push_back(i);
+	int max = -1, compare = 0;
+	int id, line = 0, column = 0;
+	int same_products = 0;
+	vector <bool> vec_client_wanted;
+	vector <string> vec_different_prod, vec_different_prod_aux;
+	string product_wanted;
+
+
+	cout << "ID: ";
+	cin >> id;
+
+	int position = searchID_transactions(id);
+
+	while (position == -1)
+	{
+		cout << "Wrong ID, try again" << endl;
+		Func11();
+	}
+
+	vec_client_wanted = publi[position];
+
+	while (line < publi.size())
+	{
+
+		while (column < Product::instance()->getSize())
+		{
+
+			if (publi[line][column] && vec_client_wanted[column])
+				compare++;                                             // In here I can see how many products does each line have in common with the client I chose and put in a vector of string the products that the client doesn't has
+			else
+			{
+
+				if ((publi[line][column] == true) && (vec_client_wanted[column] == false))
+				{
+					vec_different_prod_aux.push_back(Product::instance()->getProd(column));
+					same_products = 1;
+				}
+
+			}
+
+			column++;
+
+		}
+		// same_products helps to prevent that 2 clients with exactly the same transactions are used in this program, because we will choose a product from a client that is similar to the one we chosen but with at least one different product in his/her transaction
+		if ((compare < max) || (line == position) || (same_products == 0))
+			vec_different_prod_aux.clear();
+		else
+		{
+			if (compare > max)
+			{
+				vec_different_prod.clear();
+				vec_different_prod = vec_different_prod_aux;
+				vec_different_prod_aux.clear();
+				max = compare;
+			}
+			else
+			{
+				vec_different_prod.insert(vec_different_prod.end(), vec_different_prod_aux.begin(), vec_different_prod_aux.end());
+				vec_different_prod_aux.clear();
+			}
+		}
+		compare = 0;
+		column = 0;
+		same_products = 0;
+		line++;
+
+	}
+
+
+	cout << "The client " << id << " should be advertised with this product: " << maximu(vec_different_prod) << endl;
+
 }
 
- //====================================================================================
+
+
+
+//====================================================================================
  //================================= MISCELLANEOUS ====================================
  //====================================================================================
 
