@@ -32,7 +32,9 @@ bool cmpProdAmount::operator() (const std::pair<std::string, unsigned int> &P1, 
 void Supermarket::Bottom_10::Source()
 {
 	string final;
-	Bottom_10::instance()->startUp();
+	if (CtoT.size() == 0)
+		Bottom_10::CtoT_init();
+	Bottom_10::B10_c_init();
 	Bottom_10::instance()->initHistogram();
 
 	final = final + "----> ";
@@ -43,7 +45,7 @@ void Supermarket::Bottom_10::Source()
 	cout << final << endl;
 }
 
-void Supermarket::Bottom_10::startUp()
+void Supermarket::Bottom_10::CtoT_init()
 {
 	pair<unsigned int, vector<string> > temp_pair;
 	vector<string> temp_string;
@@ -62,7 +64,10 @@ void Supermarket::Bottom_10::startUp()
 	sort(CtoT.begin(), CtoT.end(), cmpProdPrice());
 	//when it reaches here the set contains a pair of the client number and the products bought,
 	//ordered by the amount of money the client spent at the store
+}
 
+void Supermarket::Bottom_10::B10_c_init()
+{
 	//the maximum number of common products will be the number of products the Bottom 1 client bought
 	B10_common.reserve(CtoT.at(0).second.size());
 	auto it = CtoT.begin();
@@ -196,4 +201,9 @@ std::vector < std::pair < string, unsigned int > >::iterator Supermarket::Bottom
 		if (it->first == S)
 			return it;
 	return histogram.end();
+}
+
+inline std::vector< std::pair < unsigned int, std::vector< std::string> > > Supermarket::Bottom_10::getCtoT() const
+{
+	return CtoT;
 }

@@ -26,8 +26,6 @@ private:
 	
 	static Bottom_10 *B10_ptr;
 
-	
-	void startUp();
 	void initHistogram();
 	std::vector< std::string> bestProd();
 	std::vector < std::pair < unsigned int, std::vector <std::string> > >::iterator searchSet(unsigned int N);
@@ -37,8 +35,12 @@ private:
 	void mergeVec(std::vector<std::string> &V1, const std::vector<std::string> &V2);
 
 public: 
+	void CtoT_init();
 	void Source();
 	double calcMoney(const std::vector<std::string> &prods) const;
+	std::vector< std::pair < unsigned int, std::vector< std::string> > > getCtoT() const;
+	void B10_c_init();
+
 	static Bottom_10 *instance()
 	{
 		if (!B10_ptr)
