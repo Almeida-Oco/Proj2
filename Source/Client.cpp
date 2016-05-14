@@ -17,7 +17,7 @@ vector<Client_t> Supermarket::Client::info_clients;
 void Supermarket::Client::startUp()
 {
 	Bottom_10::instance()->CtoT_init();
-	unsigned int vector_size = 0, temp = 0;
+	unsigned int vector_size = 0;
 	this->max_client_number = 0;
 	vector<string> tokens;
 	bool failed = false;
@@ -60,9 +60,8 @@ void Supermarket::Client::startUp()
 			client.number = stoi(tokens.at(0));
 			client.money = (Bottom_10::instance()->searchSet(client.number) == Bottom_10::instance()->getCtoT().end() ) ? 0.0 : Bottom_10::instance()->calcMoney(Bottom_10::instance()->searchSet(client.number)->second);
 
-			temp = client.number;
-			if (temp > this->max_client_number)
-				this->max_client_number = temp;
+			if (client.number > this->max_client_number)
+				this->max_client_number = client.number;
 			info_clients.push_back(client);
 		}
 
@@ -109,16 +108,7 @@ void Supermarket::Client::addClient()//asks the client info, checks its validity
 		cout << "Insert client name" << endl;
 		getline(cin, c_name);
 	} while (!testText(c_name));
-	if ((this->max_client_number) >(Trans::instance()->max_id_found()))
-	{
-		new_c.number = this->max_client_number;
-		this->max_client_number++;
-	}
-	else
-	{
-		new_c.number = Trans::instance()->max_id_found;
-		this->max_client_number = Trans::instance()->max_id_found++;
-	}
+	new_c.number = this->max_client_number;
 	new_c.name = c_name;
 	new_c.money = 0;
 	info_clients.insert(findInsertPos(new_c), new_c);

@@ -39,7 +39,6 @@ public:
 	//MISC
 	std::vector<Trans_t> &getInfo() const;
 	unsigned int getBiggestID() const;
-	unsigned int max_id_found();
 	static Trans *instance()
 	{
 		if (!T_ptr)
