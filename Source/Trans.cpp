@@ -372,3 +372,17 @@ vector<Trans_t> &Supermarket::Trans::getInfo() const
 {
 	return info_trans;
 }
+
+unsigned int Supermarket::Trans::max_id_found()
+{
+	unsigned int max = -1;
+
+	for (int i = 0; i < info_trans.size(); i++)
+	{
+		if (info_trans[i].number > max)
+			max = info_trans[i].number;
+
+	}
+		
+	return max++;
+}
