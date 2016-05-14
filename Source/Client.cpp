@@ -109,8 +109,16 @@ void Supermarket::Client::addClient()//asks the client info, checks its validity
 		cout << "Insert client name" << endl;
 		getline(cin, c_name);
 	} while (!testText(c_name));
-	new_c.number = this->max_client_number;
-	this->max_client_number++;
+	if ((this->max_client_number) >(Trans::instance()->max_id_found()))
+	{
+		new_c.number = this->max_client_number;
+		this->max_client_number++;
+	}
+	else
+	{
+		new_c.number = Trans::instance()->max_id_found;
+		this->max_client_number = Trans::instance()->max_id_found++;
+	}
 	new_c.name = c_name;
 	new_c.money = 0;
 	info_clients.insert(findInsertPos(new_c), new_c);
