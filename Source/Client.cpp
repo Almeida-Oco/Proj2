@@ -7,9 +7,6 @@
 
 using namespace std;
 
-string Supermarket::Client::client_file_name = "";
-unsigned int Supermarket::Client::max_client_number = 0;
-vector<Client_t> Supermarket::Client::info_clients;
 //====================================================================================
 //=================================== MODIFIERS ======================================
 //====================================================================================
@@ -74,29 +71,28 @@ void Supermarket::Client::startUp()
 	sort(this->info_clients.begin(), this->info_clients.end());
 	
 	unsigned int max_trans_number = Trans::instance()->getBiggestID();
-	max_client_number = (max_trans_number > max_client_number) ? max_trans_number : max_client_number;
+	max_client_number = (max_trans_number > max_client_number) ? max_trans_number+1 : max_client_number+1;
 } 
 
 void Supermarket::Client::removeClient()
 {//removes a certain client by removing it from the vector of clients
-
+	vector<Client_t>::iterator it;
 	bool removed = false;
-	unsigned int c_number, sz = info_clients.size(), i = 0;
+	unsigned int sz = info_clients.size(), i = 0;
+	string c_name;
 	do
 	{
-		c_number = Input_Asker::instance()->askClientName();
-		for (i=0 ; i<sz ; i++)
+		c_name = Input_Asker::instance()->askClientName();
+		it = nameBinarySearch(c_name, info_clients);
+		if (it->name != c_name)
 		{
-			if (c_number == info_clients.at(i).number)
-			{
-				removed = true;
-				break;
-			}
-		}
-		if (!removed)
 			cout << "Client not found , please try again " << endl;
-	} while (!removed);
-	info_clients.erase(info_clients.begin() + i);
+			continue;
+		}
+		else
+			break; //keeps asking user an existing name until a correct one is entered
+	} while (true);
+	info_clients.erase(it);
 } 
 
 void Supermarket::Client::addClient()//asks the client info, checks its validity and if it checks pushes back to the client vector
@@ -109,19 +105,16 @@ void Supermarket::Client::addClient()//asks the client info, checks its validity
 		getline(cin, c_name);
 	} while (!testText(c_name));
 	new_c.number = this->max_client_number;
+	this->max_client_number++;
 	new_c.name = c_name;
 	new_c.money = 0;
-	info_clients.insert(findInsertPos(new_c), new_c);
+	binaryInsert(new_c, info_clients);
 }
 
-void Supermarket::Client::addMoney(const unsigned int c_num, const double amount)
+void Supermarket::Client::addMoney(const string &S, const double amount)
 {
-	unsigned int sz = info_clients.size();
-	for (unsigned int i = 0; i < sz; i++)
-	{
-		if (info_clients.at(i).number == c_num)
-			info_clients.at(i).money += amount;
-	}
+	auto it = nameBinarySearch(S, info_clients);
+	it->money += amount;
 }
 
 //====================================================================================
@@ -136,18 +129,13 @@ void Supermarket::Client::visClient()
 	{
 		cout << "Insert client name : " << endl;
 		getline(cin, client_name);
-		if (!testText(client_name))
-			continue;
-		for (Client_t i : info_clients)
+		auto it = nameBinarySearch(client_name, info_clients);
+		if (it->name == client_name)
 		{
-			if (i.name == client_name)
-			{
-				found = true;
-				clientHeader();
-				Visualize::instance()->visNumber(i.number); Visualize::instance()->visName(i.name); visMoney(i.money);
-				cout << endl;
-				break;
-			}
+			found = true;
+			clientHeader();
+			Visualize::instance()->visNumber(it->number); Visualize::instance()->visName(it->name); visMoney(it->money);
+			cout << endl;
 		}
 		cout << endl << "========================================================" << endl;
 		if (!found)
@@ -175,41 +163,6 @@ void Supermarket::Client::clientHeader()
 //====================================================================================
 //================================= MISCELLANEOUS ====================================
 //====================================================================================
-
-vector<Client_t>::iterator Supermarket::Client::findInsertPos(const Client_t &C) const
-{
-	return info_clients.begin() + findPos(C, 0, info_clients.size()-1);
-}
-
-unsigned int Supermarket::Client::findPos(const Client_t &C, unsigned int start, unsigned int end) const
-{
-	if (start != end)
-	{
-		if (C < info_clients.at((start + end) / 2))
-			return findPos(C, start,  (((start + end) / 2) > 0) ? ((start+end)/2)-1 : 0  );
-		else if (C > info_clients.at((start + end) / 2))
-			return findPos(C, ((start + end) / 2) + 1, end);
-		else
-			return (start + end) / 2;
-	}
-
-	if (start == end && C.name > info_clients.at(start).name)
-		return start + 1;
-	if (start == end && C < info_clients.at(start))
-		return start;
-}
-
-int Supermarket::Client::findName(const string &c_name) //searches the client vector for a given name, and returns its position on the vector
-{//if the name exists, if not then return -1
-	int sz = info_clients.size();
-	for (int i = 0; i<sz; i++)
-	{
-		if (info_clients.at(i).name == c_name)
-			return i;
-	}
-	return -1;
-}
-
 void Supermarket::Client::visMoney(double money) {
 	cout << setw(MONEY_BOX) << fixed << setprecision(2) << left << money;
 }
@@ -228,3 +181,37 @@ void Supermarket::Client::update()
 	rename(temp_file_name.c_str(), this->client_file_name.c_str());
 }
 
+vector<Client_t>::iterator Supermarket::Client::nameBinarySearch(const string &element, vector<Client_t> &vec) const
+{
+	return vec.begin() + biPos(element, vec, 0, vec.size() - 1);
+}
+
+unsigned int Supermarket::Client::biPos(const string &element, const vector<Client_t> &vec, unsigned int start, unsigned int end) const
+{
+	if (start != end)
+	{
+		if (element < vec.at((start + end) / 2).name)
+			return biPos(element, vec, start, ((end - start) > 1) ? ((start + end) / 2) - 1 : end - 1);
+		else if (element > vec.at((start + end) / 2).name)
+			return biPos(element, vec, ((start + end) / 2) + 1, end);
+		else
+			return (start + end) / 2;
+	}
+
+	if (start == end && element > vec.at(start).name)
+		return start + 1;
+	if (start == end && element <= vec.at(start).name)
+		return start;
+
+	return 0;
+}
+
+string Supermarket::Client::NumtoName(unsigned int num) const
+{
+	for (auto C : info_clients)
+	{
+		if (C.number == num)
+			return C.name;
+	}
+	return "";
+}

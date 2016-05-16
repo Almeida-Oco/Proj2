@@ -3,37 +3,38 @@
 
 #include "Declarations.h"
 #include "Supermarket.h"
+#include "Binary_Op.h"
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <string>
-#include <algorithm>
 #include <fstream>
 
 class Trans;
-class Supermarket;
 
 class Supermarket::Client
 {
-	static std::string client_file_name;
-	static unsigned int max_client_number;
-	static std::vector<Client_t> info_clients;
-	static Client *C_ptr;
+	template <typename T> friend unsigned int findPos(const T &element, const std::vector<T> &vec, unsigned int start, unsigned int end);
+	template <typename T> friend void binaryInsert(const T &element, std::vector<T> &vec);
 
+	std::string client_file_name;
+	unsigned int max_client_number;
+	std::vector<Client_t> info_clients;
+	static Client *C_ptr;
 public:
 	
 	Client() {};
 	Client(const Client &C) {};
-	//void calcClientMoney(Trans &T);
 
 	std::vector <Client_t> getInfo() const { return info_clients; }
+	std::vector<Client_t>::iterator nameBinarySearch(const std::string &element, std::vector<Client_t> &vec) const;
+	std::string NumtoName(unsigned int num) const;
 	void startUp();
 
 	//manipulates vector/info of clients
 	void removeClient();
 	void addClient();
-	void addMoney(const unsigned int c_num, const double amount);
-	int findName(const std::string &c_name);
+	void addMoney(const std::string &S, const double amount);
 
 	//visualize client information
 	void visClient();
@@ -50,8 +51,7 @@ public:
 		return C_ptr;
 	}
 private:
-	std::vector<Client_t>::iterator findInsertPos(const Client_t &C) const;
-	unsigned int findPos(const Client_t &C, unsigned int start, unsigned int end) const;
+	unsigned int biPos(const std::string &element, const std::vector<Client_t> &vec, unsigned int start, unsigned int end) const;
 	void visMoney(double money);
 };
 
