@@ -27,11 +27,11 @@ void Supermarket::Client::startUp()
 		cout << "Insert the clients file name" << endl;
 		getline(cin, this->client_file_name);
 		fin.open(this->client_file_name);
-		while (!fin.is_open())
+		if (!fin.is_open())
 		{
-			cout << "Unknown name. Please try again" << endl;
-			getline(cin, this->client_file_name);
-			fin.open(this->client_file_name);
+			cout << "File not found" << endl;
+			exit(0);
+			break;
 		}
 
 		if (fin >> vector_size)
@@ -63,7 +63,12 @@ void Supermarket::Client::startUp()
 		}
 
 		if (failed)
-			info_clients.clear();
+		{
+			failed = false;
+			cout << "Not the clients file, please try again" << endl;
+			this->info_clients.clear();
+			continue;
+		}
 
 		fin.close();
 	} while (failed); 

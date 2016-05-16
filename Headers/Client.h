@@ -6,6 +6,7 @@
 #include "Binary_Op.h"
 #include <iostream>
 #include <iomanip>
+#include <cassert>
 #include <vector>
 #include <string>
 #include <fstream>

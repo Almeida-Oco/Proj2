@@ -23,9 +23,9 @@ void Supermarket::Trans::startUp()
 		fin.open(this->trans_file_name);
 		while (!fin.is_open())
 		{
-			cout << "Unknown name. Please try again" << endl;
-			getline(cin, this->trans_file_name);
-			fin.open(this->trans_file_name);
+			cout << "File not found" << endl;
+			exit(0);
+			break;
 		}
 
 		if (fin >> vector_size)
@@ -59,6 +59,14 @@ void Supermarket::Trans::startUp()
 			transaction.number = stoi(tokens.at(0));
 			this->info_trans.push_back(transaction);
 		}
+		if (failed)
+		{
+			failed = false;
+			cout << "Not the transactions file, please try again" << endl;
+			this->info_trans.clear();
+			continue;
+		}
+
 		fin.close();
 	} while (failed); //it if is the transaction files it copies its contents to a vector of structs
 
