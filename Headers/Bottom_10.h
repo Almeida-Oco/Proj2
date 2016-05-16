@@ -7,6 +7,7 @@
 #include <string>
 
 const unsigned int N_COMMON = 3;
+//change the value for testing purposes, if N_COMMON = 10, then it does Bottom_10, if it is 3, then it does Bottom_3
 
 struct cmpProdPrice
 {
@@ -21,13 +22,18 @@ struct cmpProdAmount
 class Supermarket::Bottom_10
 {
 private:
-	static std::vector< std::pair < unsigned int, std::vector< std::string> > > CtoT;
-	static std::vector<std::string> B10_common;
-	static std::vector < std::pair < std::string , unsigned int> > histogram;
-	static std::vector<int> P_amount;
-	
+	/*		   	
+	* MEMBERS
+	*/
+	std::vector< std::pair < unsigned int, std::vector< std::string> > > CtoT;
+	std::vector<std::string> B10_common;
+	std::vector < std::pair < std::string , unsigned int> > histogram;
+	std::vector<int> P_amount;
 	static Bottom_10 *B10_ptr;
 
+	/*
+	* METHODS
+	*/
 	void initHistogram();
 	std::vector< std::string> bestProd();
 	std::vector < std::pair < std::string, unsigned int > >::iterator searchHistogram(const std::string &S);
@@ -39,7 +45,7 @@ public:
 	void CtoT_init();
 	void Source();
 	double calcMoney(const std::vector<std::string> &prods) const;
-	std::vector< std::pair < unsigned int, std::vector< std::string> > > &getCtoT() const;
+	std::vector< std::pair < unsigned int, std::vector< std::string> > > &getCtoT();
 	std::vector < std::pair < unsigned int, std::vector <std::string> > >::iterator searchSet(unsigned int N);
 	void B10_c_init();
 
