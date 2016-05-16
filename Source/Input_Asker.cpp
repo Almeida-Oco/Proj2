@@ -27,26 +27,14 @@ int Supermarket::Input_Asker::ask_c_number() const
 		return c_number;
 }
 
-int Supermarket::Input_Asker::askClientName() const
+string Supermarket::Input_Asker::askClientName() const
 {
 	bool found = false;
 	string client_name;
-	do
-	{
-		cout << "Insert client name : " << endl;
-		getline(cin, client_name);
-		for (Client_t client_line : Client::instance()->getInfo())
-		{
-			if (client_line.name == client_name)
-			{
-				found = true;
-				return client_line.number;
-			}
-		}
-		if (!found)
-			cout << "Client not found, please try again" << endl;
-	} while (!found);
-	return -1;
+	vector<Client_t>::iterator it;
+	cout << "Insert client name : " << endl;
+	getline(cin, client_name);
+	return client_name;
 }
 
 bool Supermarket::Input_Asker::testNum(unsigned int num) const

@@ -22,7 +22,7 @@ public:
 	//input a date using different cout (depending on int question),
 	//validates the date and returns the Date struct
 
-	int askClientName() const;
+	std::string askClientName() const;
 	//keeps asking client name until an existing one is entered
 
 	static Input_Asker *instance()

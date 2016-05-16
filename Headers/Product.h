@@ -11,8 +11,8 @@
 
 class Supermarket::Product
 {
-	static std::string product_file_name;
-	static std::map <std::string,double> prod_price;
+	std::string product_file_name;
+	std::map <std::string,double> prod_price;
 	
 	static Product *P_ptr;
 public:
@@ -23,6 +23,7 @@ public:
 
 	unsigned int getSize();
 	double getPrice(const std::string &product);
+	double getPrice(const std::vector<std::string> &product);
 	std::string getProd(unsigned int position);
 	void update();
 
