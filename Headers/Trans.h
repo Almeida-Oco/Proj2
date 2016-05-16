@@ -13,11 +13,12 @@
 class Supermarket::Trans
 {
 private:
-	static std::string trans_file_name;
-	static std::vector<Trans_t> info_trans;
-
-public:
+	std::string trans_file_name;
+	std::vector<Trans_t> info_trans;
 	static Trans *T_ptr;
+public:
+	template <typename T> friend unsigned int findPos(const T &element, const std::vector<T> &vec, unsigned int start, unsigned int end);
+	template <typename T> friend void binaryInsert(const T &element, std::vector<T> &vec);
 
 	Trans() {};
 	Trans(const Trans &T) {};
@@ -37,7 +38,7 @@ public:
 	void selectiveAd();
 
 	//MISC
-	std::vector<Trans_t> &getInfo() const;
+	std::vector<Trans_t> &getInfo();
 	unsigned int getBiggestID() const;
 	static Trans *instance()
 	{
@@ -49,7 +50,7 @@ private:
 	void transHeader() const;
 	std::vector<std::string> mostBought(std::vector<std::string> &p_bought);
 	int	searchID_transactions(unsigned int p);
-	std::string askProduct() const;
+	std::vector<std::string> askProduct(bool B) const;
 	void visTrans(const Trans_t &T_t) const;
 	void visDate(Date_t date) const;
 

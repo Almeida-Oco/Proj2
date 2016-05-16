@@ -9,11 +9,6 @@ using namespace std;
 class Supermarket;
 class Trans;
 
-std::vector< std::pair < unsigned int, std::vector< std::string> > > Supermarket::Bottom_10::CtoT;
-std::vector<std::string> Supermarket::Bottom_10::B10_common;
-std::vector<int> Supermarket::Bottom_10::P_amount;
-std::vector < std::pair < std::string, unsigned int> > Supermarket::Bottom_10::histogram;
-
 //======================================================================================================================================================
 //============================================================ COMPARE FUNCTIONS =======================================================================
 //======================================================================================================================================================
@@ -205,7 +200,7 @@ std::vector < std::pair < string, unsigned int > >::iterator Supermarket::Bottom
 	return histogram.end();
 }
 
-std::vector< std::pair < unsigned int, std::vector< std::string> > > &Supermarket::Bottom_10::getCtoT() const
+std::vector< std::pair < unsigned int, std::vector< std::string> > > &Supermarket::Bottom_10::getCtoT()
 {
 	return CtoT;
 }
