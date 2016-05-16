@@ -8,9 +8,6 @@
 
 using namespace std;
 
-string Supermarket::Trans::trans_file_name = "";
-vector<Trans_t> Supermarket::Trans::info_trans;
-
 void Supermarket::Trans::startUp()
 {
 	unsigned int vector_size = 0;
@@ -79,14 +76,10 @@ void Supermarket::Trans::addTrans()//adds a new transaction to the vector of tra
 	T.date = Input_Asker::instance()->askDate(2);
 	vector <string> prod_bought;
 	string prod;
-	do
-	{
-		prod = askProduct();
-		prod_bought.push_back(prod);
-		Client::instance()->addMoney(T.number, Product::instance()->getPrice(prod));
-	} while (prod != "");
+	prod_bought = askProduct( (prod_bought.size() == 0) ? true : false);
+	Client::instance()->addMoney( Client::instance()->NumtoName(T.number) , Product::instance()->getPrice(prod_bought) );
 	T.products = prod_bought;
-	this->info_trans.push_back(T);
+	binaryInsert(T, info_trans);
 }
 
 //====================================================================================
@@ -105,10 +98,17 @@ void Supermarket::Trans::visAllTrans() const
 void Supermarket::Trans::visClientTrans() const
 {
 	unsigned int c_number;
+	string name;
+	vector<Client_t>::iterator it;
 	bool first = true;
 	do
 	{
-		c_number = Input_Asker::instance()->askClientName();
+		name = Input_Asker::instance()->askClientName();
+		it = Client::instance()->nameBinarySearch(name , Client::instance()->getInfo());
+		if (it->name == name)
+			c_number = it->number;
+		else
+			continue;
 		for (Trans_t T : this->info_trans)
 		{
 			if (T.number == c_number)
@@ -349,14 +349,26 @@ void Supermarket::Trans::update()
 	rename(temp_file_name.c_str(), this->trans_file_name.c_str());
 }
 
-string Supermarket::Trans::askProduct() const
+vector<string> Supermarket::Trans::askProduct(bool first_time) const
 {
 	int n_prod;
-	map<int,string> num_prod = Visualize::instance()->visAllProd();
+	bool found = false;
+	vector<string> prod_bought;
+	map<int, string> num_prod = Visualize::instance()->visAllProd(first_time);
+	auto it = num_prod.begin();
 	do {
+		found = false;
 		cin >> n_prod;
-		cin.ignore(9999, '\n');
-		if (cin.fail() && !cin.eof())
+		for (it = num_prod.begin(); it != num_prod.end(); it++)
+		{
+			if (it->first == n_prod)
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if ((cin.fail() || !found) && !cin.eof())
 		{
 			cin.clear();
 			cin.ignore(9999, '\n');
@@ -364,11 +376,16 @@ string Supermarket::Trans::askProduct() const
 			cout << "---> ";
 			continue;
 		}
-		return (!cin.eof()) ? num_prod.at(n_prod) : "";
-	} while (true);
+		else if (cin.eof())
+			break;
+		prod_bought.push_back(it->second);
+		cout << "---> ";
+
+	} while (!cin.eof());
+	return prod_bought;
 }
 
-vector<Trans_t> &Supermarket::Trans::getInfo() const
+vector<Trans_t> &Supermarket::Trans::getInfo()
 {
 	return info_trans;
 }

@@ -23,13 +23,9 @@ Supermarket::Input_Asker *Supermarket::Input_Asker::IA_ptr;
 Supermarket::Visualize *Supermarket::Visualize::V_ptr;
 Supermarket::Bottom_10 *Supermarket::Bottom_10::B10_ptr;
 
-
-
 bool testText(const string &c_name);
 void update_n_exit();
 //last function to be called, updates the files, according to the current information on the info_(vectors)
-
-
 
 int main()
 {
@@ -40,9 +36,6 @@ int main()
 	update_n_exit();
 }
 
-
-
-
 void update_n_exit()
 {
 
@@ -52,20 +45,23 @@ void update_n_exit()
 	cout << "GOODBYE" << endl;
 	exit(0);
 }
-
-
-
-
-
-
-
-
-
-
 //====================================================================================
-//===================================== STRING =======================================
+//=============================== MISCELLANEOUS ======================================
 //====================================================================================
-vector<string> string_split(const string &line, const string spliter)
+
+
+
+bool testText(const string &c_name) 
+{
+	for (char i : c_name)
+	{
+		if (!((i >= A && i <= Z) || (i >= a && i <= z) || i == SPACE))
+			return false;
+	}
+	return true;
+}
+
+vector<string> string_split(const string &line, const string &spliter)
 {
 	unsigned int pos_spliter = 0, cont_spliter = 0, sz = line.size(), splt_sz = spliter.size(), inicio = 0;
 	vector<string> split_string;
@@ -85,7 +81,7 @@ vector<string> string_split(const string &line, const string spliter)
 				cont_spliter++;
 			if (cont_spliter == splt_sz)
 			{
-				pos_spliter = i - (splt_sz-1);
+				pos_spliter = i - (splt_sz - 1);
 				split_string.push_back(line.substr(inicio, pos_spliter - inicio));
 				inicio = pos_spliter + 1;
 				inicio = i + 1;
@@ -129,18 +125,4 @@ string trim(string &str)
 		return remove_middle_spaces(str.substr(first, (last - first + 1)));
 	else
 		return "";
-}
-
-//====================================================================================
-//=============================== MISCELLANEOUS ======================================
-//====================================================================================
-
-bool testText(const string &c_name) 
-{
-	for (char i : c_name)
-	{
-		if (!((i >= A && i <= Z) || (i >= a && i <= z) || i == SPACE))
-			return false;
-	}
-	return true;
 }

@@ -27,14 +27,18 @@ void Supermarket::Visualize::visProd(const string &prod) const {
 	cout << setw(PROD_BOX) << left << prod;
 }
 //====================================================================================
-map<int, string> Supermarket::Visualize::visAllProd() const
+map<int, string> Supermarket::Visualize::visAllProd(bool first_time) const
 {
+	const int N_BOX = 3;
 	unsigned int i = 0, sz = Product::instance()->getSize(); //Product::instance()->getSize();
 	map<int, string> n_prod;
-	for (i; i < sz; i++)
+	if (first_time)
 	{
-		cout << i + 1 << " -> " << Product::instance()->getProd(i) << endl;
-		n_prod[i+1] = Product::instance()->getProd(i);
+		for (i; i < sz; i++)
+		{
+			cout << setw(N_BOX) << i + 1 << " -> " << Product::instance()->getProd(i) << endl;
+			n_prod[i + 1] = Product::instance()->getProd(i);
+		}
 	}
 	cout << "---> ";
 	return n_prod;

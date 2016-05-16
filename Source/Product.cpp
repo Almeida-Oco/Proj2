@@ -3,9 +3,6 @@
 
 using namespace std;
 
-string Supermarket::Product::product_file_name = "";
-map<string, double> Supermarket::Product::prod_price;
-
 void Supermarket::Product::startUp()
 {
 	bool failed = false;
@@ -61,6 +58,14 @@ double Supermarket::Product::getPrice(const string &product)
 	if (it != this->prod_price.end())
 		return it->second;
 	return -1;
+}
+
+double Supermarket::Product::getPrice(const vector<string> &product)
+{
+	double final = 0;
+	for (string S : product)
+		final += prod_price.at(S);
+	return final;
 }
 
 string Supermarket::Product::getProd(unsigned int position)
