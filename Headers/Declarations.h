@@ -42,6 +42,7 @@ struct Client_t {
 	double money;
 
 	bool operator< (const Client_t &C1) const;
+	bool operator<= (const Client_t &C1) const;
 	bool operator> (const Client_t &C1) const;
 };
 
@@ -51,6 +52,7 @@ struct Date_t {
 	unsigned int year;
 
 	bool operator> (const Date_t &D1) const;
+	bool operator>= (const Date_t &D1) const;
 	bool operator< (const Date_t &D1) const;
 };
 
@@ -61,9 +63,11 @@ struct Trans_t
 	std::vector<std::string> products;
 
 	bool operator< (const Trans_t &T1) const;
+	bool operator<= (const Trans_t &T1) const;
+	bool operator> (const Trans_t &T1) const;
 };
 
-std::vector<std::string> string_split(const std::string &line, const std::string spliter);
+std::vector<std::string> string_split(const std::string &line, const std::string &spliter);
 std::string remove_middle_spaces(const std::string &S);
 std::string trim(std::string &str);
 bool testText(const std::string &c_name);
