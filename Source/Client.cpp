@@ -14,7 +14,6 @@ using namespace std;
 void Supermarket::Client::startUp()
 {
 	Bottom_10::instance()->CtoT_init();
-	unsigned int placeholder = 0;
 	this->max_client_number = 0;
 	vector<string> tokens;
 	bool failed = false;
@@ -34,7 +33,7 @@ void Supermarket::Client::startUp()
 			exit(0);
 			break;
 		}
-		if (!(fin >> placeholder))
+		if (!(fin >> number_lines_cli))
 		{
 			fin.ignore(999, '\n');
 			fin.clear();
@@ -90,6 +89,7 @@ void Supermarket::Client::removeClient()
 	
 	if(c_name != "")
 		info_clients.erase(it);
+		this->number_lines_cli--;   
 } 
 
 void Supermarket::Client::addClient()//asks the client info, checks its validity and if it checks pushes back to the client vector
@@ -107,6 +107,7 @@ void Supermarket::Client::addClient()//asks the client info, checks its validity
 	new_c.name = c_name;
 	new_c.money = 0;
 	info_clients.insert(it , new_c);
+	this->number_lines_cli++;
 }
 
 void Supermarket::Client::addMoney(const string &S, const double amount)
@@ -180,7 +181,7 @@ void Supermarket::Client::update()
 
 	fout.open(temp_file_name);
 	if (fout.is_open())
-		fout << info_clients.size() << endl;
+		fout << this->number_lines_cli << endl;    
 		for (Client_t i : info_clients)
 			fout << i.number << " ; " << i.name << " ; " << i.money << endl;
 	fout.close();
