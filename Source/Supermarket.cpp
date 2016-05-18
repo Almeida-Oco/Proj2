@@ -6,6 +6,8 @@
 #include "..\Headers\Input_Asker.h"
 #include "..\Headers\Trans.h"
 
+using namespace std;
+
 void Supermarket::MainMenu()
 {
 	const int C = 1, Tr = 2, A = 3, E = 0;
@@ -19,24 +21,38 @@ void Supermarket::MainMenu()
 		std::cout << "1 -> Clients" << std::endl;
 		std::cout << "2 -> Transactions" << std::endl;
 		std::cout << "3 -> Advertisement" << std::endl;
-		std::cout << "---> ";
-		std::cin >> action;
-		std::cin.ignore(999, '\n');
-		if (std::cin.fail())
+		do
 		{
+			std::cout << "---> ";
 			std::cin.clear();
-			std::cin.ignore(9999, '\n');
-		}
-		if (action == C)
-			ClientMenu();
-		else if (action == Tr)
-			TransMenu();
-		else if (action == A)
-			AdMenu();
-		else if (action == E)
+			std::cin >> action;
+			if (cin.good() || (cin.fail() && !cin.eof()))
+			{
+				cin.clear();
+				std::cin.ignore(9999, '\n');
+			}
+			else if (cin.fail())
+			{
+				if (cin.peek() != EOF && !cin.eof())
+					cin.ignore(999, '\n');
+				cin.clear();
+			}
+
+			if (action == C)
+				ClientMenu();
+			else if (action == Tr)
+				TransMenu();
+			else if (action == A)
+				AdMenu();
+			else if (action != E)
+			{
+				std::cout << "Invalid input, please try again" << endl;
+				continue;
+			}
+			if(action != E)
+				action = -1;
 			break;
-		else
-			std::cout << "Invalid input, please try again";
+		} while (true);
 	} while (action != E);
 }
 
@@ -54,25 +70,40 @@ void Supermarket::ClientMenu()
 		std::cout << "2 -> Remove Client" << std::endl;
 		std::cout << "3 -> See Client" << std::endl;
 		std::cout << "4 -> See  all Clients" << std::endl;
-		std::cout << "---> ";
-		std::cin >> action;
-		std::cin.ignore(999, '\n');
-		if (std::cin.fail())
+		do
 		{
+			std::cout << "---> ";
 			std::cin.clear();
-			std::cin.ignore(9999, '\n');
-		}
+			std::cin >> action;
+			if (cin.good() || (cin.fail() && !cin.eof()))
+			{
+				cin.clear();
+				std::cin.ignore(9999, '\n');
+			}
+			else if (cin.fail())
+			{
+				if (cin.peek() != EOF && !cin.eof())
+					cin.ignore(999, '\n');
+				cin.clear();
+			}
 
-		if (action == add)
-			Client::instance()->addClient();
-		else if (action == rem)
-			Client::instance()->removeClient();
-		else if (action == see_one)
-			Client::instance()->visClient();
-		else if (action == see_all)
-			Client::instance()->visAllClients();
-		else
-			std::cout << "Invalid input, please try again" << std::endl << std::endl;
+			if (action == add)
+				Client::instance()->addClient();
+			else if (action == rem)
+				Client::instance()->removeClient();
+			else if (action == see_one)
+				Client::instance()->visClient();
+			else if (action == see_all)
+				Client::instance()->visAllClients();
+			else if (action != go_back)
+			{
+				std::cout << "Invalid input, please try again" << std::endl;
+				continue;
+			}
+			if (action != go_back)
+				action = -1;
+			break;
+		} while (true);
 	} while (action != go_back);
 }
 
@@ -91,28 +122,42 @@ void Supermarket::TransMenu()
 		std::cout << "3 -> See Day Transactions" << std::endl;
 		std::cout << "4 -> See Transactions between dates" << std::endl;
 		std::cout << "5 -> See  all Transactions" << std::endl;
-		std::cout << "---> ";
-		std::cin.clear();
-		std::cin >> action;
-		std::cin.ignore(999, '\n');
-		if (std::cin.fail())
+		do
 		{
+			std::cout << "---> ";
 			std::cin.clear();
-			std::cin.ignore(9999, '\n');
-		}
+			std::cin >> action;
+			if (cin.good() || (cin.fail() && !cin.eof()))
+			{
+				cin.clear();
+				std::cin.ignore(9999, '\n');
+			}
+			else if (cin.fail())
+			{
+				if (cin.peek() != EOF && !cin.eof())
+					cin.ignore(999, '\n');
+				cin.clear();
+			}
 
-		if (action == add)
-			Trans::instance()->addTrans();
-		else if (action == see_c)
-			Trans::instance()->visClientTrans();
-		else if (action == see_d)
-			Trans::instance()->visDayTrans();
-		else if (action == see_b)
-			Trans::instance()->visBetweenDates();
-		else if (action == see_all)
-			Trans::instance()->visAllTrans();
-		else
-			std::cout << "Invalid input, please try again" << std::endl << std::endl;
+			if (action == add)
+				Trans::instance()->addTrans();
+			else if (action == see_c)
+				Trans::instance()->visClientTrans();
+			else if (action == see_d)
+				Trans::instance()->visDayTrans();
+			else if (action == see_b)
+				Trans::instance()->visBetweenDates();
+			else if (action == see_all)
+				Trans::instance()->visAllTrans();
+			else if (action != go_back)
+			{
+				std::cout << "Invalid input, please try again" << std::endl;
+				continue;
+			}
+			if (action != go_back)
+				action = -1;
+			break;
+		} while (true);
 	} while (action != go_back);
 }
 
@@ -128,21 +173,34 @@ void Supermarket::AdMenu()
 		std::cout << "0 -> Go Back" << std::endl;
 		std::cout << "1 -> Client Advertisement" << std::endl;
 		std::cout << "2 -> Bottom 10 Advertisement" << std::endl;
-		std::cout << "---> ";
-		std::cin >> action;
-		std::cin.ignore(999, '\n');
-		if (std::cin.fail())
+		do
 		{
+			std::cout << "---> ";
 			std::cin.clear();
-			std::cin.ignore(9999, '\n');
-		}
-		if (action == C_a)
-			Supermarket::Trans::instance()->selectiveAd();
-		else if (action == B_a)
-			Supermarket::Bottom_10::instance()->Source();
-		else if (action == E)
+			std::cin >> action;
+			if (cin.good() || (cin.fail() && !cin.eof()))
+			{
+				cin.clear();
+				std::cin.ignore(9999, '\n');
+			}
+			else if (cin.fail())
+			{
+				if (cin.peek() != EOF && !cin.eof())
+					cin.ignore(999, '\n');
+				cin.clear();
+			}
+
+			if (action == C_a)
+				Supermarket::Trans::instance()->selectiveAd();
+			else if (action == B_a)
+				Supermarket::Bottom_10::instance()->Source();
+			else if (action != E)
+				std::cout << "Invalid input, please try again" << endl;
+
+			if (action != E)
+				action = -1;
 			break;
-		else
-			std::cout << "Invalid input, please try again";
+
+		} while (true);
 	} while (action != E);
 }
