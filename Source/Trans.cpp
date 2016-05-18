@@ -10,7 +10,7 @@ using namespace std;
 
 void Supermarket::Trans::startUp()
 {
-	unsigned int placeholder = 0;
+
 	bool failed = false;
 	vector<string> tokens;
 	Trans_t transaction;
@@ -28,9 +28,7 @@ void Supermarket::Trans::startUp()
 			exit(0);
 			break;
 		}
-		
-		fin >> placeholder;
-		if (cin.fail())
+		if (!(fin >> number_lines_trans))
 		{
 			failed = true;
 			cin.clear();
@@ -99,6 +97,7 @@ void Supermarket::Trans::addTrans()//adds a new transaction to the vector of tra
 	Client::instance()->addMoney( Client::instance()->NumtoName(T.number) , Product::instance()->getPrice(prod_bought) );
 	T.products = prod_bought;
 	info_trans.insert(it ,T);
+	this->number_lines_trans++; 
 }
 
 //====================================================================================
@@ -370,7 +369,7 @@ void Supermarket::Trans::update()
 	ofstream fout;
 	fout.open(temp_file_name);
 	if (fout.is_open())
-		fout << info_trans.size();
+	fout << this->number_lines_trans << endl;
 		for (Trans_t i : this->info_trans)																									//create function to return string of products to display
 			fout << i.number << " ; " << to_string(i.date.day) + "/" + to_string(i.date.month) + "/" + to_string(i.date.year) << " ; " << Visualize::instance()->P_comma(i.products) << endl;
 	fout.close();

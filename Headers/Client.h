@@ -15,6 +15,7 @@ class Trans;
 
 class Supermarket::Client
 {
+	unsigned int number_lines_cli;  
 	std::string client_file_name;
 	unsigned int max_client_number;
 	std::set<Client_t> info_clients;
