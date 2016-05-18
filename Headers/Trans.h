@@ -18,9 +18,6 @@ private:
 	static Trans *T_ptr;
 	unsigned int number_lines_trans; 
 public:
-	template <typename T> friend unsigned int findPos(const T &element, const std::vector<T> &vec, unsigned int start, unsigned int end);
-	template <typename T> friend void binaryInsert(const T &element, std::vector<T> &vec);
-
 	Trans() {};
 	Trans(const Trans &T) {};
 
