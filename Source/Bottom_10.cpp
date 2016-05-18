@@ -6,18 +6,15 @@
 
 using namespace std;
 
-class Supermarket;
-class Trans;
-
 //======================================================================================================================================================
 //============================================================ COMPARE FUNCTIONS =======================================================================
 //======================================================================================================================================================
-bool cmpProdPrice::operator() (const std::pair < unsigned int, std::vector < std::string > >  &P1, const std::pair < unsigned int, std::vector < std::string > > &P2) const
+bool cmpProdPrice::operator() (const pair < unsigned int, vector < string > >  &P1, const pair < unsigned int, vector <string > > &P2) const
 {
 	return (Supermarket::Bottom_10::instance()->calcMoney(P1.second) < Supermarket::Bottom_10::instance()->calcMoney(P2.second)) || P1.first == P2.first;
 }
 
-bool cmpProdAmount::operator() (const std::pair<std::string, unsigned int> &P1, const std::pair<std::string, unsigned int> &P2) const
+bool cmpProdAmount::operator() (const pair<string, unsigned int> &P1, const pair<string, unsigned int> &P2) const
 {
 	return P2.second < P1.second;
 }
@@ -33,7 +30,7 @@ void Supermarket::Bottom_10::Source()
 		Bottom_10::CtoT_init();
 	Bottom_10::B10_c_init();
 	Bottom_10::instance()->initHistogram();
-
+	cout << "The recommended products are: " << endl;
 	final = final + "---> ";
 	for (string S : Bottom_10::instance()->bestProd())
 		final = final + S + " , ";
@@ -141,6 +138,10 @@ vector<string> Supermarket::Bottom_10::bestProd()
 	return bestProds;
 }
 
+//======================================================================================================================================================
+//================================================== BOTTOM_10 CLASS AUXILIAR METHODS ==================================================================
+//======================================================================================================================================================
+
 
 unsigned int Supermarket::Bottom_10::howManyBought(const string &S) const
 {
@@ -159,7 +160,7 @@ unsigned int Supermarket::Bottom_10::howManyBought(const string &S) const
 	return cont;
 }
 
-double Supermarket::Bottom_10::calcMoney(const std::vector<std::string> &prods) const
+double Supermarket::Bottom_10::calcMoney(const vector<string> &prods) const
 {
 	double total = 0;
 	for (auto it = prods.begin(); it < prods.end(); it++)
@@ -168,7 +169,7 @@ double Supermarket::Bottom_10::calcMoney(const std::vector<std::string> &prods) 
 	return total;
 }
 
-bool Supermarket::Bottom_10::isSimilar(const std::vector<std::string> &candidate_P) const
+bool Supermarket::Bottom_10::isSimilar(const vector<string> &candidate_P) const
 {
 	for (auto it = B10_common.begin(); it != B10_common.end(); it++)
 		if (find(candidate_P.begin(), candidate_P.end(), *it) == candidate_P.end())
@@ -182,7 +183,7 @@ void Supermarket::Bottom_10::mergeVec(vector<string> &V1, const vector<string> &
 		V1.push_back(S);
 }
 
-std::vector < std::pair < unsigned int, std::vector <std::string> > >::iterator Supermarket::Bottom_10::searchSet(unsigned int N)
+vector < pair < unsigned int, vector <string> > >::iterator Supermarket::Bottom_10::searchSet(unsigned int N)
 {
 	auto it = CtoT.begin();
 	for (it; it != CtoT.end(); it++)
@@ -191,7 +192,7 @@ std::vector < std::pair < unsigned int, std::vector <std::string> > >::iterator 
 	return CtoT.end();
 }
 
-std::vector < std::pair < string, unsigned int > >::iterator Supermarket::Bottom_10::searchHistogram(const string &S)
+vector < pair < string, unsigned int > >::iterator Supermarket::Bottom_10::searchHistogram(const string &S)
 {
 	auto it = histogram.begin();
 	for (it; it != histogram.end(); it++)
@@ -200,7 +201,7 @@ std::vector < std::pair < string, unsigned int > >::iterator Supermarket::Bottom
 	return histogram.end();
 }
 
-std::vector< std::pair < unsigned int, std::vector< std::string> > > &Supermarket::Bottom_10::getCtoT()
+vector< pair < unsigned int, vector< string> > > &Supermarket::Bottom_10::getCtoT()
 {
 	return CtoT;
 }
