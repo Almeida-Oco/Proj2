@@ -18,6 +18,7 @@ class Supermarket::Client
 	template <typename T> friend unsigned int findPos(const T &element, const std::vector<T> &vec, unsigned int start, unsigned int end);
 	template <typename T> friend void binaryInsert(const T &element, std::vector<T> &vec);
 
+	unsigned int number_lines_cli;  
 	std::string client_file_name;
 	unsigned int max_client_number;
 	std::set<Client_t> info_clients;
