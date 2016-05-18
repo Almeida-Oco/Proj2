@@ -15,15 +15,18 @@ int Supermarket::Input_Asker::T_askName() const
 	cout << endl << "========================================================" << endl;
 	cout << "Insert client name, CTRL+Z to go back " << endl;
 	getline(cin, client_name);
-	if (cin.eof())
+	if (cin.fail())
+	{
+		cin.ignore(999, '\n');
 		return -1;
+	}
 
 	it = Client::instance()->nameBinarySearch(client_name);
 	while (it->name != client_name)
 	{
 		cout << "Try again, CTRL+Z to go back " << endl;
 		getline(cin, client_name);
-
+		cin.ignore(999,'\n');
 		if (cin.eof())
 			return -1;
 		else
@@ -39,28 +42,40 @@ string Supermarket::Input_Asker::askClientName(bool existing , set<Client_t>::it
 	cout << endl << "========================================================" << endl;
 	cout << "Insert client name, CTRL+Z to go back " << endl;
 	getline(cin, client_name);
-	if (existing)
+	if (!cin.fail())
 	{
 		it = Client::instance()->nameBinarySearch(client_name);
-		while (it->name != client_name)
+		if (existing)
 		{
-			cout << "Try again, CTRL+Z to go back " << endl;
-			getline(cin, client_name);
-
-			if (cin.eof())
-				return "";
-			else
+			while (it == Client::instance()->getInfo().end() || it->name != client_name)
+			{
+				cout << "Try again, CTRL+Z to go back " << endl;
+				getline(cin, client_name);
+				cin.ignore(999,'\n');
+				if (cin.eof())
+					return "";
+				else
+					it = Client::instance()->nameBinarySearch(client_name);
+			}
+		}
+		else if (it != Client::instance()->getInfo().end())
+		{
+			while (!testText(client_name))
+			{
+				cout << "Try again, CTRL+Z to go back " << endl;
+				getline(cin, client_name);
+				cin.ignore(999,'\n');
 				it = Client::instance()->nameBinarySearch(client_name);
+				if (cin.eof())
+					return "";
+			}
 		}
 	}
 	else
-		while (!testText(client_name))
-		{
-			cout << "Try again, CTRL+Z to go back " << endl;
-			getline(cin, client_name);
-			if (cin.eof())
-				return "";
-		}
+	{
+		cin.ignore(999, '\n');
+		return "";
+	}
 
 	return it->name;
 }
@@ -93,20 +108,24 @@ Date_t Supermarket::Input_Asker::askDate(int question , set<Trans_t>::iterator &
 		else if (question == 2)
 			cout << "Insert Day (DD/MM/YY), CTRL+Z to go back " << endl;
 		getline(cin, line);
-
-		date_numbers = string_split(line, "/");
-		for (unsigned int i = 0; i < date_numbers.size(); i++)
-			date_numbers.at(i) = trim(date_numbers.at(i));
-
-		if (date_numbers.size() == 3)
+		if (!cin.fail())
 		{
-			input_date.day = stoi(date_numbers.at(0));
-			input_date.month = stoi(date_numbers.at(1));
-			input_date.year = stoi(date_numbers.at(2));
+			cin.ignore(999, '\n');
+			date_numbers = string_split(line, "/");
+			for (unsigned int i = 0; i < date_numbers.size(); i++)
+				date_numbers.at(i) = trim(date_numbers.at(i));
 
-			it = Trans::instance()->dateBinarySearch(input_date);
-			if (it == Trans::instance()->getInfo().end())
-				continue;
+			if (date_numbers.size() == 3)
+			{
+				input_date.day = stoi(date_numbers.at(0));
+				input_date.month = stoi(date_numbers.at(1));
+				input_date.year = stoi(date_numbers.at(2));
+
+				it = Trans::instance()->dateBinarySearch(input_date);
+				if (it == Trans::instance()->getInfo().end())
+					continue;
+			}
+
 		}
 		else if (cin.eof())
 		{
