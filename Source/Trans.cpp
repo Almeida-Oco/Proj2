@@ -29,9 +29,14 @@ void Supermarket::Trans::startUp()
 			break;
 		}
 		
-		if (!(fin >> placeholder))
+		fin >> placeholder;
+		if (cin.fail())
+		{
 			failed = true;
-
+			cin.clear();
+			cin.ignore(999, '\n');
+			continue;
+		}
 		fin.ignore(999, '\n');
 		fin.clear();
 
@@ -63,10 +68,8 @@ void Supermarket::Trans::startUp()
 		}
 		if (failed)
 		{
-			failed = false;
 			cout << "Not the transactions file, please try again" << endl;
 			this->info_trans.clear();
-			continue;
 		}
 
 		fin.close();
@@ -120,7 +123,7 @@ void Supermarket::Trans::visClientTrans() const
 	do
 	{
 		name = Input_Asker::instance()->askClientName(true,it);
-		if (it->name == name)
+		if (!cin.eof() && it->name == name)
 			c_number = it->number;
 		else  //if user inserted CTRL+Z
 			break;
@@ -193,6 +196,7 @@ void Supermarket::Trans::visTrans(const Trans_t &T_t) const
 //====================================================================================
 //================================== ADVERTISERS =====================================
 //====================================================================================
+
 vector<string> Supermarket::Trans::mostBought(vector<string> &p_bought)
 //receives unsorted repetitions of different products and returns vector with products with more repetitions
 {
@@ -264,18 +268,21 @@ int Supermarket::Trans::searchID_transactions(unsigned int p)
 void Supermarket::Trans::selectiveAd() 
 {
 	Bottom_10::instance()->CtoT_init();
-	unsigned int target_position = searchID_transactions(Input_Asker::instance()->T_askName());
-	
+	int c_number = Input_Asker::instance()->T_askName();
+	if (c_number == -1)
+		return;
+	unsigned int target_position = searchID_transactions(c_number);
+	vector<string> alreadyAccountedFor;
 	bool verifi = false;
 	vector< vector<bool> > publi(Bottom_10::instance()->getCtoT().size(), vector<bool>(Product::instance()->getSize()));
 	vector<bool> vec_bool;
 
-	for (unsigned int trans_prods = 0; trans_prods < Bottom_10::instance()->getCtoT().size(); trans_prods++ , vec_bool.clear())
-	{
-		for (unsigned int prods_i=0; prods_i < Product::instance()->getSize(); prods_i++)
-		{
-			for (unsigned int i=0; i < Bottom_10::instance()->getCtoT().at(trans_prods).second.size(); i++)
-			{
+	for (unsigned int trans_prods = 0; trans_prods < Bottom_10::instance()->getCtoT().size(); trans_prods++ , vec_bool.clear()) 
+	{//iterates through CtoT, a set that contains a single transaction for each client
+		for (unsigned int prods_i=0; prods_i < Product::instance()->getSize(); prods_i++) 
+		{//iterates the product map
+			for (unsigned int i=0; i < Bottom_10::instance()->getCtoT().at(trans_prods).second.size(); i++) 
+			{//iterates products client bought
 				if (Product::instance()->getProd(prods_i) == (Bottom_10::instance()->getCtoT().at(trans_prods)).second.at(i))
 				{
 					vec_bool.push_back(true);
