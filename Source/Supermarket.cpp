@@ -6,8 +6,6 @@
 #include "..\Headers\Input_Asker.h"
 #include "..\Headers\Trans.h"
 
-using namespace std;
-
 void Supermarket::MainMenu()
 {
 	const int C = 1, Tr = 2, A = 3, E = 0;
@@ -80,11 +78,11 @@ void Supermarket::ClientMenu()
 
 void Supermarket::TransMenu()
 {
-	std::cout << std::endl << "========================================================" << std::endl;
 	const int add = 1, see_c = 2, see_d = 3, see_b = 4, see_all = 5, go_back = 0;
 	int action;
 	do
 	{
+		std::cout << std::endl << "========================================================" << std::endl;
 		std::cout << "What do you want to do?" << std::endl;
 		std::cout << std::endl;
 		std::cout << "0 -> Go back" << std::endl;

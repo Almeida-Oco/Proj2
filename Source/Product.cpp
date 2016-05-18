@@ -13,6 +13,7 @@ void Supermarket::Product::startUp()
 	do
 	{
 		failed = false;
+		cout << "========================================================" << endl;
 		cout << "Insert the products file name" << endl;
 		getline(cin, this->product_file_name);
 		fin.open(this->product_file_name);

@@ -29,8 +29,8 @@ void Supermarket::Visualize::visProd(const string &prod) const {
 //====================================================================================
 map<int, string> Supermarket::Visualize::visAllProd(bool first_time) const
 {
-	const int N_BOX = 3;
-	unsigned int i = 0, sz = Product::instance()->getSize(); //Product::instance()->getSize();
+	const int N_BOX = 2;
+	unsigned int i = 0, sz = Product::instance()->getSize();
 	map<int, string> n_prod;
 	if (first_time)
 	{

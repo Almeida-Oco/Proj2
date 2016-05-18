@@ -50,7 +50,7 @@ void Supermarket::Bottom_10::CtoT_init()
 	//the maximum size of the CtoT vector will be the amount of transactions the info_trans vector contains
 	CtoT.reserve(Trans::instance()->getInfo().size());
 
-	for (vector<Trans_t>::iterator it = Trans::instance()->getInfo().begin(); it != Trans::instance()->getInfo().end(); it++)
+	for (set<Trans_t>::iterator it = Trans::instance()->getInfo().begin(); it != Trans::instance()->getInfo().end(); it++)
 	{
 		auto set_it = searchSet(it->number);
 		if (set_it == CtoT.end())
