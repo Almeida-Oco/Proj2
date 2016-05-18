@@ -34,6 +34,10 @@ bool Date_t::operator>= (const Date_t &D1) const
 }
 bool Date_t::operator< (const Date_t &D1) const
 { return !(*this >= D1); }
+bool Date_t::operator== (const Date_t &D1) const
+{
+	return (this->day == D1.day && this->month == D1.month && this->year == D1.year);
+}
 
 bool Trans_t::operator< (const Trans_t &T1) const
 {
