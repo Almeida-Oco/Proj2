@@ -88,8 +88,10 @@ void Supermarket::Client::removeClient()
 	c_name = Input_Asker::instance()->askClientName(true , it); //if user inputs CTRL+Z function returns ""
 	
 	if(c_name != "")
+	{
 		info_clients.erase(it);
 		this->number_lines_cli--;   
+	}
 } 
 
 void Supermarket::Client::addClient()//asks the client info, checks its validity and if it checks pushes back to the client vector
