@@ -8,13 +8,13 @@
 #include <iomanip>
 #include <algorithm>
 #include <string>
-#include <vector>
+#include <set>
 
 class Supermarket::Trans
 {
 private:
 	std::string trans_file_name;
-	std::vector<Trans_t> info_trans;
+	std::multiset<Trans_t> info_trans;
 	static Trans *T_ptr;
 public:
 	template <typename T> friend unsigned int findPos(const T &element, const std::vector<T> &vec, unsigned int start, unsigned int end);
@@ -38,7 +38,8 @@ public:
 	void selectiveAd();
 
 	//MISC
-	std::vector<Trans_t> &getInfo();
+	std::multiset<Trans_t> &getInfo();
+	std::set<Trans_t>::iterator dateBinarySearch(const Date_t &element) const;
 	unsigned int getBiggestID() const;
 	static Trans *instance()
 	{

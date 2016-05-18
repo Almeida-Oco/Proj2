@@ -14,7 +14,7 @@ using namespace std;
 void Supermarket::Client::startUp()
 {
 	Bottom_10::instance()->CtoT_init();
-	unsigned int vector_size = 0;
+	unsigned int placeholder = 0;
 	this->max_client_number = 0;
 	vector<string> tokens;
 	bool failed = false;
@@ -24,6 +24,7 @@ void Supermarket::Client::startUp()
 		Client_t client;
 		string line;
 		ifstream fin;
+		cout << "========================================================" << endl;
 		cout << "Insert the clients file name" << endl;
 		getline(cin, this->client_file_name);
 		fin.open(this->client_file_name);
@@ -33,13 +34,15 @@ void Supermarket::Client::startUp()
 			exit(0);
 			break;
 		}
+		if (!(fin >> placeholder))
+		{
+			fin.ignore(999, '\n');
+			fin.clear();
+			failed = true;
+		}fin.ignore(999, '\n');
+		
 
-		if (fin >> vector_size)
-			info_clients.reserve(vector_size);
-		fin.ignore(999, '\n');
-		fin.clear();
-
-		while (getline(fin, line))
+		while (getline(fin, line) && !failed)
 		{
 			tokens = string_split(line, " ; ");
 			if (tokens.size() != 3)
@@ -59,7 +62,8 @@ void Supermarket::Client::startUp()
 
 			if (client.number > this->max_client_number)
 				this->max_client_number = client.number;
-			info_clients.push_back(client);
+
+			info_clients.insert(client);
 		}
 
 		if (failed)
@@ -67,13 +71,10 @@ void Supermarket::Client::startUp()
 			failed = false;
 			cout << "Not the clients file, please try again" << endl;
 			this->info_clients.clear();
-			continue;
 		}
 
 		fin.close();
 	} while (failed); 
-
-	sort(this->info_clients.begin(), this->info_clients.end());
 	
 	unsigned int max_trans_number = Trans::instance()->getBiggestID();
 	max_client_number = (max_trans_number > max_client_number) ? max_trans_number+1 : max_client_number+1;
@@ -81,45 +82,41 @@ void Supermarket::Client::startUp()
 
 void Supermarket::Client::removeClient()
 {//removes a certain client by removing it from the vector of clients
-	vector<Client_t>::iterator it;
+	set<Client_t>::iterator it;
 	bool removed = false;
 	unsigned int sz = info_clients.size(), i = 0;
 	string c_name;
-	do
-	{
-		c_name = Input_Asker::instance()->askClientName();
-		it = nameBinarySearch(c_name, info_clients);
-		if (it->name != c_name)
-		{
-			cout << "Client not found , please try again " << endl;
-			continue;
-		}
-		else
-			break; //keeps asking user an existing name until a correct one is entered
-	} while (true);
-	info_clients.erase(it);
+	c_name = Input_Asker::instance()->askClientName(true , it); //if user inputs CTRL+Z function returns ""
+	
+	if(c_name != "")
+		info_clients.erase(it);
 } 
 
 void Supermarket::Client::addClient()//asks the client info, checks its validity and if it checks pushes back to the client vector
 {
 	Client_t new_c;
 	string info, c_name;
-	cout << endl << "-----------------------------------------------------" << endl;
-	do {
-		cout << "Insert client name" << endl;
-		getline(cin, c_name);
-	} while (!testText(c_name));
+	set<Client_t>::iterator it;
+	c_name = Input_Asker::instance()->askClientName(false , it);
+
+	if (c_name == "")
+		return;
+
 	new_c.number = this->max_client_number;
 	this->max_client_number++;
 	new_c.name = c_name;
 	new_c.money = 0;
-	binaryInsert(new_c, info_clients);
+	info_clients.insert(it , new_c);
 }
 
 void Supermarket::Client::addMoney(const string &S, const double amount)
 {
-	auto it = nameBinarySearch(S, info_clients);
-	it->money += amount;
+	Client_t temp;
+	set<Client_t>::iterator it = nameBinarySearch(S), temp_it;
+	temp = *it;
+	temp.money += amount;
+	info_clients.erase(it);
+	info_clients.insert(temp);
 }
 
 //====================================================================================
@@ -129,12 +126,18 @@ void Supermarket::Client::addMoney(const string &S, const double amount)
 void Supermarket::Client::visClient()
 {
 	bool found = false;
+	set<Client_t>::iterator it;
 	string client_name;
 	do
 	{
-		cout << "Insert client name : " << endl;
+		cout << endl << "========================================================" << endl;
+		cout << "Insert client name, CTRL+Z to go back " << endl;
 		getline(cin, client_name);
-		auto it = nameBinarySearch(client_name, info_clients);
+		if (!cin.eof())
+			it = nameBinarySearch(client_name);
+		else
+			return;
+
 		if (it->name == client_name)
 		{
 			found = true;
@@ -142,9 +145,8 @@ void Supermarket::Client::visClient()
 			Visualize::instance()->visNumber(it->number); Visualize::instance()->visName(it->name); visMoney(it->money);
 			cout << endl;
 		}
-		cout << endl << "========================================================" << endl;
 		if (!found)
-			cout << "Client not found, please try again : " << endl;
+			cout << "Try again, CTRL+Z to go back " << endl;
 	} while (!found);
 }
 
@@ -156,7 +158,6 @@ void Supermarket::Client::visAllClients()
 		Visualize::instance()->visNumber(i.number); Visualize::instance()->visName(i.name); visMoney(i.money);
 		cout << endl;
 	}
-	cout << endl << "========================================================" << endl;
 }
 
 void Supermarket::Client::clientHeader()
@@ -165,12 +166,13 @@ void Supermarket::Client::clientHeader()
 	cout << setw(NUM_BOX) << left << "Num :" << setw(NAME_BOX) << "Name :" << setw(MONEY_BOX) << "Money :" << endl << endl;
 }
 
-//====================================================================================
-//================================= MISCELLANEOUS ====================================
-//====================================================================================
 void Supermarket::Client::visMoney(double money) {
 	cout << setw(MONEY_BOX) << fixed << setprecision(2) << left << money;
 }
+
+//====================================================================================
+//================================= MISCELLANEOUS ====================================
+//====================================================================================
 
 void Supermarket::Client::update()
 {
@@ -186,37 +188,29 @@ void Supermarket::Client::update()
 	rename(temp_file_name.c_str(), this->client_file_name.c_str());
 }
 
-vector<Client_t>::iterator Supermarket::Client::nameBinarySearch(const string &element, vector<Client_t> &vec) const
-{
-	return vec.begin() + biPos(element, vec, 0, vec.size() - 1);
-}
-
-unsigned int Supermarket::Client::biPos(const string &element, const vector<Client_t> &vec, unsigned int start, unsigned int end) const
-{
-	if (start != end)
-	{
-		if (element < vec.at((start + end) / 2).name)
-			return biPos(element, vec, start, ((end - start) > 1) ? ((start + end) / 2) - 1 : end - 1);
-		else if (element > vec.at((start + end) / 2).name)
-			return biPos(element, vec, ((start + end) / 2) + 1, end);
-		else
-			return (start + end) / 2;
-	}
-
-	if (start == end && element > vec.at(start).name)
-		return start + 1;
-	if (start == end && element <= vec.at(start).name)
-		return start;
-
-	return 0;
-}
-
 string Supermarket::Client::NumtoName(unsigned int num) const
 {
-	for (auto C : info_clients)
+	for (auto it = info_clients.begin(); it != info_clients.end(); it++)
 	{
-		if (C.number == num)
-			return C.name;
+		if (it->number == num)
+			return it->name;
 	}
 	return "";
+}
+
+set<Client_t>::iterator Supermarket::Client::nameBinarySearch(const string &element)
+{
+	set<Client_t>::iterator it;
+	it = info_clients.begin();
+	for (it; it != info_clients.end(); it++)
+	{
+		if (it->name == element)
+			return it;
+	}
+	return it;
+}
+
+set<Client_t> Supermarket::Client::getInfo() const
+{
+	return info_clients;
 }

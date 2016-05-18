@@ -5,9 +5,9 @@
 #include "Supermarket.h"
 #include "Binary_Op.h"
 #include <iostream>
+#include <set>
 #include <iomanip>
 #include <cassert>
-#include <vector>
 #include <string>
 #include <fstream>
 
@@ -20,15 +20,15 @@ class Supermarket::Client
 
 	std::string client_file_name;
 	unsigned int max_client_number;
-	std::vector<Client_t> info_clients;
+	std::set<Client_t> info_clients;
 	static Client *C_ptr;
 public:
 	
 	Client() {};
 	Client(const Client &C) {};
 
-	std::vector <Client_t> getInfo() const { return info_clients; }
-	std::vector<Client_t>::iterator nameBinarySearch(const std::string &element, std::vector<Client_t> &vec) const;
+	std::set<Client_t> getInfo() const;
+	std::set<Client_t>::iterator nameBinarySearch(const std::string &element);
 	std::string NumtoName(unsigned int num) const;
 	void startUp();
 
@@ -52,7 +52,6 @@ public:
 		return C_ptr;
 	}
 private:
-	unsigned int biPos(const std::string &element, const std::vector<Client_t> &vec, unsigned int start, unsigned int end) const;
 	void visMoney(double money);
 };
 

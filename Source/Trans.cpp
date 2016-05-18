@@ -10,7 +10,7 @@ using namespace std;
 
 void Supermarket::Trans::startUp()
 {
-	unsigned int vector_size = 0;
+	unsigned int placeholder = 0;
 	bool failed = false;
 	vector<string> tokens;
 	Trans_t transaction;
@@ -18,6 +18,7 @@ void Supermarket::Trans::startUp()
 	ifstream fin;
 	do {
 		failed = false;
+		cout << "========================================================" << endl;
 		cout << "Insert the transactions file name" << endl;
 		getline(cin, this->trans_file_name);
 		fin.open(this->trans_file_name);
@@ -27,9 +28,10 @@ void Supermarket::Trans::startUp()
 			exit(0);
 			break;
 		}
+		
+		if (!(fin >> placeholder))
+			failed = true;
 
-		if (fin >> vector_size)
-			info_trans.reserve(vector_size);
 		fin.ignore(999, '\n');
 		fin.clear();
 
@@ -57,7 +59,7 @@ void Supermarket::Trans::startUp()
 			transaction.date.month = stoi(date_tokens.at(1));
 			transaction.date.year = stoi(date_tokens.at(2));
 			transaction.number = stoi(tokens.at(0));
-			this->info_trans.push_back(transaction);
+			info_trans.insert(transaction);
 		}
 		if (failed)
 		{
@@ -69,25 +71,31 @@ void Supermarket::Trans::startUp()
 
 		fin.close();
 	} while (failed); //it if is the transaction files it copies its contents to a vector of structs
-
-	sort(this->info_trans.begin(), this->info_trans.end());
 }
 
-//====================================================================================
-//=================================== MODIFIERS ======================================
-//====================================================================================
+/*====================================================================================**
+**=================================== MODIFIERS ======================================**
+**====================================================================================*/
 
 void Supermarket::Trans::addTrans()//adds a new transaction to the vector of transactions
 {
 	Trans_t T;
-	T.number = Input_Asker::instance()->ask_c_number();
-	T.date = Input_Asker::instance()->askDate(2);
+	set<Trans_t>::iterator it;
+	int c_number = Input_Asker::instance()->T_askName();
 	vector <string> prod_bought;
 	string prod;
-	prod_bought = askProduct( (prod_bought.size() == 0) ? true : false);
+
+	if (c_number != -1)
+		T.number = c_number;
+	else
+		return;
+
+	T.date = Input_Asker::instance()->askDate(2 , it);
+
+	prod_bought = askProduct( true );
 	Client::instance()->addMoney( Client::instance()->NumtoName(T.number) , Product::instance()->getPrice(prod_bought) );
 	T.products = prod_bought;
-	binaryInsert(T, info_trans);
+	info_trans.insert(it ,T);
 }
 
 //====================================================================================
@@ -107,16 +115,15 @@ void Supermarket::Trans::visClientTrans() const
 {
 	unsigned int c_number;
 	string name;
-	vector<Client_t>::iterator it;
+	set<Client_t>::iterator it;
 	bool first = true;
 	do
 	{
-		name = Input_Asker::instance()->askClientName();
-		it = Client::instance()->nameBinarySearch(name , Client::instance()->getInfo());
+		name = Input_Asker::instance()->askClientName(true,it);
 		if (it->name == name)
 			c_number = it->number;
-		else
-			continue;
+		else  //if user inserted CTRL+Z
+			break;
 		for (Trans_t T : this->info_trans)
 		{
 			if (T.number == c_number)
@@ -127,51 +134,45 @@ void Supermarket::Trans::visClientTrans() const
 				visTrans(T);
 			}
 		}
-		cout << endl << "========================================================" << endl;
-	} while (c_number == -1);
+		break;
+
+	} while (true);
 }
 
 void Supermarket::Trans::visDayTrans() const
 {
 	Date_t D;
+	set<Trans_t>::iterator it;
 	bool found = false, first = true;
 	unsigned int i = 0;
-	D = Input_Asker::instance()->askDate(2);
-
-	for (Trans_t T : this->info_trans)
+	D = Input_Asker::instance()->askDate(2,it);
+	if (D.day == 0)
+		return;
+	transHeader();
+	for (it ; it != Trans::instance()->getInfo().end() ; it++)
 	{
-		if (T.date.day == D.day && T.date.month == D.month && T.date.year == D.year)
-		{
-			if (first)
-				transHeader();
-			first = false;
-			Visualize::instance()->visNumber(T.number); visDate(T.date); cout << Visualize::instance()->P_comma(T.products); cout << endl;
-			found = true;
-		}
-		i++;
+		if (it->date == D)
+			visTrans(*it);
+		else
+			break;
 	}
-	if (!found)
-		cout << "The date is not on records" << endl;
-	cout << endl << "========================================================" << endl;
 }
 
 void Supermarket::Trans::visBetweenDates() const
 {
 	bool first = true;
-	Date_t lower_date = Input_Asker::instance()->askDate(0);
-	Date_t upper_date = Input_Asker::instance()->askDate(1);
+	set<Trans_t>::iterator it_begin;
+	set<Trans_t>::iterator it_end;
+	Date_t lower_date = Input_Asker::instance()->askDate(0,it_begin);
+	Date_t upper_date = Input_Asker::instance()->askDate(1, it_end);
+	if (lower_date.day == 0 || upper_date.day == 0)
+		return;
 
-	for (Trans_t T : this->info_trans)
+	transHeader();
+	for (it_begin; it_begin != it_end; it_begin++)
 	{
-		if (T.date > lower_date && T.date < upper_date)
-		{
-			if (first)
-				transHeader();
-			first = false;
-			visTrans(T);
-		}
+		visTrans(*it_begin);
 	}
-	cout << endl << "========================================================" << endl;
 }
 
 void Supermarket::Trans::transHeader() const
@@ -262,7 +263,8 @@ int Supermarket::Trans::searchID_transactions(unsigned int p)
 
 void Supermarket::Trans::selectiveAd() 
 {
-	unsigned int target_position = searchID_transactions(Input_Asker::instance()->ask_c_number());
+	Bottom_10::instance()->CtoT_init();
+	unsigned int target_position = searchID_transactions(Input_Asker::instance()->T_askName());
 	
 	bool verifi = false;
 	vector< vector<bool> > publi(Bottom_10::instance()->getCtoT().size(), vector<bool>(Product::instance()->getSize()));
@@ -333,6 +335,18 @@ void Supermarket::Trans::selectiveAd()
  //================================= MISCELLANEOUS ====================================
  //====================================================================================
 
+std::set<Trans_t>::iterator Supermarket::Trans::dateBinarySearch(const Date_t &element) const
+{
+	set<Trans_t>::iterator it;
+	it = info_trans.begin();
+	for (it; it != info_trans.end(); it++)
+	{
+		if (it->date == element)
+			return it;
+	}
+	return it;
+}
+
 unsigned int Supermarket::Trans::getBiggestID() const
 {
 	unsigned int max = 0;
@@ -367,6 +381,7 @@ vector<string> Supermarket::Trans::askProduct(bool first_time) const
 	do {
 		found = false;
 		cin >> n_prod;
+		cin.ignore(9999, '\n');
 		for (it = num_prod.begin(); it != num_prod.end(); it++)
 		{
 			if (it->first == n_prod)
@@ -393,7 +408,7 @@ vector<string> Supermarket::Trans::askProduct(bool first_time) const
 	return prod_bought;
 }
 
-vector<Trans_t> &Supermarket::Trans::getInfo()
+multiset<Trans_t> &Supermarket::Trans::getInfo()
 {
 	return info_trans;
 }
