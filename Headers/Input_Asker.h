@@ -3,7 +3,7 @@
 
 #include "Declarations.h"
 #include "Supermarket.h"
-#include <vector>
+#include <set>
 #include <iostream>
 #include <string>
 
@@ -15,14 +15,14 @@ public:
 	Input_Asker() {};
 	Input_Asker(const Input_Asker &IA) {};
 
-	int ask_c_number()  const;
+	int T_askName()  const;
 	//asks for a client number until an existing one is entered
 
-	Date_t askDate(int question) const;
+	Date_t askDate(int question, std::set<Trans_t>::iterator &it) const;
 	//input a date using different cout (depending on int question),
 	//validates the date and returns the Date struct
 
-	std::string askClientName() const;
+	std::string askClientName(bool existing, std::set<Client_t>::iterator &it) const;
 	//keeps asking client name until an existing one is entered
 
 	static Input_Asker *instance()

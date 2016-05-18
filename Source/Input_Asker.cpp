@@ -1,5 +1,6 @@
 #include "..\Headers\Input_Asker.h"
 #include "..\Headers\Supermarket.h"
+#include "..\Headers\Trans.h"
 #include "..\Headers\Client.h"
 
 using namespace std;
@@ -7,34 +8,61 @@ using namespace std;
 //==================================== CLIENTS =======================================
 //====================================================================================
 
-int Supermarket::Input_Asker::ask_c_number() const
+int Supermarket::Input_Asker::T_askName() const
 {
-	int c_number;
-	do
-	{
-		cout << "Insert client number" << endl;
-		cin >> c_number;
-		cin.ignore(9999, '\n');
-		while (cin.fail())
-		{
-			cin.clear();
-			cin.ignore(9999, '\n');
-			cout << "Insert client number" << endl;
-			cin >> c_number;
-		}
-	} while (!testNum(c_number));
+	set<Client_t>::iterator it;
+	string client_name;
+	cout << endl << "========================================================" << endl;
+	cout << "Insert client name, CTRL+Z to go back " << endl;
+	getline(cin, client_name);
+	if (cin.eof())
+		return -1;
 
-		return c_number;
+	it = Client::instance()->nameBinarySearch(client_name);
+	while (it->name != client_name)
+	{
+		cout << "Try again, CTRL+Z to go back " << endl;
+		getline(cin, client_name);
+
+		if (cin.eof())
+			return -1;
+		else
+			it = Client::instance()->nameBinarySearch(client_name);
+	}
+
+	return it->number;
 }
 
-string Supermarket::Input_Asker::askClientName() const
+string Supermarket::Input_Asker::askClientName(bool existing , set<Client_t>::iterator &it) const
 {
-	bool found = false;
 	string client_name;
-	vector<Client_t>::iterator it;
-	cout << "Insert client name : " << endl;
+	cout << endl << "========================================================" << endl;
+	cout << "Insert client name, CTRL+Z to go back " << endl;
 	getline(cin, client_name);
-	return client_name;
+	if (existing)
+	{
+		it = Client::instance()->nameBinarySearch(client_name);
+		while (it->name != client_name)
+		{
+			cout << "Try again, CTRL+Z to go back " << endl;
+			getline(cin, client_name);
+
+			if (cin.eof())
+				return "";
+			else
+				it = Client::instance()->nameBinarySearch(client_name);
+		}
+	}
+	else
+		while (!testText(client_name))
+		{
+			cout << "Try again, CTRL+Z to go back " << endl;
+			getline(cin, client_name);
+			if (cin.eof())
+				return "";
+		}
+
+	return it->name;
 }
 
 bool Supermarket::Input_Asker::testNum(unsigned int num) const
@@ -51,34 +79,43 @@ bool Supermarket::Input_Asker::testNum(unsigned int num) const
 //==================================== DATE =========================================
 //====================================================================================
 
-Date_t Supermarket::Input_Asker::askDate(int question) const
+Date_t Supermarket::Input_Asker::askDate(int question , set<Trans_t>::iterator &it) const
 {
-	int cont = 0, date_placeholder = 0;
-	bool done = false;
 	vector<string> date_numbers;
 	Date_t input_date;
 	string line;
 	do
 	{
 		if (question == 0)
-			cout << "Please insert the lower bound : (DD/MM/YY) " << endl;
+			cout << "Insert Lower bound (DD/MM/YY), CTRL+Z to go back " << endl;
 		else if (question == 1)
-			cout << "Please insert the upper bound : (DD/MM/YY)" << endl;
+			cout << "Insert Upper bound (DD/MM/YY), CTRL+Z to go back " << endl;
 		else if (question == 2)
-			cout << "Please insert the desired day : (DD/MM/YY)" << endl;
+			cout << "Insert Day (DD/MM/YY), CTRL+Z to go back " << endl;
 		getline(cin, line);
 
 		date_numbers = string_split(line, "/");
 		for (unsigned int i = 0; i < date_numbers.size(); i++)
 			date_numbers.at(i) = trim(date_numbers.at(i));
+
 		if (date_numbers.size() == 3)
 		{
 			input_date.day = stoi(date_numbers.at(0));
 			input_date.month = stoi(date_numbers.at(1));
 			input_date.year = stoi(date_numbers.at(2));
+
+			it = Trans::instance()->dateBinarySearch(input_date);
+			if (it == Trans::instance()->getInfo().end())
+				continue;
+		}
+		else if (cin.eof())
+		{
+			input_date.day = 0;
+			input_date.month = 0;
+			input_date.year = 0;
+			return input_date;
 		}
 	} while (!testDate(input_date));
-
 	return input_date;
 }
 
