@@ -14,6 +14,7 @@ using namespace std;
 void Supermarket::Client::startUp()
 {
 	Bottom_10::instance()->CtoT_init();
+	auto it = Bottom_10::instance()->getCtoT().begin();
 	unsigned int placeholder = 0;
 	this->max_client_number = 0;
 	vector<string> tokens;
@@ -58,7 +59,8 @@ void Supermarket::Client::startUp()
 
 			client.name = trim(tokens.at(1));
 			client.number = stoi(tokens.at(0));
-			client.money = (Bottom_10::instance()->searchSet(client.number) == Bottom_10::instance()->getCtoT().end() ) ? 0.0 : Bottom_10::instance()->calcMoney(Bottom_10::instance()->searchSet(client.number)->second);
+			it = Bottom_10::instance()->searchSet(client.number);
+			client.money = (  it == Bottom_10::instance()->getCtoT().end()  ) ?  0.0  :  Bottom_10::instance()->calcMoney(it->second);
 
 			if (client.number > this->max_client_number)
 				this->max_client_number = client.number;
@@ -68,7 +70,6 @@ void Supermarket::Client::startUp()
 
 		if (failed)
 		{
-			failed = false;
 			cout << "Not the clients file, please try again" << endl;
 			this->info_clients.clear();
 		}
@@ -133,6 +134,7 @@ void Supermarket::Client::visClient()
 		cout << endl << "========================================================" << endl;
 		cout << "Insert client name, CTRL+Z to go back " << endl;
 		getline(cin, client_name);
+		cin.ignore(999,'\n');
 		if (!cin.eof())
 			it = nameBinarySearch(client_name);
 		else
@@ -210,7 +212,7 @@ set<Client_t>::iterator Supermarket::Client::nameBinarySearch(const string &elem
 	return it;
 }
 
-set<Client_t> Supermarket::Client::getInfo() const
+set<Client_t> &Supermarket::Client::getInfo()
 {
 	return info_clients;
 }
