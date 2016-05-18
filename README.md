@@ -3,4 +3,4 @@ Vende ++
 
 O QUE FALTA FAZER:
 
-Mudar para quando insere nomes de ficheiros errados o programa fechar, usar "assert"
+Modificar o numero que aparece no inicio dos ficheiros .txt
