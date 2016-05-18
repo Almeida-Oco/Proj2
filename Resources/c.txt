@@ -1,6 +1,7 @@
-1 ; Rui Pereira ; 0
-2 ; Maria de Lurdes ; 0
+6
+8 ; Antonio ; 5.49
 5 ; Joana Beires ; 0
-4 ; Joao ; 0
+4 ; Joao ; 1
 6 ; Manuela Moura ; 0
-8 ; Antonio ; 0
+2 ; Maria de Lurdes ; 2.5
+1 ; Rui Pereira ; 2.7
