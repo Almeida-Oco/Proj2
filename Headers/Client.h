@@ -27,10 +27,15 @@ public:
 	Client() {};
 	Client(const Client &C) {};
 
-	std::set<Client_t> &getInfo();
-	std::set<Client_t>::iterator nameBinarySearch(const std::string &element);
+	/*
+	*  MAIN MEMBER FUNCTIONS
+	*/
+	std::set<Client_t>::iterator nameBinarySearch(const std::string &element); 
+	//iterates the set to find the client by its name
 	std::string NumtoName(unsigned int num) const;
+	//gets the client name based on the given ID
 	void startUp();
+	//used to initialize the set and etc.
 
 	//manipulates vector/info of clients
 	void removeClient();
@@ -43,7 +48,7 @@ public:
 	void clientHeader();
 
 	void update();
-
+	std::set<Client_t> &getInfo(); //returns info_clients
 
 	static Client *instance()
 	{

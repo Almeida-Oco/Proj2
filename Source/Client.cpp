@@ -12,7 +12,7 @@ using namespace std;
 //====================================================================================
 
 void Supermarket::Client::startUp()
-{
+{//initializes Client data members
 	Bottom_10::instance()->CtoT_init();
 	auto it = Bottom_10::instance()->getCtoT().begin();
 	this->max_client_number = 0;
@@ -28,6 +28,9 @@ void Supermarket::Client::startUp()
 		cout << "Insert the clients file name" << endl;
 		getline(cin, this->client_file_name);
 		fin.open(this->client_file_name);
+		/*
+		*  INPUT VERIFIER
+		*/
 		if (!fin.is_open())
 		{
 			cout << "File not found" << endl;
@@ -41,9 +44,11 @@ void Supermarket::Client::startUp()
 			failed = true;
 		}fin.ignore(999, '\n');
 		
-
+		/*
+		*  INFORMATION EXTRACTOR
+		*/
 		while (getline(fin, line) && !failed)
-		{
+		{ //it keeps checking if it is the clients file
 			tokens = string_split(line, " ; ");
 			if (tokens.size() != 3)
 			{
@@ -95,8 +100,8 @@ void Supermarket::Client::removeClient()
 	}
 } 
 
-void Supermarket::Client::addClient()//asks the client info, checks its validity and if it checks pushes back to the client vector
-{
+void Supermarket::Client::addClient()
+{//asks client name, and then creates new client
 	Client_t new_c;
 	string info, c_name;
 	set<Client_t>::iterator it;
