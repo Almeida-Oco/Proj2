@@ -5,6 +5,8 @@ O QUE FALTA FAZER:
 
 Testar as funcoes update das classes Client , Trans e Product.
 
+Ver se pode haver repeticoes do mesmo produto numa transação.
+
 
 #SUPERMARKET VENDE++
 
