@@ -144,24 +144,15 @@ void Supermarket::Client::visClient()
 	string client_name;
 	do
 	{
-		cout << endl << "========================================================" << endl;
-		cout << "Insert client name, CTRL+Z to go back " << endl;
-		getline(cin, client_name);
-		cin.ignore(999,'\n');
-		if (!cin.eof())
-			it = nameBinarySearch(client_name);
-		else
-			return;
+		Input_Asker::instance()->askClientName(true, it);
 
-		if (it->name == client_name)
+		if (it != Client::instance()->getInfo().end())
 		{
 			found = true;
 			clientHeader();
 			Visualize::instance()->visNumber(it->number); Visualize::instance()->visName(it->name); visMoney(it->money);
 			cout << endl;
 		}
-		if (!found)
-			cout << "Try again, CTRL+Z to go back " << endl;
 	} while (!found);
 }
 

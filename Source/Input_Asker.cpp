@@ -23,7 +23,7 @@ int Supermarket::Input_Asker::T_askName() const
 	}
 
 	it = Client::instance()->nameBinarySearch(client_name);
-	while (it->name != client_name)
+	while (it == Client::instance()->getInfo().end())
 	{
 		cout << "Try again, CTRL+Z to go back " << endl;
 		getline(cin, client_name);
@@ -48,7 +48,7 @@ string Supermarket::Input_Asker::askClientName(bool existing , set<Client_t>::it
 		it = Client::instance()->nameBinarySearch(client_name);
 		if (existing)
 		{
-			while (it == Client::instance()->getInfo().end() || it->name != client_name)
+			while (it == Client::instance()->getInfo().end())
 			{
 				cout << "Try again, CTRL+Z to go back " << endl;
 				getline(cin, client_name);
