@@ -92,12 +92,15 @@ void Supermarket::Trans::addTrans()//adds a new transaction to the vector of tra
 		return;
 
 	T.date = Input_Asker::instance()->askDate(2 , it);
-
-	prod_bought = askProduct( true );
-	Client::instance()->addMoney( Client::instance()->NumtoName(T.number) , Product::instance()->getPrice(prod_bought) );
-	T.products = prod_bought;
-	info_trans.insert(it ,T);
-	this->number_lines_trans++; 
+	if(T.date.day != 0)
+		prod_bought = askProduct( true );
+	if (prod_bought.size() != 0)
+	{
+		Client::instance()->addMoney(Client::instance()->NumtoName(T.number), Product::instance()->getPrice(prod_bought));
+		T.products = prod_bought;
+		info_trans.insert(it, T);
+		this->number_lines_trans++;
+	}
 }
 
 //====================================================================================
@@ -443,4 +446,9 @@ vector<string> Supermarket::Trans::askProduct(bool first_time) const
 multiset<Trans_t> &Supermarket::Trans::getInfo()
 {
 	return info_trans;
+}
+
+unsigned int Supermarket::Trans::getNum()
+{
+	return this->number_lines_trans;
 }

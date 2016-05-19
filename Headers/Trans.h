@@ -38,6 +38,7 @@ public:
 
 	//MISC
 	std::multiset<Trans_t> &getInfo();
+	unsigned int getNum();
 	std::set<Trans_t>::iterator dateBinarySearch(const Date_t &element) const;
 	unsigned int getBiggestID() const;
 	static Trans *instance()
