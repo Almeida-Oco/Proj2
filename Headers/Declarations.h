@@ -53,6 +53,7 @@ struct Date_t {
 
 	bool operator> (const Date_t &D1) const;
 	bool operator>= (const Date_t &D1) const;
+	bool operator<= (const Date_t &D1) const;
 	bool operator< (const Date_t &D1) const;
 	bool operator== (const Date_t &D1) const;
 };

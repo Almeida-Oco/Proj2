@@ -32,6 +32,10 @@ bool Date_t::operator>= (const Date_t &D1) const
 	}
 	return false;
 }
+bool Date_t::operator<= (const Date_t &D1) const
+{
+	return !(*this > D1);
+}
 bool Date_t::operator< (const Date_t &D1) const
 { return !(*this >= D1); }
 bool Date_t::operator== (const Date_t &D1) const
