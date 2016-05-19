@@ -447,8 +447,3 @@ multiset<Trans_t> &Supermarket::Trans::getInfo()
 {
 	return info_trans;
 }
-
-unsigned int Supermarket::Trans::getNum()
-{
-	return this->number_lines_trans;
-}
