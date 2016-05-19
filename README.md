@@ -17,11 +17,11 @@ Já da para jabardar com o menu q em principio nao vacila, (CONVEM TESTAR).
  * For testing purposes, the Bottom 10 reccomendation system contains a variable name N_COMMON, present
  	in the Bottom_10.h file,
 
->>>N_COMMON = 10  ---> Bottom 10.
+>N_COMMON = 10  ---> Bottom 10.
 
->>>N_COMMON = 7  ----> Bottom 7.
+>N_COMMON = 7  ----> Bottom 7.
  
->>>N_COMMON = 3  ----> Bottom 3.
+>N_COMMON = 3  ----> Bottom 3.
 
  	This is useful since it allows us to test the program without needing to create big amounts of data
 
