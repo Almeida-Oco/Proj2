@@ -1,3 +1,5 @@
+14
+arroz ; 0.8
 azeitonas ; 0.99
 banana ; 1
 batatas ; 1
