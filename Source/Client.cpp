@@ -58,7 +58,7 @@ void Supermarket::Client::startUp()
 
 			client.name = trim(tokens.at(1));
 			client.number = stoi(tokens.at(0));
-			it = Bottom_10::instance()->searchSet(client.number);
+			it = Bottom_10::instance()->searchVec(client.number);
 			client.money = (  it == Bottom_10::instance()->getCtoT().end()  ) ?  0.0  :  Bottom_10::instance()->calcMoney(it->second);
 
 			if (client.number > this->max_client_number)
