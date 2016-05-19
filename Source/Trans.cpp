@@ -150,31 +150,57 @@ void Supermarket::Trans::visDayTrans() const
 	D = Input_Asker::instance()->askDate(2,it);
 	if (D.day == 0)
 		return;
-	transHeader();
 	for (it ; it != Trans::instance()->getInfo().end() ; it++)
 	{
+		
 		if (it->date == D)
+		{
+			found = true;
+			if (first && found)
+			{
+				transHeader();
+				first = false;
+			}
 			visTrans(*it);
+		}
+			
 		else
 			break;
 	}
+
+
+	if (!found)
+		cout << endl << "The date is not on records " << endl;
 }
 
 void Supermarket::Trans::visBetweenDates() const
 {
-	bool first = true;
-	set<Trans_t>::iterator it_begin;
-	set<Trans_t>::iterator it_end;
-	Date_t lower_date = Input_Asker::instance()->askDate(0,it_begin);
-	Date_t upper_date = Input_Asker::instance()->askDate(1, it_end);
+	bool first = true, found = false;
+	set<Trans_t>::iterator temp_it;
+	Date_t lower_date = Input_Asker::instance()->askDate(0,temp_it);
+	Date_t upper_date = Input_Asker::instance()->askDate(1, temp_it);
 	if (lower_date.day == 0 || upper_date.day == 0)
 		return;
 
-	transHeader();
-	for (it_begin; it_begin != it_end; it_begin++)
+	for (temp_it = info_trans.begin(); temp_it != info_trans.end(); temp_it++)
 	{
-		visTrans(*it_begin);
+		if (temp_it->date >= lower_date && temp_it->date <= upper_date)
+		{
+			found = true;
+			if (first)
+			{
+				transHeader();
+				first = false;
+			}
+			visTrans(*temp_it);
+			
+		}
+		else if (temp_it->date > upper_date)
+			break;
 	}
+
+	if (!found)
+		cout << endl << "No transaction inbetween" << endl;
 }
 
 void Supermarket::Trans::transHeader() const

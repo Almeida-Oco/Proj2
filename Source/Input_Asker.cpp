@@ -117,7 +117,7 @@ Date_t Supermarket::Input_Asker::askDate(int question , set<Trans_t>::iterator &
 		else if (question == 1)
 			cout << "Insert Upper bound (DD/MM/YY), CTRL+Z to go back " << endl;
 		else if (question == 2)
-			cout << "Insert Day (DD/MM/YY), CTRL+Z to go back " << endl;
+			cout << "Insert Date (DD/MM/YY), CTRL+Z to go back " << endl;
 		getline(cin, line);
 		if (cin.fail())
 		{
