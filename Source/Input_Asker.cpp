@@ -32,8 +32,7 @@ int Supermarket::Input_Asker::T_askName() const
 		else
 			it = Client::instance()->nameBinarySearch(client_name);
 	}
-
-	return it->number;
+		return it->number;
 }
 
 string Supermarket::Input_Asker::askClientName(bool existing , set<Client_t>::iterator &it) const
@@ -87,16 +86,6 @@ string Supermarket::Input_Asker::askClientName(bool existing , set<Client_t>::it
 	}
 
 	return client_name;
-}
-
-bool Supermarket::Input_Asker::testNum(unsigned int num) const
-{
-	for (Client_t i : Client::instance()->getInfo())
-	{
-		if (i.number == num)
-			return true;
-	}
-	return false;
 }
 
 //====================================================================================
