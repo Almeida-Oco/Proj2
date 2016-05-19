@@ -122,7 +122,7 @@ void Supermarket::Trans::visClientTrans() const
 	do
 	{
 		name = Input_Asker::instance()->askClientName(true,it);
-		if (!cin.eof() && it->name == name)
+		if (name != "" && it != Client::instance()->getInfo().end())
 			c_number = it->number;
 		else  //if user inserted CTRL+Z
 			break;

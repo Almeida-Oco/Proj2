@@ -106,7 +106,7 @@ void Supermarket::Client::addClient()//asks the client info, checks its validity
 		if (c_name == "")
 			return;
 
-		if (it != Client::instance()->getInfo().end() && it->name == c_name)
+		if (it != Client::instance()->getInfo().end())
 		{
 			cout << "Name already in use, try again" << endl;
 			continue;
