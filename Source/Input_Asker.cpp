@@ -27,7 +27,6 @@ int Supermarket::Input_Asker::T_askName() const
 	{
 		cout << "Try again, CTRL+Z to go back " << endl;
 		getline(cin, client_name);
-		cin.ignore(999,'\n');
 		if (cin.eof())
 			return -1;
 		else
@@ -107,10 +106,12 @@ bool Supermarket::Input_Asker::testNum(unsigned int num) const
 Date_t Supermarket::Input_Asker::askDate(int question , set<Trans_t>::iterator &it) const
 {
 	vector<string> date_numbers;
+	bool digit = true;
 	Date_t input_date;
 	string line;
 	do
 	{
+		cout << endl << "========================================================" << endl;
 		if (question == 0)
 			cout << "Insert Lower bound (DD/MM/YY), CTRL+Z to go back " << endl;
 		else if (question == 1)
@@ -118,32 +119,59 @@ Date_t Supermarket::Input_Asker::askDate(int question , set<Trans_t>::iterator &
 		else if (question == 2)
 			cout << "Insert Day (DD/MM/YY), CTRL+Z to go back " << endl;
 		getline(cin, line);
-		if (!cin.fail())
+		if (cin.fail())
 		{
-			cin.ignore(999, '\n');
-			date_numbers = string_split(line, "/");
-			for (unsigned int i = 0; i < date_numbers.size(); i++)
-				date_numbers.at(i) = trim(date_numbers.at(i));
-
-			if (date_numbers.size() == 3)
+			if (cin.eof())
 			{
-				input_date.day = stoi(date_numbers.at(0));
-				input_date.month = stoi(date_numbers.at(1));
-				input_date.year = stoi(date_numbers.at(2));
+				input_date.day = 0;
+				input_date.month = 0;
+				input_date.year = 0;
+				return input_date;
+			}
+			continue;
+		}
 
-				it = Trans::instance()->dateBinarySearch(input_date);
-				if (it == Trans::instance()->getInfo().end())
-					continue;
+
+		date_numbers = string_split(line, "/");
+		for (unsigned int i = 0; i < date_numbers.size(); i++)
+			date_numbers.at(i) = trim(date_numbers.at(i));
+
+		if (date_numbers.size() == 3)
+		{
+			for (int i = 0; i < 3; i++){
+				if (date_numbers.at(i).length() == 0){
+					digit = false;
+					break;
+				}
+
+				for (char C : date_numbers.at(i)){
+					if (!(isdigit(C))){
+						digit = false;
+						break;
+					}
+				}
+			}
+			if (!digit)
+			{
+				cout << "Invalid format, please try again" << endl;
+				continue;
 			}
 
+			input_date.day = stoi(date_numbers.at(0));
+			input_date.month = stoi(date_numbers.at(1));
+			input_date.year = stoi(date_numbers.at(2));
+
+			it = Trans::instance()->dateBinarySearch(input_date);
+			if (it == Trans::instance()->getInfo().end())
+				continue;
 		}
-		else if (cin.eof())
+		else
 		{
-			input_date.day = 0;
-			input_date.month = 0;
-			input_date.year = 0;
-			return input_date;
+			cout << "Invalid format, please try again" << endl;
+			continue;
 		}
+
+
 	} while (!testDate(input_date));
 	return input_date;
 }
