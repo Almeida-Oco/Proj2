@@ -30,12 +30,15 @@ void Supermarket::Bottom_10::Source()
 		Bottom_10::CtoT_init();
 	Bottom_10::B10_c_init();
 	Bottom_10::instance()->initHistogram();
+
+	//print out the recommended products
 	cout << "The recommended products are: " << endl;
 	final = final + "---> ";
 	for (string S : Bottom_10::instance()->bestProd())
 		final = final + S + " , ";
 	final = final.substr(0, final.length() - 3);
 	final = final + " <---";
+
 	cout << final << endl;
 }
 
@@ -46,15 +49,17 @@ void Supermarket::Bottom_10::CtoT_init()
 
 	//the maximum size of the CtoT vector will be the amount of transactions the info_trans vector contains
 	CtoT.reserve(Trans::instance()->getInfo().size());
+	//used for more efficient vector::insert
 
 	for (set<Trans_t>::iterator it = Trans::instance()->getInfo().begin(); it != Trans::instance()->getInfo().end(); it++)
-	{
-		auto set_it = searchSet(it->number);
+	{//merges the products the client bought into a single vector, and pushes it to CtoT
+		auto set_it = searchVec(it->number);
 		if (set_it == CtoT.end())
 			CtoT.push_back(make_pair(it->number, it->products));
 		else
 			mergeVec(set_it->second, it->products);
 	}
+
 	sort(CtoT.begin(), CtoT.end(), cmpProdPrice());
 	//when it reaches here the set contains a pair of the client number and the products bought,
 	//ordered by the amount of money the client spent at the store
@@ -87,14 +92,14 @@ void Supermarket::Bottom_10::initHistogram()
 		if (isSimilar(it->second))
 		{
 			for (auto IT = it->second.begin(); IT != it->second.end(); IT++)
-			{
-				if (find(B10_common.begin(), B10_common.end(), *IT) == B10_common.end()) //meaning it was not bought by all the Bottom 10
-				{
+			{//iterate the vector of products the client bought
+				if (find(B10_common.begin(), B10_common.end(), *IT) == B10_common.end()) 
+				{//meaning it was not bought by all the Bottom 10
 					auto hist_it = searchHistogram(*IT);
 					if (hist_it == histogram.end())
-						histogram.push_back(make_pair(*IT,1));
+						histogram.push_back(make_pair(*IT,1)); //if product wasnt already in histogram
 					else
-						hist_it->second++;
+						hist_it->second++; //if product was already in histogram
 				}
 			}
 		}
@@ -109,8 +114,8 @@ vector<string> Supermarket::Bottom_10::bestProd()
 	const unsigned int NONE = 0;
 	unsigned int bought = 0;
 
-	for (auto it = histogram.begin(); it != histogram.end(); it++)
-	{
+	for (auto it = histogram.begin(); it != histogram.end(); it++) 
+	{//search the best product in the histogram
 		bought = howManyBought(it->first);
 		if (bought == NONE)
 		{
@@ -118,15 +123,15 @@ vector<string> Supermarket::Bottom_10::bestProd()
 			return bestProds;
 		}
 		else
-			P_amount.push_back(it->second - bought);
+			P_amount.push_back(it->second - bought); //created in case histogram recommendation fails
 	}
 	//if the program gets through this for loop it means that there was no product in the histogram
 	//that was not bought by the Bottom 10
 
-	auto max_it = max_element(P_amount.begin(), P_amount.end());
+	auto max_it = max_element(P_amount.begin(), P_amount.end()); //get the best product
 	auto bP_it = histogram.begin();
 	for (unsigned int i = 0; i < P_amount.size(); i++)
-	{
+	{//this is done in case there is a tie between two or more products
 		if (P_amount.at(i) == *max_it)
 		{
 			bP_it = histogram.begin();
@@ -144,7 +149,7 @@ vector<string> Supermarket::Bottom_10::bestProd()
 
 
 unsigned int Supermarket::Bottom_10::howManyBought(const string &S) const
-{
+{//counts how many times the given product was bought by the bottom 10 clients
 	unsigned int cont = 0;
 	auto B10_it = CtoT.begin();
 	advance(B10_it, 3);
@@ -161,7 +166,7 @@ unsigned int Supermarket::Bottom_10::howManyBought(const string &S) const
 }
 
 double Supermarket::Bottom_10::calcMoney(const vector<string> &prods) const
-{
+{//calculates the price of the vector of product
 	double total = 0;
 	for (auto it = prods.begin(); it < prods.end(); it++)
 		total = total + Product::instance()->getPrice(*it);
@@ -170,7 +175,7 @@ double Supermarket::Bottom_10::calcMoney(const vector<string> &prods) const
 }
 
 bool Supermarket::Bottom_10::isSimilar(const vector<string> &candidate_P) const
-{
+{//check if the given candidate bought all the bottom 10 common products
 	for (auto it = B10_common.begin(); it != B10_common.end(); it++)
 		if (find(candidate_P.begin(), candidate_P.end(), *it) == candidate_P.end())
 			return false;
@@ -178,13 +183,13 @@ bool Supermarket::Bottom_10::isSimilar(const vector<string> &candidate_P) const
 }
 
 void Supermarket::Bottom_10::mergeVec(vector<string> &V1, const vector<string> &V2)
-{
+{ //used to merge vectors together
 	for (string S : V2)
 		V1.push_back(S);
 }
 
-vector < pair < unsigned int, vector <string> > >::iterator Supermarket::Bottom_10::searchSet(unsigned int N)
-{
+vector < pair < unsigned int, vector <string> > >::iterator Supermarket::Bottom_10::searchVec(unsigned int N)
+{  //searches the vector for the given number
 	auto it = CtoT.begin();
 	for (it; it != CtoT.end(); it++)
 		if (it->first == N)
@@ -193,7 +198,7 @@ vector < pair < unsigned int, vector <string> > >::iterator Supermarket::Bottom_
 }
 
 vector < pair < string, unsigned int > >::iterator Supermarket::Bottom_10::searchHistogram(const string &S)
-{
+{ //searches the given products in the vector
 	auto it = histogram.begin();
 	for (it; it != histogram.end(); it++)
 		if (it->first == S)
