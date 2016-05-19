@@ -17,7 +17,8 @@ int Supermarket::Input_Asker::T_askName() const
 	getline(cin, client_name);
 	if (cin.fail())
 	{
-		cin.ignore(999, '\n');
+		if(!cin.eof())
+			cin.ignore(999, '\n');
 		return -1;
 	}
 
@@ -51,33 +52,42 @@ string Supermarket::Input_Asker::askClientName(bool existing , set<Client_t>::it
 			{
 				cout << "Try again, CTRL+Z to go back " << endl;
 				getline(cin, client_name);
-				cin.ignore(999,'\n');
-				if (cin.eof())
+				if (cin.fail())
+				{
+					if (!cin.eof())
+						cin.ignore(999, '\n');
 					return "";
+				}
 				else
 					it = Client::instance()->nameBinarySearch(client_name);
 			}
 		}
-		else if (it != Client::instance()->getInfo().end())
+		else
 		{
+
 			while (!testText(client_name))
 			{
 				cout << "Try again, CTRL+Z to go back " << endl;
 				getline(cin, client_name);
-				cin.ignore(999,'\n');
-				it = Client::instance()->nameBinarySearch(client_name);
 				if (cin.eof())
 					return "";
+				if (cin.fail())
+					cin.clear();
+				
+				it = Client::instance()->nameBinarySearch(client_name);
+				
 			}
 		}
 	}
 	else
 	{
-		cin.ignore(999, '\n');
+		if(!cin.fail())
+			cin.ignore(999, '\n');
+		cin.clear();
 		return "";
 	}
 
-	return it->name;
+	return client_name;
 }
 
 bool Supermarket::Input_Asker::testNum(unsigned int num) const

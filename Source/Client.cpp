@@ -100,16 +100,26 @@ void Supermarket::Client::addClient()//asks the client info, checks its validity
 	Client_t new_c;
 	string info, c_name;
 	set<Client_t>::iterator it;
-	c_name = Input_Asker::instance()->askClientName(false , it);
+	do
+	{
+		c_name = Input_Asker::instance()->askClientName(false, it);
+		if (c_name == "")
+			return;
 
-	if (c_name == "")
-		return;
+		if (it != Client::instance()->getInfo().end() && it->name == c_name)
+		{
+			cout << "Name already in use, try again" << endl;
+			continue;
+		}
+		else
+			break;
+	} while (true);
 
 	new_c.number = this->max_client_number;
 	this->max_client_number++;
 	new_c.name = c_name;
 	new_c.money = 0;
-	info_clients.insert(it , new_c);
+	info_clients.insert(new_c);
 	this->number_lines_cli++;
 }
 
