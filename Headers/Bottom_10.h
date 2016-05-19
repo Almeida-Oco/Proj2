@@ -50,6 +50,10 @@ private:
 	std::vector < std::pair < std::string, unsigned int > >::iterator searchHistogram(const std::string &S);
 
 public: 
+
+	Bottom_10() {};
+	Bottom_10(const Bottom_10 &C) {};
+
 	/*
 	*  MAIN MEMBER FUNCTIONS
 	*/

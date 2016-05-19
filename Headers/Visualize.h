@@ -1,3 +1,4 @@
+
 #ifndef VISUALIZE_H
 #define VISUALIZE_H
 
@@ -15,6 +16,7 @@ class Supermarket::Visualize
 	static Visualize *V_ptr;
 
 public:
+	//used to avoid multiple class objects
 	Visualize() {};
 	Visualize(const Visualize &V) {};
 

@@ -16,6 +16,7 @@ class Supermarket::Product
 	
 	static Product *P_ptr;
 public:
+	//used to avoid multiple class objects
 	Product() {};
 	Product(const Product &P) {};
 

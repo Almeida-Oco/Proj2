@@ -18,6 +18,7 @@ private:
 	static Trans *T_ptr;
 	unsigned int number_lines_trans; 
 public:
+	//used to avoid multiple class objects
 	Trans() {};
 	Trans(const Trans &T) {};
 
