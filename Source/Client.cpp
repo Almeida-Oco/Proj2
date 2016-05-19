@@ -144,8 +144,9 @@ void Supermarket::Client::visClient()
 	string client_name;
 	do
 	{
-		Input_Asker::instance()->askClientName(true, it);
-
+		client_name = Input_Asker::instance()->askClientName(true, it);
+		if (client_name == "")
+			return;
 		if (it != Client::instance()->getInfo().end())
 		{
 			found = true;
