@@ -25,6 +25,8 @@ Ver se pode haver repeticoes do mesmo produto numa transação.
  	This is useful since it allows us to test the program without needing to create big amounts of data, so 
  	change its number as needed.
 
+ * There can not exist transactions which do not have any product bought.
+
  * In the Bottom 10 reccomendation system, we did not use maps or multimaps, and instead used a 
  	vector of pairs, so that we could order it by value and not by key, which makes it easier to
  	find the Bottom 10, since they will be the first 10 costumers.
