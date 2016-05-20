@@ -25,10 +25,17 @@ bool cmpProdAmount::operator() (const pair<string, unsigned int> &P1, const pair
 
 void Supermarket::Bottom_10::Source()
 {
+	
 	string final;
-	if (CtoT.size() == 0)
-		Bottom_10::CtoT_init();
+	Bottom_10::CtoT_init();
+	if (N_COMMON >= CtoT.size())
+	{
+		cout << endl << "There are not enough transactions to do a Bottom " << N_COMMON << " reccomendation" << endl;
+		return;
+	}
 	Bottom_10::B10_c_init();
+	
+
 	Bottom_10::instance()->initHistogram();
 
 	//print out the recommended products
