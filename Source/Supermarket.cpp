@@ -26,17 +26,14 @@ void Supermarket::MainMenu()
 			std::cout << "---> ";
 			std::cin.clear();
 			std::cin >> action;
-			if (cin.good() || (cin.fail() && !cin.eof()))
+			if (cin.fail() && !cin.eof())
 			{
 				cin.clear();
-				std::cin.ignore(9999, '\n');
+				cin.ignore();
+				cin.ignore();
 			}
-			else if (cin.fail())
-			{
-				if (cin.peek() != EOF && !cin.eof())
-					cin.ignore(999, '\n');
+			else if (cin.eof())
 				cin.clear();
-			}
 
 			if (action == C)
 				ClientMenu();
@@ -75,17 +72,14 @@ void Supermarket::ClientMenu()
 			std::cout << "---> ";
 			std::cin.clear();
 			std::cin >> action;
-			if (cin.good() || (cin.fail() && !cin.eof()))
+			if (cin.fail() && !cin.eof())
 			{
 				cin.clear();
-				std::cin.ignore(9999, '\n');
+				cin.ignore();
+				cin.ignore();
 			}
-			else if (cin.fail())
-			{
-				if (cin.peek() != EOF && !cin.eof())
-					cin.ignore(999, '\n');
+			else if (cin.eof())
 				cin.clear();
-			}
 
 			if (action == add)
 				Client::instance()->addClient();
@@ -127,17 +121,14 @@ void Supermarket::TransMenu()
 			std::cout << "---> ";
 			std::cin.clear();
 			std::cin >> action;
-			if (cin.good() || (cin.fail() && !cin.eof()))
+			if (cin.fail() && !cin.eof())
 			{
 				cin.clear();
-				std::cin.ignore(9999, '\n');
+				cin.ignore();
+				cin.ignore();
 			}
-			else if (cin.fail())
-			{
-				if (cin.peek() != EOF && !cin.eof())
-					cin.ignore(999, '\n');
+			else if (cin.eof())
 				cin.clear();
-			}
 
 			if (action == add)
 				Trans::instance()->addTrans();
@@ -178,17 +169,14 @@ void Supermarket::AdMenu()
 			std::cout << "---> ";
 			std::cin.clear();
 			std::cin >> action;
-			if (cin.good() || (cin.fail() && !cin.eof()))
+			if (cin.fail() && !cin.eof())
 			{
 				cin.clear();
-				std::cin.ignore(9999, '\n');
+				cin.ignore();
+				cin.ignore();
 			}
-			else if (cin.fail())
-			{
-				if (cin.peek() != EOF && !cin.eof())
-					cin.ignore(999, '\n');
+			else if (cin.eof())
 				cin.clear();
-			}
 
 			if (action == C_a)
 				Supermarket::Trans::instance()->selectiveAd();
