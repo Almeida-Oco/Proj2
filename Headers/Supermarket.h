@@ -2,6 +2,7 @@
 #define SUPERMARKET_H
 
 #include <iostream>
+#include <string>
 
 class Supermarket {
 private:

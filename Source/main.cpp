@@ -122,7 +122,7 @@ string trim(string &str)
 	first = str.find_first_not_of(' ');
 	last = str.find_last_not_of(' ');
 	if (first != ULONG_MAX && last != ULONG_MAX)
-		return remove_middle_spaces(str.substr(first, (last - first + 1)));
+		return remove_middle_spaces(str.substr(first, (first != last) ? (last - first + 1) : 1));
 	else
 		return "";
 }

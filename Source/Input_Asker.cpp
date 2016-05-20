@@ -15,11 +15,11 @@ int Supermarket::Input_Asker::T_askName() const
 	cout << endl << "========================================================" << endl;
 	cout << "Insert client name, CTRL+Z to go back " << endl;
 	getline(cin, client_name);
-	if (cin.fail())
+	if (cin.fail() && !cin.eof())
 	{
-		if(!cin.eof())
-			cin.ignore(999, '\n');
-		return -1;
+		cin.clear();
+		cin.ignore();
+		cin.ignore();
 	}
 
 	it = Client::instance()->nameBinarySearch(client_name);
