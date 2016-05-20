@@ -300,6 +300,11 @@ void Supermarket::Trans::selectiveAd()
 	if (c_number == -1)
 		return;
 	unsigned int target_position = searchID_transactions(c_number);
+	if (target_position == -1) //meaning the client has no transaction
+	{
+		cout << endl << "The client has no transactions " << endl;
+		return;
+	}
 	vector<string> alreadyAccountedFor;
 	bool verifi = false;
 	vector< vector<bool> > publi(Bottom_10::instance()->getCtoT().size(), vector<bool>(Product::instance()->getSize()));
