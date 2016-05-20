@@ -22,8 +22,8 @@ public:
 
 	void visProd(const std::string &prod) const;
 	void printRecommended(const std::vector<std::string> &P) const;
-	void visNumber(unsigned int number) const; //WORKING
-	void visName(const std::string &name) const; //WORKING
+	void visNumber(unsigned int number) const;
+	void visName(const std::string &name) const;
 	std::map<int, std::string> visAllProd(bool first_time) const;
 	//creates a map that associates a number to the product name (used for new transactions)
 	std::string P_comma(const std::vector<std::string> &prods);
