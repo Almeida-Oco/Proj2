@@ -11,7 +11,7 @@ using namespace std;
 void Supermarket::MainMenu()
 {
 	const int C = 1, Tr = 2, A = 3, E = 0;
-	int action;
+	string action;
 	do
 	{
 		std::cout << std::endl << "========================================================" << std::endl;
@@ -25,32 +25,33 @@ void Supermarket::MainMenu()
 		{
 			std::cout << "---> ";
 			std::cin.clear();
-			std::cin >> action;
-			if (cin.fail() && !cin.eof())
+			getline(cin, action);
+			action = trim(action);
+			if (action.size() == 1)
 			{
-				cin.clear();
-				cin.ignore();
-				cin.ignore();
+				if (action.at(0) == '1')
+					ClientMenu();
+				else if (action.at(0) == '2')
+					TransMenu();
+				else if (action.at(0) == '3')
+					AdMenu();
+				else if (action.at(0) != '0')
+				{
+					std::cout << "Invalid input, please try again" << endl;
+					continue;
+				}
 			}
-			else if (cin.eof())
-				cin.clear();
-
-			if (action == C)
-				ClientMenu();
-			else if (action == Tr)
-				TransMenu();
-			else if (action == A)
-				AdMenu();
-			else if (action != E)
+			else
 			{
 				std::cout << "Invalid input, please try again" << endl;
 				continue;
 			}
-			if(action != E)
+
+			if(action.at(0) != '0')
 				action = -1;
 			break;
 		} while (true);
-	} while (action != E);
+	} while (action.at(0) !='0');
 }
 
 void Supermarket::ClientMenu()
@@ -80,6 +81,8 @@ void Supermarket::ClientMenu()
 			}
 			else if (cin.eof())
 				cin.clear();
+			else if (cin.good())
+				cin.ignore(999, '\n');
 
 			if (action == add)
 				Client::instance()->addClient();
@@ -129,6 +132,8 @@ void Supermarket::TransMenu()
 			}
 			else if (cin.eof())
 				cin.clear();
+			else if (cin.good())
+				cin.ignore(999, '\n');
 
 			if (action == add)
 				Trans::instance()->addTrans();
@@ -177,6 +182,8 @@ void Supermarket::AdMenu()
 			}
 			else if (cin.eof())
 				cin.clear();
+			else if (cin.good())
+				cin.ignore(999, '\n');
 
 			if (action == C_a)
 				Supermarket::Trans::instance()->selectiveAd();
