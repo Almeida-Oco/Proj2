@@ -3,23 +3,29 @@ Vende ++
 
 O QUE FALTA FAZER:
 
-Evitar que o programa crashe ao inserir CTRL+Z ou outro input jabardolas nas funcoes de Input_Asker. 
-(algumas acho que ja estao)
+Testar as funcoes update das classes Client , Trans e Product.
 
-Conferir erros que ocorrem, principalmente relacionados com erros de escrita e acesso a posições "out of arrange".
+Ver se pode haver repeticoes do mesmo produto numa transação.
 
-O QUE JÁ ESTÁ FEITO:
-Já da para jabardar com o menu q em principio nao vacila, (CONVEM TESTAR).
+
 #SUPERMARKET VENDE++
 
 ## SPECIFICATIONS 
 
  * For testing purposes, the Bottom 10 reccomendation system contains a variable name N_COMMON, present
- 	in the Bottom_10.h file,
- 		N_COMMON = 10  ---> Bottom 10
- 		N_COMMON = 7  ----> Bottom 7
- 		N_COMMON = 3  ----> Bottom 3
- 	this is useful since it allows us to test the program without needing to create big amounts of data
+ 	in the Bottom_10.h file, by default it is 10, but it can be changed to another number in order to test
+  the Bottom_10 functionality without doing a bottom 10, example below:
+
+>N_COMMON = 10  ---> Bottom 10.
+
+>N_COMMON = 7  ----> Bottom 7.
+ 
+>N_COMMON = 3  ----> Bottom 3.
+
+ 	This is useful since it allows us to test the program without needing to create big amounts of data, so 
+ 	change its number as needed.
+
+ * There can not exist transactions which do not have any product bought.
 
  * In the Bottom 10 reccomendation system, we did not use maps or multimaps, and instead used a 
  	vector of pairs, so that we could order it by value and not by key, which makes it easier to
