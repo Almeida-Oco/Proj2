@@ -84,7 +84,7 @@ void Supermarket::Bottom_10::B10_c_init()
 		for (auto vec_it = B10_common.begin(); vec_it != B10_common.end(); vec_it++)
 		{
 			if (find(it->second.begin(), it->second.end(), *vec_it) == it->second.end())
-				B10_common.erase(vec_it);
+				vec_it = B10_common.erase(vec_it);
 		}
 	}
 	//now B10_common contains the common products between the Bottom 10
