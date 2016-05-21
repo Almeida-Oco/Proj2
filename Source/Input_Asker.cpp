@@ -15,14 +15,16 @@ int Supermarket::Input_Asker::T_askName() const
 	cout << endl << "========================================================" << endl;
 	cout << "Insert client name, CTRL+Z to go back " << endl;
 	getline(cin, client_name);
-	if (cin.fail() && !cin.eof())
+	if (cin.fail())
 	{
+		if (!cin.eof())
+			cin.ignore(999, '\n');
 		cin.clear();
-		cin.ignore();
-		cin.ignore();
+		return -1;
 	}
+	else
+		it = Client::instance()->nameBinarySearch(client_name);
 
-	it = Client::instance()->nameBinarySearch(client_name);
 	while (it == Client::instance()->getInfo().end())
 	{
 		cout << "Try again, CTRL+Z to go back " << endl;
@@ -60,7 +62,7 @@ string Supermarket::Input_Asker::askClientName(bool existing , set<Client_t>::it
 					it = Client::instance()->nameBinarySearch(client_name);
 			}
 		}
-		else
+		else //if client did not exist already
 		{
 
 			while (!testText(client_name))
