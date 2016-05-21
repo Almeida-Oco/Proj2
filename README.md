@@ -49,7 +49,7 @@
 >>>Handles all the product information, its name and its price, this information is stored in a **map<string,double>**, therefore sorted by Alphabetic product order.
 
 >> **BOTTOM_10** Class
->>> Responsible for the Bottom 10 publicity, its data member CtoT, is also used in the regular Advertisement. This ** vector<pair <unsigned int , vector <string > > > **, holds a single vector<string> for each client, which represents all the products the client bought in the store.
+>>> Responsible for the Bottom 10 publicity, its data member CtoT, is also used in the regular Advertisement. This **vector<pair <unsigned int , vector <string > > >**, holds a single vector<string> for each client, which represents all the products the client bought in the store.
 
 >> **VISUALIZE** Class
 >>> Handles the common visualizing options in classes, such as number visualization and name visualization, it has **no data members.**
