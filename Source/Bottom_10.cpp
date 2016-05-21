@@ -25,7 +25,6 @@ bool cmpProdAmount::operator() (const pair<string, unsigned int> &P1, const pair
 
 void Supermarket::Bottom_10::Source()
 {
-	
 	string final;
 	Bottom_10::CtoT_init();
 	if (N_COMMON >= CtoT.size())
@@ -51,6 +50,7 @@ void Supermarket::Bottom_10::Source()
 
 void Supermarket::Bottom_10::CtoT_init()
 {
+	CtoT.clear();
 	pair<unsigned int, vector<string> > temp_pair;
 	vector<string> temp_string;
 
@@ -118,6 +118,7 @@ void Supermarket::Bottom_10::initHistogram()
 vector<string> Supermarket::Bottom_10::bestProd()
 {
 	vector<string> bestProds;
+	bestProds.reserve(histogram.size());
 	const unsigned int NONE = 0;
 	unsigned int bought = 0;
 
@@ -127,6 +128,15 @@ vector<string> Supermarket::Bottom_10::bestProd()
 		if (bought == NONE)
 		{
 			bestProds.push_back(it->first);
+			auto temp_it = it;
+			if ((temp_it+1) != histogram.end() &&  (temp_it+1)->second == it->second)
+			{ //done in case there are multiple amount of similar products in the histogram
+			 // if there are two products which have 3 repetitions, and 3 repetitions is the max number, then it returns both of them
+				bestProds.push_back(temp_it->first);
+				temp_it++;
+				while (temp_it->second == it->second)
+					bestProds.push_back(temp_it->first);
+			}
 			return bestProds;
 		}
 		else
