@@ -7,10 +7,12 @@
 class Supermarket {
 private:
 	static Supermarket *S_pt;
-public:
+
 	//used to avoid multiple class objects
-	Supermarket () {};
+	Supermarket() {};
 	Supermarket(const Supermarket &T) {};
+public:
+	
 
 	class Visualize;
 	class Input_Asker;

@@ -15,10 +15,11 @@ class Supermarket::Visualize
 {
 	static Visualize *V_ptr;
 
-public:
 	//used to avoid multiple class objects
 	Visualize() {};
 	Visualize(const Visualize &V) {};
+public:
+	
 
 	void visProd(const std::string &prod) const;
 	void printRecommended(const std::vector<std::string> &P) const;

@@ -22,10 +22,12 @@ class Supermarket::Client
 	unsigned int max_client_number;
 	std::set<Client_t> info_clients;
 	static Client *C_ptr;
-public:
+
 	//used to avoid multiple class objects
 	Client() {};
 	Client(const Client &C) {};
+public:
+	
 
 	/*
 	*  MAIN MEMBER FUNCTIONS

@@ -11,10 +11,11 @@ class Supermarket::Input_Asker
 {
 	static Input_Asker *IA_ptr;
 
-public:
 	//used to avoid multiple class objects
 	Input_Asker() {};
 	Input_Asker(const Input_Asker &IA) {};
+public:
+	
 
 	int T_askName()  const;
 	//asks for a client number until an existing one is entered

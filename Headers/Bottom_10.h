@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-const unsigned int N_COMMON = 3;
+const unsigned int N_COMMON = 10;
 //change the value for testing purposes, if N_COMMON = 10, then it does Bottom_10, if it is 3, then it does Bottom_3
 
 struct cmpProdPrice //used to compare the amount of money a client has spent
@@ -34,9 +34,6 @@ private:
 	//used in case all products in the histogram have been bought by at least 1 Bottom 10
 	static Bottom_10 *B10_ptr;
 
-	/*
-	*  MAIN MEMBER FUNCTIONS
-	*/
 	void initHistogram(); //needs to first have CtoT initialized
 	std::vector< std::string> bestProd(); //returns vector of the recommended products
 	
@@ -49,11 +46,11 @@ private:
 	bool isSimilar(const std::vector<std::string> &candidate_P) const;
 	std::vector < std::pair < std::string, unsigned int > >::iterator searchHistogram(const std::string &S);
 
-public: 
 
 	Bottom_10() {};
 	Bottom_10(const Bottom_10 &C) {};
 
+public: 
 	/*
 	*  MAIN MEMBER FUNCTIONS
 	*/
