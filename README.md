@@ -27,7 +27,9 @@
  * Everytime the program asks the user to input a reference the a certain client, it is always done by **referencing their name** and never the number for efficiency reasons.
 
  * Everytime information is asked to the user it always as a way to cancel, usually by inputting CTRL+Z.
-
+ 
+ * We know that the user will probably not do this, but if he types, anywhere in the program, a string followed by CTRL+Z ("kdjjsja^Z", for example), he has to press enter 2 times, so the program can assume that was an invalid input. We couldn´t modified this, and we just want to inform you that we know that our program does this. 
+ 
  * All the classes in this program follow the **singleton design pattern**, meaning only one instance of the class can exist at all times.
 
  * All the information changed during runtime, like removing client or adding a transaction, is **lost if the program is closed**, unless closed by going to the Main Menu and selecting the exit option.
